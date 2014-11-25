@@ -1,30 +1,24 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django import forms
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.forms import USZipCodeField
 from django.utils import timezone
 
 
-class Hike(models.Model):
-    TYPE_CHOICES = ('Out and Back', 'Loop', 'One Way')
-
-    location = models.ForeignKey(Location)
-    name = models.CharField(max_length=180, unique=True)
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    likes = models.IntegerField(default=0)
-    trail_map = models.FileField()
+class Region(models.Model):
+    # REGION_CHOICE = ('Coast', 'Columbia Gorge')
+    region = models.CharField(max_length=50)
 
     def __unicode__(self):
-        return self.name
+        return self.region
 
 
 class Location(models.Model):
+    region = models.ForeignKey(Region)
     address = models.CharField(max_length=128)
     city = models.CharField(max_length=70)
     state = models.CharField(max_length=2, choices=STATE_CHOICES, null=True, blank=True, default='OR')
     zipcode = USZipCodeField(max_length=5)
-    region = models.CharField(max_length=128)
 
     def __unicode__(self):
         return self.address
@@ -36,22 +30,38 @@ class Location(models.Model):
         pass
 
 
+class Hike(models.Model):
+    # TYPE_CHOICES = ('Out and Back', 'Loop', 'One Way')
+
+    location = models.ForeignKey(Location)
+    name = models.CharField(max_length=180, unique=True)
+    type = models.CharField(max_length=20)
+    likes = models.IntegerField(default=0)
+    trail_map = models.FileField(upload_to='trail_maps', blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Difficulty(models.Model):
-    DIFFICULTY_LEVEL_CHOICES = ('Easy', 'Moderate', 'Difficult')
+    # DIFFICULTY_LEVEL_CHOICES = ('Easy', 'Moderate', 'Difficult', 'Advanced')
     hike = models.ForeignKey(Hike)
-    difficulty_level = models.CharField(max_length=20, choices=DIFFICULTY_LEVEL_CHOICES)
+    difficulty_level = models.CharField(max_length=20)
     difficulty_level_explanation = models.TextField()
     length = models.IntegerField(default=0)
     elevation = models.IntegerField(default=0)
 
+    def __unicode__(self):
+        return self.difficulty_level
 
-class Hazard(models.Model):
+
+class Hazards(models.Model):
     hike = models.ForeignKey(Hike)
     trail_maintenance = models.CharField(max_length=200)
     weather_effects = models.CharField(max_length=200)
     user_reports = models.TextField()
     user_reports_date = models.DateTimeField()
-    known_challenges = models.TextField
+    known_challenges = models.TextField()
 
 
 class Sights(models.Model):
@@ -76,7 +86,7 @@ class Hiker(models.Model):
     home_address = models.CharField(max_length=128)
     home_city = models.CharField(max_length=70)
     home_state = models.CharField(max_length=2, choices=STATE_CHOICES, null=True, blank=True, default='OR')
-    home_zipcode = USZipCodeField(max_length=5)
+    home_zipcode = models.CharField(max_length=5, default='97219')
     health_level = models.CharField(max_length=100)
     avg_walking_pace = models.FloatField(default=2.0)
     miles_walked = models.FloatField(default=0.0)
@@ -124,11 +134,11 @@ class HikePhotos(models.Model):
 
 
 class MyHikes(models.Model):
-    RATING_CHOICES = ('Never Hiked', 'Loved It', 'Liked It', 'Not Sure', 'It Was Ok', 'Had Better', 'Hated It')
+    # RATING_CHOICES = ('Never Hiked', 'Loved It', 'Liked It', 'Not Sure', 'It Was Ok', 'Had Better', 'Hated It')
     hike = models.ForeignKey(Hike)
     hiker = models.ForeignKey(Hiker)
     last_hiked = models.DateTimeField(blank=True, null=True)
-    rating = models.CharField(max_length=20, choices=RATING_CHOICES, default='Never Hiked')
+    rating = models.CharField(max_length=20)
 
     def add_to_future_hikes(self):
         pass
@@ -137,4 +147,3 @@ class MyHikes(models.Model):
 class FutureHikes(models.Model):
     hike = models.ForeignKey(Hike)
     hiker = models.ForeignKey(Hiker)
-
