@@ -1,0 +1,20 @@
+{% extends 'hikes/base.html' %}
+
+
+{% block content %}
+        <h2>{{ region }}</h2>
+    {% if region %}
+        {% if locations %}
+            {% for location in locations %}
+                {% if location.region == region %}
+                    <ul><a href="/hikes/trailhead/{{ location.url }}"> {{ location.trailhead }}</a>: lat: {{ location.latitude }} | lng: {{ location.longitude }} - {{ location.num_hikes }} hikes</ul><br>
+                {% else %}
+                    <strong>No locations currently in region.</strong>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    {% else %}
+        The specified region {{ region }} does not exist!
+    {% endif %}
+{% endblock content %}
