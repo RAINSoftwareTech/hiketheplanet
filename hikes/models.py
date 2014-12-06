@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
 from localflavor.us.us_states import STATE_CHOICES
-from localflavor.us.forms import USZipCodeField
 from django.utils import timezone
 
 
+# ie: 'Oregon Coast', 'Columbia Gorge'
 class Region(models.Model):
-    # REGION_CHOICE = ('Coast', 'Columbia Gorge')
     region = models.CharField(max_length=50)
+    num_hikes = models.IntegerField(default=1)
 
     def __unicode__(self):
         return self.region
@@ -15,13 +15,13 @@ class Region(models.Model):
 
 class Location(models.Model):
     region = models.ForeignKey(Region)
-    address = models.CharField(max_length=128)
-    city = models.CharField(max_length=70)
-    state = models.CharField(max_length=2, choices=STATE_CHOICES, null=True, blank=True, default='OR')
-    zipcode = USZipCodeField(max_length=5)
+    trailhead = models.CharField(max_length=200)
+    latitude = models.FloatField(default=0.0)
+    longitude = models.FloatField(default=0.0)
+    num_hikes = models.IntegerField(default=1)
 
     def __unicode__(self):
-        return self.address
+        return self.trailhead
 
     def miles_from_user(self):
         pass
@@ -83,11 +83,11 @@ class Equipment(models.Model):
 class Hiker(models.Model):
     hiker = models.OneToOneField(User)
     profile_pic = models.ImageField(upload_to='profile_images', blank=True)
-    home_address = models.CharField(max_length=128)
-    home_city = models.CharField(max_length=70)
+    home_address = models.CharField(max_length=128, blank=True)
+    home_city = models.CharField(max_length=70, default='Portland')
     home_state = models.CharField(max_length=2, choices=STATE_CHOICES, null=True, blank=True, default='OR')
     home_zipcode = models.CharField(max_length=5, default='97219')
-    health_level = models.CharField(max_length=100)
+    health_level = models.CharField(max_length=100, default='Average')
     avg_walking_pace = models.FloatField(default=2.0)
     miles_walked = models.FloatField(default=0.0)
 

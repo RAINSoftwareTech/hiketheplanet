@@ -2,19 +2,19 @@
 
 
 {% block content %}
-        <h2>{{ region }}</h2>
-    {% if region %}
-        {% if locations %}
-            {% for location in locations %}
-                {% if location.region == region %}
-                    <ul><a href="/hikes/trailhead/{{ location.url }}"> {{ location.trailhead }}</a>: lat: {{ location.latitude }} | lng: {{ location.longitude }} - {{ location.num_hikes }} hikes</ul><br>
+        <h2>{{ trailhead }}</h2>
+    {% if trailhead %}
+        {% if hikes %}
+            {% for hike in hikes %}
+                {% if trailhead.trailhead == trailhead %}
+                    <ul><a href="/hikes/hike/{{ hike.url }}"> {{ hike.name }}</a> difficulty level: {{ hike.difficulty }} | Likes: {{ hike.likes }}</ul><br>
                 {% else %}
-                    <strong>No locations currently in region.</strong>
+                    <strong>No locations currently at this trailhead.</strong>
                 {% endif %}
             {% endfor %}
         {% endif %}
 
     {% else %}
-        The specified region {{ region }} does not exist!
+        The specified trailhead {{ trailhead }} does not exist!
     {% endif %}
 {% endblock content %}

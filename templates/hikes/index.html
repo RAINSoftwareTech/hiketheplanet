@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Hike the Map: Pacific Northwest</title>
-</head>
-<body>
-<h1>This is going to be much more impressive later!!</h1>
-</body>
-</html>
+{% extends 'hikes/base.html' %}
+
+
+{% block content %}
+<div>
+        {% if regions %}
+            <ul>
+                {% for region in regions %}
+                <h3><a href="/hikes/region/{{ region.url }}"> {{ region.region }}</a> - {{ region.num_hikes }} hikes</h3>
+                    {% if locations %}
+                        <ul>
+                        {% for location in locations %}
+                            {% if location.region == region %}
+                                <li> {{ location.trailhead }}: lat: {{ location.latitude }} | lng: {{ location.longitude }} - {{ location.num_hikes }} hikes</li><br>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <strong>There are no locations present.</strong>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no regions present.</strong>
+        {% endif %}
+</div>
+
+{% endblock content %}
+
+
