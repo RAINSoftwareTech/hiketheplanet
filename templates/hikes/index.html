@@ -2,22 +2,37 @@
 
 
 {% block content %}
+
+<div class="modal fade" id="trailheadModal" tabindex="-1" role="dialog" aria-labelledby="trailheadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="trailheadModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$('#trailheadModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var region = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text(region + ' Trailheads')
+  modal.find('.modal-body p').text('Regional trailheads map for ' + region + ' will go here')
+})</script>
+
 <div>
         {% if regions %}
             <ul>
                 {% for region in regions %}
-                <h3><a href="/hikes/region/{{ region.url }}"> {{ region.region }}</a> - {{ region.num_hikes }} hikes</h3>
-                    {% if locations %}
-                        <ul>
-                        {% for location in locations %}
-                            {% if location.region == region %}
-                                <li> {{ location.trailhead }}: lat: {{ location.latitude }} | lng: {{ location.longitude }} - {{ location.num_hikes }} hikes</li><br>
-                            {% endif %}
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        <strong>There are no locations present.</strong>
-                    {% endif %}
+                <h3><a class="region-modal-link" data-toggle="modal" data-target="#trailheadModal" data-whatever="{{ region.name }}"> {{ region.name }}</a> - {{ region.num_hikes }} trailheads
+                    <span class="list-link"><a href="/hikes/region/{{ region.url }}">listview</a></span></h3>
+
                 {% endfor %}
             </ul>
         {% else %}

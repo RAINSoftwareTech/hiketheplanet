@@ -25,43 +25,26 @@ def ajax(request):
     return HttpResponse(dumps(ajax_region_list), content_type="application/json")
 
 
-def dom(request):
-    if request.method == "POST":
-        print request.POST
-    return render(request, 'hikes/dom.html')
-
-
-def jsexample(request):
-    return render(request, 'hikes/jsexample.html')
-
-
 def index(request):
     context = RequestContext(request)
     region_list = models.Region.objects.order_by('-num_hikes')
-    location_list = models.Location.objects.all()
-    context_dict = {'regions': region_list, 'locations': location_list}
+    context_dict = {'regions': region_list}
     for region in region_list:
-        region.url = encode_url(region.region)
+        region.url = encode_url(region.name)
     return render_to_response('hikes/index.html', context_dict, context)
-
-
-def hike(request):
-    pass
 
 
 def region(request, region_url):
     context = RequestContext(request)
-    region_names_list = models.Region.objects.values_list('region', flat=True)
-    region_name = decode_url(region_url, region_names_list)
-    context_dict = {'region': region_name}
+    context_dict = build_context_dict(models.Region, region_url, 'region')
 
     try:
-        this_region = models.Region.objects.get(region=region_name)
-        locations = models.Location.objects.filter(region=this_region)
-        context_dict['locations'] = locations
+        this_region = models.Region.objects.get(name=context_dict['region'])
+        trailheads = models.Trailhead.objects.filter(region=this_region).order_by('-latitude')
+        context_dict['trailheads'] = trailheads
         context_dict['region'] = this_region
-        for location in locations:
-            location.url = encode_url(location.trailhead)
+        for trailhead in trailheads:
+            trailhead.url = encode_url(trailhead.name)
     except models.Region.DoesNotExist:
         pass
 
@@ -70,13 +53,11 @@ def region(request, region_url):
 
 def trailhead(request, trailhead_url):
     context = RequestContext(request)
-    trailhead_names_list = models.Location.objects.values_list('trailhead', flat=True)
-    trailhead_name = decode_url(trailhead_url, trailhead_names_list)
-    context_dict = {'trailhead': trailhead_name}
+    context_dict = build_context_dict(models.Trailhead, trailhead_url, 'trailhead')
 
     try:
-        this_location = models.Location.objects.get(trailhead=trailhead_name)
-        hikes = models.Hike.objects.filter(location=this_location)
+        this_location = models.Trailhead.objects.get(name=context_dict['trailhead'])
+        hikes = models.Hike.objects.filter(trailhead=this_location)
         context_dict['trailhead'] = this_location
         context_dict['hikes'] = hikes
         for hike in hikes:
@@ -86,6 +67,13 @@ def trailhead(request, trailhead_url):
 
     return render_to_response('hikes/trailheads.html', context_dict, context)
 
+
+def hike(request, hike_url):
+    context = RequestContext(request)
+    context_dict = build_context_dict(models.Hike, hike_url, 'hike')
+    hike_details = models.Hike.objects.get(name=context_dict['hike'])
+    context_dict['hike'] = hike_details
+    return render_to_response('hikes/hike.html', context_dict, context)
 
 def register(request):
     context = RequestContext(request)
@@ -110,5 +98,12 @@ def decode_url(url, field_list):
     url_name = url_name.title()
     for name in field_list:
         if name.startswith(url_name[:6]):
-            return name
+            if url == encode_url(name):
+                return name
     return url_name
+
+
+def build_context_dict(this_model, url, key):
+    names_list = this_model.objects.values_list('name', flat=True)
+    this_name = decode_url(url, names_list)
+    return {key: this_name}

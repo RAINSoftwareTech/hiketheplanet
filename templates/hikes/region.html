@@ -4,10 +4,10 @@
 {% block content %}
         <h2>{{ region }}</h2>
     {% if region %}
-        {% if locations %}
-            {% for location in locations %}
-                {% if location.region == region %}
-                    <ul><a href="/hikes/trailhead/{{ location.url }}"> {{ location.trailhead }}</a>: lat: {{ location.latitude }} | lng: {{ location.longitude }} - {{ location.num_hikes }} hikes</ul><br>
+        {% if trailheads %}
+            {% for trailhead in trailheads %}
+                {% if trailhead.region == region %}
+                    <ul><a href="/hikes/trailhead/{{ trailhead.url }}"> {{ trailhead.name }}</a>: lat: {{ trailhead.latitude }} | lng: {{ trailhead.longitude }} - {{ trailhead.num_hikes }} trailheads</ul>
                 {% else %}
                     <strong>No locations currently in region.</strong>
                 {% endif %}

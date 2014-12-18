@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #containerElement {
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+
+
+        .particle {
+            border: 1px solid black;
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="containerElement"></div>
+<script>
+
+
+    var particleFactory = function (particle, container) {
+        this.particle = particle;
+        this.container = container;
+
+
+        this.position = {
+            x: Math.random() * 80,
+            y: Math.random() * 80
+        };
+
+
+        this.directionAndVelocityVector = {
+            vx: Math.random() * 3 + 1,
+            vy: Math.random() * 3 + 1
+        };
+
+
+        this.detectCollision = function () {
+            var container = this.container;
+            var particle = this.particle;
+            var position = this.position;
+
+
+            var directionAndVelocityVector = this.directionAndVelocityVector;
+
+
+            if (position.x > (container.offsetWidth - particle.offsetWidth)) {
+                position.x = container.offsetWidth - particle.offsetWidth;
+                directionAndVelocityVector.vx = -directionAndVelocityVector.vx;
+            } else if (position.x < 0) {
+                position.x = 0;
+                directionAndVelocityVector.vx = -directionAndVelocityVector.vx;
+            }
+
+
+            if (position.y > (container.offsetHeight - particle.offsetHeight)) {
+                position.y = container.offsetHeight - particle.offsetHeight;
+                directionAndVelocityVector.vy = -directionAndVelocityVector.vy;
+            } else if (position.y < 0) {
+                position.y = 0;
+                directionAndVelocityVector.vy = -directionAndVelocityVector.vy;
+            }
+            return this;
+        };
+
+
+
+        this.move = function() {
+            this.position.x += this.directionAndVelocityVector.vx;
+            this.position.y += this.directionAndVelocityVector.vy;
+            this.detectCollision();
+            particle.style.left = Math.ceil(this.position.x) + "px";
+            particle.style.top = Math.ceil(this.position.y) + "px";
+
+
+        };
+
+
+    };
+
+
+    var particle_list = [];
+
+
+    function init() {
+        var containerElement = document.getElementById("containerElement");
+
+
+        for (var i = 0; i < 10; i++) {
+            var particleElement = document.createElement("div");
+            particleElement.classList.add("particle");
+            particle_list.push(new particleFactory(particleElement, containerElement));
+            containerElement.appendChild(particleElement);
+        }
+    }
+
+
+    init();
+
+
+    var drawingCount = 0;
+
+
+    function draw() {
+        requestAnimationFrame(draw);
+        for (var i = 0; i < 10; i++) {
+            particle_list[i].move();
+        }
+    }
+
+
+    draw();
+
+
+</script>
+</body>
+</html>

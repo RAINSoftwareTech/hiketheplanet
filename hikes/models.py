@@ -6,22 +6,22 @@ from django.utils import timezone
 
 # ie: 'Oregon Coast', 'Columbia Gorge'
 class Region(models.Model):
-    region = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     num_hikes = models.IntegerField(default=1)
 
     def __unicode__(self):
-        return self.region
+        return self.name
 
 
-class Location(models.Model):
+class Trailhead(models.Model):
     region = models.ForeignKey(Region)
-    trailhead = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
     num_hikes = models.IntegerField(default=1)
 
     def __unicode__(self):
-        return self.trailhead
+        return self.name
 
     def miles_from_user(self):
         pass
@@ -33,26 +33,19 @@ class Location(models.Model):
 class Hike(models.Model):
     # TYPE_CHOICES = ('Out and Back', 'Loop', 'One Way')
 
-    location = models.ForeignKey(Location)
+    trailhead = models.ForeignKey(Trailhead)
     name = models.CharField(max_length=180, unique=True)
-    type = models.CharField(max_length=20)
+    hike_type = models.CharField(max_length=20, default="Easy")
     likes = models.IntegerField(default=0)
     trail_map = models.FileField(upload_to='trail_maps', blank=True)
+    difficulty_level = models.CharField(max_length=20)
+    difficulty_level_explanation = models.TextField()
+    distance = models.FloatField(default=0.0)
+    elevation = models.IntegerField(default=0)
+    high_point = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.name
-
-
-class Difficulty(models.Model):
-    # DIFFICULTY_LEVEL_CHOICES = ('Easy', 'Moderate', 'Difficult', 'Advanced')
-    hike = models.ForeignKey(Hike)
-    difficulty_level = models.CharField(max_length=20)
-    difficulty_level_explanation = models.TextField()
-    length = models.IntegerField(default=0)
-    elevation = models.IntegerField(default=0)
-
-    def __unicode__(self):
-        return self.difficulty_level
 
 
 class Hazards(models.Model):
