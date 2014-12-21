@@ -10,11 +10,19 @@
     <script src="{% static "js/jquery-1.11.1.js" %}"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{% static "css/hikes.css" %}" />
+    {% block head-block %}
+    {% endblock %}
+<title>Hike the Map: {% block title_block %}Pacific Northwest{% endblock %}</title>
 </head>
+
 <body>
     <div class="page-header">
         <h1><a href="/hikes/">Hike the Map: Pacific Northwest</a></h1>
     </div>
+
+    {% block modal-block %}
+    {% endblock %}
+
     <div class="content container">
         <div class="row">
             <div class="col-md-8">
@@ -23,5 +31,6 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>

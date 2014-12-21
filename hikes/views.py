@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
+from django.contrib import auth
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, redirect, render
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from hikes import models
@@ -8,18 +9,18 @@ from json import dumps
 
 
 @csrf_exempt
-def ajax(request):
-    if request.method =="POST":
-        region = models.Region()
-        region.region = request.POST["region"]
-        region.save()
-
-    region_list = list(models.Region.objects.order_by('-num_hikes'))
+def ajax(request, region_name):
+    this_region = models.Region.objects.get(name=region_name)
+    trailheads_list = models.Trailhead.objects.filter(region=this_region)
     ajax_region_list = []
-    for r in region_list:
+    for t in trailheads_list:
+        t.url = encode_url(t.name)
         ajax_region_list.append({
-            "region": r.region,
-            "number of hikes": str(r.num_hikes),
+            "trailhead": t.name,
+            "lat": t.latitude,
+            "lon": t.longitude,
+            "url": t.url,
+            "num_hikes": t.num_hikes,
         })
 
     return HttpResponse(dumps(ajax_region_list), content_type="application/json")
@@ -29,8 +30,8 @@ def index(request):
     context = RequestContext(request)
     region_list = models.Region.objects.order_by('-num_hikes')
     context_dict = {'regions': region_list}
-    for region in region_list:
-        region.url = encode_url(region.name)
+    for r in region_list:
+        r.url = encode_url(r.name)
     return render_to_response('hikes/index.html', context_dict, context)
 
 
@@ -43,8 +44,8 @@ def region(request, region_url):
         trailheads = models.Trailhead.objects.filter(region=this_region).order_by('-latitude')
         context_dict['trailheads'] = trailheads
         context_dict['region'] = this_region
-        for trailhead in trailheads:
-            trailhead.url = encode_url(trailhead.name)
+        for t in trailheads:
+            t.url = encode_url(t.name)
     except models.Region.DoesNotExist:
         pass
 
@@ -60,8 +61,8 @@ def trailhead(request, trailhead_url):
         hikes = models.Hike.objects.filter(trailhead=this_location)
         context_dict['trailhead'] = this_location
         context_dict['hikes'] = hikes
-        for hike in hikes:
-            hike.url = encode_url(hike.name)
+        for h in hikes:
+            h.url = encode_url(h.name)
     except models.Region.DoesNotExist:
         pass
 
@@ -75,11 +76,27 @@ def hike(request, hike_url):
     context_dict['hike'] = hike_details
     return render_to_response('hikes/hike.html', context_dict, context)
 
-def register(request):
-    context = RequestContext(request)
-    registered = False
 
-    pass
+def register(request):
+    if request.method == "POST":
+        User.objects.create_user(request.POST["username"], None, request.POST["password"])
+    return render(request, 'hikes/register.html')
+
+
+def login(request):
+    if request.method == "POST":
+        user = auth.authenticate(username=request.POST['username'],
+                                 password=request.POST['password'])
+        if user is not None:
+            if user.is_active:
+                print("user is valid, active and authenticated")
+                return redirect('index')
+            else:
+                print("the password is valid, but the account has been disabled!")
+
+        else:
+            print("the username and password were incorrect")
+    return render(request, 'hikes/login.html')
 
 
 def encode_url(name):

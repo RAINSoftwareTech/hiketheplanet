@@ -1,0 +1,24 @@
+/*@media screen and (min-width: 400px) {*/
+    /*#mapModal .modal-dialog {*/
+        /*width: 400px;*/
+        /*height: 400px;*/
+    /*}*/
+/*}*/
+
+#mapModal .modal-dialog {
+    width: 75%;
+    height: 400px;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+#mapModal .modal-dialog h1,
+#mapModal .modal-dialog h2,
+#mapModal .modal-dialog h3,
+#mapModal .modal-dialog h4 {
+    font-family: 'Architects Daughter', cursive;
+    color: #542107;
+}
