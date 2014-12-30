@@ -17,7 +17,16 @@
 
 <body>
     <div class="page-header">
-        <h1><a href="/hikes/">Hike the Map: Pacific Northwest</a></h1>
+        <h1><a href="/hikes">Hike the Map: Pacific Northwest</a></h1>
+
+        <div class="user-header">
+            <span>
+            <ul>
+              <li> <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="126" width="87"></li>
+              <li><a href="#" class="login-link" data-toggle="modal" data-target="#loginModal">Login or Register</a></li>
+            </ul>
+            </span>
+        </div>
     </div>
 
     {% block modal-block %}

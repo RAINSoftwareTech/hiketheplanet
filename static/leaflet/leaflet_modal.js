@@ -69,7 +69,7 @@ function stateChanged() {
 				var plotmark = new L.Marker(plotll);
 				plotmark.data=plotlist[i];
 				map.addLayer(plotmark);
-				plotmark.bindPopup("<a href='/hikes/trailhead/"
+				plotmark.bindPopup("<a href='/hikes/"
                     + plotlist[i].url + "'><h4>"
                     + plotlist[i].trailhead
                     + "</a></h4>Hikes starting here: "

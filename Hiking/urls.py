@@ -5,6 +5,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^hikes/', include('hikes.urls')),
-
+    url(r'^login/', include('authentication.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

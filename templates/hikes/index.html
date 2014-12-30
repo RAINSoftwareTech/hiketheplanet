@@ -1,20 +1,30 @@
-{% extends 'hikes/modal.html' %}
-
+{% extends 'hikes/browse_map_modal.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
 <div class="body">
-        {% if regions %}
-            <ul>
-                {% for region in regions %}
-                <h3><a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ region.name }}"> {{ region.name }}</a> - {{ region.num_hikes }} trailheads
-                    <span class="list-link"><a href="/hikes/region/{{ region.url }}">listview</a></span></h3>
+<script src="{% static "js/hikes.js" %}"></script>
+    <div class="search_browse">
+    <a href="#" onclick="toggleDisplay('browse_region');" id="search_browse_links">Browse Hikes by Locations</a>
 
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no regions present.</strong>
-        {% endif %}
+        <div id="browse_region" style="display: none">
+            {% if regions %}
+                <ul>
+                    {% for region in regions %}
+                    <h3><a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ region.name }}"> {{ region.name }}</a>
+                        - {{ region.num_hikes }} trailheads
+                        <span class="list-link"><a href="/hikes/region/{{ region.url }}">listview</a></span></h3>
+
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <strong>There are no regions present.</strong>
+            {% endif %}
+        </div>
+
+    <p>this is just to test display</p>
+    </div>
 </div>
 
 {% endblock content %}

@@ -2,19 +2,6 @@ h3 a {
     color: #216629;
 }
 
-
-.page-header {
-    background-color: #0D6317;
-    margin-top: 0;
-    padding: 20px 20px 20px 40px;
-}
-
-.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
-    color: #ffffff;
-    font-size: 36pt;
-    text-decoration: none;
-}
-
 .content {
     margin-left: 40px;
 }
@@ -56,3 +43,62 @@ h1, h2, h3, h4 {
 
 }
 
+#search_browse_links{
+    font-size: 24px;
+    color: #216629;
+    font-family: 'Architects Daughter', cursive;
+}
+
+#search_browse_links:visited{
+    color: #542107;
+}
+
+
+/******************
+HEADING
+******************/
+
+.page-header {
+    background-color: #0D6317;
+    margin: 0 0 30px 0;
+    padding: 5px 0 0 10px;
+    width: 100%;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
+.page-header h1 {
+    float: left;
+}
+
+
+/*****************
+USER HEADER
+******************/
+
+.user-header {
+  text-align:right;
+  padding:10px 0;
+  margin:20px 0 0;
+  display: inline;
+ }
+
+.user-header ul {
+  list-style:none;
+  margin:0 10px;
+  padding:5px;
+}
+
+.user-header li{
+  display:block;
+}
+
+.user-header a{
+  font-weight:800;
+  padding:15px 10px;
+  color: #ffffff;
+}

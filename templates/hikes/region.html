@@ -1,4 +1,4 @@
-{% extends 'hikes/base.html' %}
+{% extends 'hikes/../base.html' %}
 
 
 {% block content %}
@@ -7,7 +7,7 @@
         {% if trailheads %}
             {% for trailhead in trailheads %}
                 {% if trailhead.region == region %}
-                    <ul><a href="/hikes/trailhead/{{ trailhead.url }}"> {{ trailhead.name }}</a>: lat: {{ trailhead.latitude }} | lng: {{ trailhead.longitude }} - {{ trailhead.num_hikes }} trailheads</ul>
+                    <ul><a href="/hikes/{{ trailhead.url }}"> {{ trailhead.name }}</a>: lat: {{ trailhead.latitude }} | lng: {{ trailhead.longitude }} - {{ trailhead.num_hikes }} hikes starting here</ul>
                 {% else %}
                     <strong>No locations currently in region.</strong>
                 {% endif %}
