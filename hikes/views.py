@@ -73,7 +73,7 @@ def trailhead(request, trailhead_url):
         context_dict['hikes'] = hikes
         for h in hikes:
             h.url = encode_url(h.name)
-    except Region.DoesNotExist:
+    except Trailhead.DoesNotExist:
         pass
 
     return render_to_response('hikes/trailheads.html', context_dict, context)

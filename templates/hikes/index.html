@@ -6,7 +6,7 @@
 <div class="body">
 <script src="{% static "js/hikes.js" %}"></script>
     <div class="search_browse">
-    <a href="#" onclick="toggleDisplay('browse_region');" id="search_browse_links">Browse Hikes by Locations</a>
+    <p><a href="#" onclick="toggleDisplay('browse_region');" id="search_browse_links">Browse Hikes by Locations</a></p>
 
         <div id="browse_region" style="display: none">
             {% if regions %}
@@ -23,7 +23,12 @@
             {% endif %}
         </div>
 
-    <p>this is just to test display</p>
+    <p><a href="#" onclick="toggleDisplay('search_by')" id="search_browse_links">Search By ...</a></p>
+        <div id="search_by" style="display: none">
+            <ul>
+                <h3>Search will go here</h3>
+            </ul>
+        </div>
     </div>
 </div>
 

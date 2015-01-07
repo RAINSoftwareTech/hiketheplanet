@@ -1,17 +1,48 @@
-{% extends 'hikes/../base.html' %}
-
-
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head-block %}
+  <link rel="stylesheet" href="{% static "css/details.css" %}" />
+{% endblock %}
+{% block title_block %}{{ hike.name }}{% endblock %}
 {% block content %}
-    <h2>{{ hike }}</h2>
-    hike: {{ hike.name }}
-    <br>type: {{ hike.hike_type }}
-    <br>likes: {{ hike.likes }}
-    <br>difficulty: {{ hike.difficulty_level }}
-    <br>explanation: {{ hike.difficulty_level_explanation }}
+<div class="body">
+<script src="{% static "js/hikes.js" %}"></script>
+
+    <h2>{{ hike }} - <span id="likes">{{ hike.likes }} likes</span></h2>
+    <div class="trailhead"><h4>{{ hike.trailhead }} - <a href="#">map/directions</a></h4></div>
+    <div class="difficulty" id="{{ hike.difficulty_level }}">{{ hike.difficulty_level }} - <a href="#" onclick="toggleDisplay('diff_exp');" id="diff_why">Why</a>
+        <div id="diff_exp" style="display: none">
+            {% if hike.difficulty_level_explanation %}
+                {{ hike.difficulty_level_explanation }}
+            {% else %}
+                <a href="#" id="add_diff_exp">add an explanation</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="user_adds">
+        <ul>
+            <li><a href="#" id="favs">Add to favorites</a></li>
+            <li><a href="#" id="checkin">Check-in/Checkout</a></li>
+            <li>Last Hiked On: <a href="#" id="last_hiked"><i>login in to see</i></a></li>
+        </ul>
+    </div>
+
+    <div class="basic_details">
+        <ul>
+            <li>{{ hike.distance }} miles {{ hike.hike_type }}</li>
+            <li>approx XX.X hours at your pace of X.X miles per hour</li>
+        </ul>
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
     <br>distance: {{ hike.distance }}
     <br>elevation: {{ hike.elevation }}
     <br>high point: {{ hike.high_point }}
     <br>trail map: {{ hike.trail_map }}
-
+</div>
 
 {% endblock content %}

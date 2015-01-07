@@ -1,0 +1,67 @@
+/*****************
+ADD TO LINKS FOR USERS
+******************/
+
+.user_adds {
+  text-align:center;
+  padding:10px 0;
+  margin:20px 0 0;
+  display: inline;
+}
+
+.user_adds ul {
+  list-style:none;
+  margin:0 10px;
+  padding:5px;
+}
+
+.user_adds li {
+    display: inline;
+    color: #542107;
+    padding: 20px;
+    font-weight:400;
+}
+
+.user_adds a {
+  font-weight:800;
+  padding:15px 10px;
+}
+
+
+/*****************
+BASIC DETAILS
+******************/
+.basic_details ul {
+    padding: 20px;
+}
+
+.basic_details li {
+    text-align: left;
+    display: inline;
+    margin: 5px 35px 5px 5px;
+}
+
+
+/*****************
+DIFFICULTY
+******************/
+#Easy {
+    color: #249617;
+}
+
+#Moderate {
+    color: #B0AA05;
+}
+
+#Difficult {
+    color: #A30603;
+}
+
+
+/*****************
+BODY
+******************/
+a {
+  font-style: italic;
+  color: #542107;
+}
