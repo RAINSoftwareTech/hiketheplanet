@@ -3,20 +3,22 @@
 
 
 {% block content %}
-        <h2>{{ trailhead }}</h2>
-    <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ trailhead.name }}"> directions</a>
-    {% if trailhead %}
-        {% if hikes %}
-            {% for hike in hikes %}
-                {% if hike.trailhead == trailhead %}
-                    <ul><a href="/hikes/hike/{{ hike.url }}"> {{ hike.name }}</a> difficulty level: {{ hike.difficulty_level }} | Likes: {{ hike.likes }}</ul><br>
-                {% else %}
-                    <strong>No locations currently at this trailhead.</strong>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+<div class="body">
+    <h2>{{ trailhead }}</h2>
+<a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ trailhead.name }}" onclick="initmap()"> directions</a>
+        {% if trailhead %}
+            {% if hikes %}
+                {% for hike in hikes %}
+                    {% if hike.trailhead == trailhead %}
+                        <ul><a href="/hikes/hike/{{ hike.url }}"> {{ hike.name }}</a> difficulty level: {{ hike.difficulty_level }} | Likes: {{ hike.likes }}</ul><br>
+                    {% else %}
+                        <strong>No locations currently at this trailhead.</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
 
-    {% else %}
-        The specified trailhead {{ trailhead }} does not exist!
-    {% endif %}
+        {% else %}
+            The specified trailhead {{ trailhead }} does not exist!
+        {% endif %}
+</div>
 {% endblock content %}
