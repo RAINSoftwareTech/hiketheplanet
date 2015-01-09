@@ -5,7 +5,8 @@
 {% block content %}
 <div class="body">
     <h2>{{ trailhead }}</h2>
-<a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ trailhead.latitude }}" data-lon="{{ trailhead.longitude }}" data-hiker-location="97219"> directions</a>
+<a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ trailhead.latitude }}"
+   data-lon="{{ trailhead.longitude }}" data-hiker-location="{{ hiker.location }}"> directions</a>
         {% if trailhead %}
             {% if hikes %}
                 {% for hike in hikes %}

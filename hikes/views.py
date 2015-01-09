@@ -71,6 +71,7 @@ def trailhead(request, trailhead_url):
         hikes = Hike.objects.filter(trailhead=this_location)
         context_dict['trailhead'] = this_location
         context_dict['hikes'] = hikes
+        context_dict['hiker'] = {'location': "97219"}
         for h in hikes:
             h.url = encode_url(h.name)
     except Trailhead.DoesNotExist:
@@ -88,4 +89,5 @@ def hike(request, hike_url):
     context_dict['hike'] = hike_details
     context_dict['hazards'] = hazards
     context_dict['sights'] = sights
+    context_dict['trailhead'] = hike_details.trailhead
     return render_to_response('hikes/hike.html', context_dict, context)
