@@ -23,7 +23,6 @@ function initmap() {
 	map.setView(new L.LatLng(45.51830, -122.67600),9);
 	map.addLayer(osm);
 
-
 }
 
 mapModal.on('shown.bs.modal', function(){
