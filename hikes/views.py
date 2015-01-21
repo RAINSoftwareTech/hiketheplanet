@@ -4,6 +4,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from hikes.models import Region, Trailhead, Hike, Hazards, Sights
 from json import dumps
@@ -32,12 +33,13 @@ def ajax(request, region_name):
     return HttpResponse(dumps(ajax_region_list), content_type="application/json")
 
 
+@csrf_exempt
 def index(request):
     context = RequestContext(request)
     region_list = Region.objects.order_by('-num_hikes')
-    context_dict = {'regions': region_list}
     for r in region_list:
         r.url = encode_url(r.name)
+    context_dict = {'regions': region_list}
     return render_to_response('hikes/index.html', context_dict, context)
 
 

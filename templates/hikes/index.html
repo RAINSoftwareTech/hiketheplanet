@@ -1,6 +1,10 @@
 {% extends 'hikes/browse_map_modal.html' %}
 {% load staticfiles %}
 
+{% block head-block2 %}
+
+    {% endblock %}
+
 {% block content %}
 
 <div class="body">
@@ -25,13 +29,20 @@
 
     <p><a href="#" onclick="toggleDisplay('search_by')" id="search_browse_links">Search By ...</a></p>
         <div id="search_by" style="display: none">
-            <ul>
-                <h3>Search will go here</h3>
+
+            <h3>Search by Hike</h3>
+
+            <div class="search">
+
+            <input type="text" id="hike_search" name="search" />
+            </div>
+            <ul id="search-results">
+
             </ul>
         </div>
     </div>
 </div>
-
+<script src="{% static "js/search.js" %}"></script>
 {% endblock content %}
 
 
