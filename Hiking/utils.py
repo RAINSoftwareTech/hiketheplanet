@@ -16,9 +16,10 @@ def decode_url(url, field_list):
     url_name = url.replace('_', ' ')
     url_name = url_name.title()
     for name in field_list:
-        if name.startswith(url_name[:6]):
-            if url == encode_url(name):
-                return name
+        for i in range(len(name) - 1, -1, -1):
+            if name.startswith(url_name[:i]):
+                if url == encode_url(name):
+                    return name
     return url_name
 
 

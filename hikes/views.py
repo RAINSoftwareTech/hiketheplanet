@@ -14,7 +14,7 @@ from Hiking.utils import encode_url, build_context_dict
 @csrf_exempt
 def ajax(request, region_name):
     this_region = Region.objects.get(name=region_name)
-    trailheads_list = Trailhead.objects.filter(region=this_region)
+    trailheads_list = Trailhead.objects.filter(region=this_region).order_by("name")
     ajax_region_list = []
     for t in trailheads_list:
         if t.num_hikes == 1:

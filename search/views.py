@@ -23,9 +23,9 @@ def search_hikes(request):
         hike.url = encode_url(hike.name)
         ajax_hikes_list.append({
             'hike': hike.name,
-            'length': hike.distance,
+            'distance': hike.distance,
             'difficulty': hike.difficulty_level,
-            'url': hike.url
+            'hikeUrl': hike.url
         })
 
      # return render_to_response('search.html', {'hikes': hikes}, context)

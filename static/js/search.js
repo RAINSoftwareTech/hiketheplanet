@@ -67,10 +67,34 @@
         if (ajaxRequest.readyState == 4) {
             //use the info here that was returned
             if (ajaxRequest.status == 200) {
-                console.log(ajaxRequest.responseText);
+                var data = JSON.parse(ajaxRequest.responseText);
+                searchResults(data);
 
             }
         }
+    }
+
+    function searchResults(data){
+        var results,
+            url,
+            name,
+            distance,
+            difficulty,
+            text;
+        var output = [];
+        results = document.getElementById("search-results");
+        for(i=0; i<data.length; i++) {
+            url = "/hikes/hike/" + data[i].hikeUrl;
+            name = data[i].hike;
+            distance = " | Length: " + data[i].distance;
+            difficulty = " miles | Difficulty: " + data[i].difficulty;
+            text = '<a href="' + url + '">'
+                + name + '</a> ' + distance + difficulty;
+            output.push(text);
+        }
+        console.log(ajaxRequest.responseText);
+        results.innerHTML = "<li>" + output.join("</li><li>") + "</li>";
+
     }
 
     initSearch();
