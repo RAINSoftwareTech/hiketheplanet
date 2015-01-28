@@ -24,6 +24,7 @@ EXCLUDE_LINKS = [
     'http://www.portlandhikersfieldguide.org/wiki/Latourell_Falls_Trailhead',
 ]
 
+
 def make_soup(url):
     html = urlopen(url).read()
     return BeautifulSoup(html, "lxml")

@@ -5,6 +5,7 @@ from hikes.models import Hike, Trailhead
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from json import dumps
+import webbrowser
 
 
 @csrf_exempt
@@ -33,42 +34,40 @@ def search_hikes(request):
 @csrf_exempt
 def search_distance(request):
     API_KEY = 'Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96'
-    # URL = 'http://www.mapquestapi.com/directions/v1/route?key={}&from={}&to={}'
-    URL = 'http://www.mapquestapi.com/directions/v1/routematrix?key={}&json={}'
+    URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin{}&hostedData={}&radius={}'
+    hosted_data = 'mqap.149310_pdxhikes||'
     starting_zip = '97219'
     max_distance = 60
-    matrix_json = {}
-    matrix_json['options'] = {'allToAll': 'false'}
 
-    distance_list = []
-    # hikes = Hike.objects.all().order_by('name')
-    hikes = Trailhead.objects.all().order_by('name')
+    full_url = URL.format(API_KEY, starting_zip, hosted_data, max_distance)
+    print(full_url)
+    data = urlopen(full_url).read()
+    distances = json.loads(data)
+    search_results = distances['searchResults']
+    results_list = []
+    for result in search_results:
+        fields = result['fields']
+        name = fields['Hike']
+        this_hike = Hike.objects.get(name=name)
+        results_list.append({
+            'hike': name,
+            'distance': result['distance'],
+            'difficulty': this_hike.difficulty_level,
+            'length': this_hike.distance,
+            'hike_url': encode_url(this_hike.name)
+        })
+    # mq_table()
+
+    return HttpResponse(dumps(results_list), content_type="application/json")
+
+
+def mq_table():
+    hikes = Hike.objects.all().order_by('name')
+    table = open('mqtable.csv', 'w')
+    table.write('Hike,Lat,Lon\n')
     for hike in hikes:
-        # location = hike.trailhead
-        lat = hike.latitude
-        lon = hike.longitude
-        lat_lon = str(lat) + ',' + str(lon)
-
-        matrix_json['locations'] = [starting_zip, lat_lon]
-
-        # full_url = URL.format(API_KEY, quote(starting_zip), quote(lat_lon))
-        full_url = URL.format(API_KEY, matrix_json)
-        print(full_url)
-        data = urlopen(full_url).read()
-        directions = json.loads(data)
-        print(directions)
-        # distance = directions['route']['distance']
-        distance = directions['distance'][1]
-        print(distance)
-
-        if distance <= max_distance:
-            hike.url = encode_url(hike.name)
-            distance_list.append({
-                'hike': hike.name,
-                'distance': distance,
-                # 'length': hike.distance,
-                # 'difficulty': hike.difficulty_level,
-                'hike_url': hike.url
-            })
-
-    return HttpResponse(dumps(distance_list), content_type="application/json")
+        location = hike.trailhead
+        new_line = str(hike.name) + ',' + str(location.latitude) + ',' + str(location.longitude) + '\n'
+        table.write(new_line)
+        print(new_line)
+    table.close()
