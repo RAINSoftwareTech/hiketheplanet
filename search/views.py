@@ -34,10 +34,20 @@ def search_hikes(request):
 @csrf_exempt
 def search_distance(request):
     API_KEY = 'Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96'
-    URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin{}&hostedData={}&radius={}'
+    URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin={}&hostedData={}&radius={}'
     hosted_data = 'mqap.149310_pdxhikes||'
+
+    if request.method == 'GET':
+        search_text = request.GET.get('search_text')
+    else:
+        search_text = ''
+
     starting_zip = '97219'
     max_distance = 60
+    # parameters = search_text.split('_')
+    # starting_zip = parameters[1]
+    # max_distance = parameters[0]
+    # print(starting_zip, max_distance)
 
     full_url = URL.format(API_KEY, starting_zip, hosted_data, max_distance)
     print(full_url)
