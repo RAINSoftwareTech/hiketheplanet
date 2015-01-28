@@ -139,7 +139,7 @@
             name = data[i].hike;
             miles = " | Driving Miles: " + data[i].distance;
             difficulty = " miles | Difficulty: " + data[i].difficulty;
-            length = " | Length" + data[i].length + 'miles';
+            length = " | Length " + data[i].length + ' miles';
             text = '<a href="' + url + '">'
                 + name + '</a> ' + miles + difficulty + length;
             output.push(text);

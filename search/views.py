@@ -35,6 +35,7 @@ def search_hikes(request):
 def search_distance(request):
     API_KEY = 'Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96'
     URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin={}&hostedData={}&radius={}'
+    geo_url ='http://www.mapquestapi.com/geocoding/v1/address?key={}&location={}&maxResults=1'
     hosted_data = 'mqap.149310_pdxhikes||'
 
     if request.method == 'GET':
@@ -42,14 +43,25 @@ def search_distance(request):
     else:
         search_text = ''
 
-    starting_zip = '97219'
-    max_distance = 60
-    # parameters = search_text.split('_')
-    # starting_zip = parameters[1]
-    # max_distance = parameters[0]
-    # print(starting_zip, max_distance)
+    # starting_zip = '97219'
+    # max_distance = 60
+    parameters = search_text.split('_')
+    starting_zip = parameters[1]
+    max_distance = parameters[0]
+    print(starting_zip, max_distance)
 
-    full_url = URL.format(API_KEY, starting_zip, hosted_data, max_distance)
+    full_geo = geo_url.format(API_KEY, starting_zip)
+    geo_data = urlopen(full_geo).read()
+    geo_details = json.loads(geo_data)
+
+    start_lat = geo_details['results'][0]['locations'][0]['latLng']['lat']
+    print(start_lat)
+    start_lon = geo_details['results'][0]['locations'][0]['latLng']['lng']
+    print(start_lon)
+    start_latlon = str(start_lat) + ',' + str(start_lon)
+    print(start_latlon)
+
+    full_url = URL.format(API_KEY, start_latlon, hosted_data, max_distance)
     print(full_url)
     data = urlopen(full_url).read()
     distances = json.loads(data)
