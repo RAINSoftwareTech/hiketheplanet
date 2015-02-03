@@ -1,20 +1,9 @@
 from django import forms
-from django.contrib.auth.models import User
-from hikes.models import Hiker
+from hikes.models import Hike, Hazards, Sights, Equipment
 
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+class HikeForm(forms.Form):
 
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-
-
-class HikerRegistrationForm(forms.ModelForm):
-    class Meta:
-        model = Hiker
-        fields = ('home_zipcode',
-                  'profile_pic')
-
-
+        model = Hike
+        fields = ('difficulty_level_explanation', 'description')

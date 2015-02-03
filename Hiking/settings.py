@@ -31,7 +31,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+CRISPY_TEMPLATE_APPS = 'bootstrap3'
 # Application definition
 
 INSTALLED_APPS = (
@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'hikes',
     'localflavor',
+    'crispy_forms'
 )
 
 MIDDLEWARE_CLASSES = (

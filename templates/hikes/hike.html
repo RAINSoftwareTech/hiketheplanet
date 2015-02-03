@@ -14,7 +14,7 @@
     <h2>{{ hike }} - <span id="likes">{{ hike.likes }} likes</span></h2>
     <div class="trailhead"><h4>{{ trailhead.name }} -
         <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ trailhead.latitude }}"
-           data-lon="{{ trailhead.longitude }}" data-hiker-location="97219">map/directions</a></h4></div>
+           data-lon="{{ trailhead.longitude }}" data-hiker-location="{{ hiker.location }}">map/directions</a></h4></div>
 
     <div class="difficulty" id="{{ hike.difficulty_level }}">{{ hike.difficulty_level }} - <a href="#" onclick="toggleDisplay('diff_exp');" id="diff_why">Why</a>
         <div id="diff_exp" style="display: none">
@@ -38,7 +38,17 @@
     <div class="basic_details">
         <ul>
             <li>{{ hike.distance }} miles {{ hike.hike_type }}</li>
-            <li>approx XX.X hours at your pace of X.X miles per hour</li>
+            <li>approx
+                {% if hiker.hours > 0 %}
+                    {% if hiker.minutes > 0 %}
+                        {{ hiker.hours }} hours and {{ hiker.minutes }} minutes
+                    {% else %}
+                        {{ hiker.hours }} hours
+                    {% endif %}
+                {% else %}
+                    {{ hiker.minutes }} minutes
+                {% endif %}
+                at your pace of {{ hiker.pace }} miles per hour</li>
         </ul>
         <ul>
             <li></li>

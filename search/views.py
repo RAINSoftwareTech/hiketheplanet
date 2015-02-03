@@ -5,7 +5,7 @@ from hikes.models import Hike, Trailhead
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from json import dumps
-import webbrowser
+from operator import itemgetter
 
 
 @csrf_exempt
@@ -34,7 +34,7 @@ def search_hikes(request):
 @csrf_exempt
 def search_distance(request):
     API_KEY = 'Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96'
-    URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin={}&hostedData={}&radius={}'
+    URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin={}&hostedData={}&radius={}&maxMatches=800'
     geo_url ='http://www.mapquestapi.com/geocoding/v1/address?key={}&location={}&maxResults=1'
     hosted_data = 'mqap.149310_pdxhikes||'
 
@@ -65,6 +65,7 @@ def search_distance(request):
     print(full_url)
     data = urlopen(full_url).read()
     distances = json.loads(data)
+    # print(distances)
     search_results = distances['searchResults']
     results_list = []
     for result in search_results:
@@ -79,8 +80,8 @@ def search_distance(request):
             'hike_url': encode_url(this_hike.name)
         })
     # mq_table()
-
-    return HttpResponse(dumps(results_list), content_type="application/json")
+    sorted_results = sorted(results_list, key=itemgetter('distance'), reverse=True)
+    return HttpResponse(dumps(sorted_results), content_type="application/json")
 
 
 def mq_table():

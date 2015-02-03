@@ -88,8 +88,26 @@ def hike(request, hike_url):
     hike_details = Hike.objects.get(name=context_dict['hike'])
     hazards = Hazards.objects.filter(hike=hike_details)
     sights = Sights.objects.filter(hike=hike_details)
+
+    hiker_pace = 2
+    hike_time = hike_details.distance / hiker_pace
+    hike_total = round(hike_time * 60, 0)
+    print(hike_total)
+    hike_hours = int(hike_total // 60)
+    print(hike_hours)
+    hike_minutes = int(hike_total % 60)
+
+    hiker_details = {}
+    hiker_details['location'] = "97219"
+    hiker_details['pace'] = hiker_pace
+    hiker_details['hours'] = hike_hours
+    hiker_details['minutes'] = hike_minutes
+
     context_dict['hike'] = hike_details
     context_dict['hazards'] = hazards
     context_dict['sights'] = sights
     context_dict['trailhead'] = hike_details.trailhead
+    context_dict['hiker'] = hiker_details
+
+    print()
     return render_to_response('hikes/hike.html', context_dict, context)
