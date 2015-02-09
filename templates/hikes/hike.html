@@ -21,7 +21,8 @@
             {% if hike.difficulty_level_explanation %}
                 {{ hike.difficulty_level_explanation }}
             {% else %}
-                <a href="#" id="add_diff_exp">add an explanation</a>
+                <a href="#" id="add_diff_exp"  onclick="toggleDisplay('diff_exp_form');">add an explanation?</a>
+                <input type="text" class="form-control" id="diff_exp_form" style="display: none">
             {% endif %}
         </div>
     </div>
@@ -37,8 +38,8 @@
 
     <div class="basic_details">
         <ul>
-            <li>{{ hike.distance }} miles {{ hike.hike_type }}</li>
-            <li>approx
+            <li class="col1">{{ hike.distance }} miles {{ hike.hike_type }}</li>
+            <li class="col2">approx
                 {% if hiker.hours > 0 %}
                     {% if hiker.minutes > 0 %}
                         {{ hiker.hours }} hours and {{ hiker.minutes }} minutes
@@ -48,17 +49,29 @@
                 {% else %}
                     {{ hiker.minutes }} minutes
                 {% endif %}
-                at your pace of {{ hiker.pace }} miles per hour</li>
+                at your pace of {{ hiker.pace }} miles per hour
+            </li>
+            <li class="col1">elevation: {{ hike.elevation }}</li>
+            <li class="col2">high point: {{ hike.high_point }}</li>
         </ul>
-        <ul>
-            <li></li>
-        </ul>
-    </div>
+        <div class="description" id="hike_descrp">
+            {% if hike.description %}
+                {{ hike.description }}
+            {% else %}
+                <a href="#" id="add_descrip"  onclick="toggleDisplay('add_descrip_form');">add a description?</a>
+                <textarea rows="3" class="form-control" id="add_descrip_form" style="display: none"></textarea>
+            {% endif %}
+        </div>
+        <div class="trailMap" id="trail_map">
+                {% if hike.trail_map %}
+                    Trail Map: {{ hike.trail_map }}
+                {% else %}
+                    <a href="#" id="add_map"  onclick="toggleDisplay('add_map_form');">add a trail map?</a>
+                    <input type="file" id="add_map_form" style="display: none">
+                {% endif %}
+        </div>
 
-    <br>distance: {{ hike.distance }}
-    <br>elevation: {{ hike.elevation }}
-    <br>high point: {{ hike.high_point }}
-    <br>trail map: {{ hike.trail_map }}
+
 </div>
 
 {% endblock content %}

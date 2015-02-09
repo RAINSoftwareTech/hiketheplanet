@@ -44,8 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'hikes',
-    'localflavor',
-    'crispy_forms'
+    'localflavor'
 )
 
 MIDDLEWARE_CLASSES = (

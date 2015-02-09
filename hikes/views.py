@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from hikes.models import Region, Trailhead, Hike, Hazards, Sights
 from json import dumps
 from Hiking.utils import encode_url, build_context_dict
+from hikes.forms import HikeForm
 
 
 @csrf_exempt
@@ -97,6 +98,8 @@ def hike(request, hike_url):
     print(hike_hours)
     hike_minutes = int(hike_total % 60)
 
+    form = HikeForm()
+
     hiker_details = {}
     hiker_details['location'] = "97219"
     hiker_details['pace'] = hiker_pace
@@ -108,6 +111,8 @@ def hike(request, hike_url):
     context_dict['sights'] = sights
     context_dict['trailhead'] = hike_details.trailhead
     context_dict['hiker'] = hiker_details
+
+    context_dict['form'] = form
 
     print()
     return render_to_response('hikes/hike.html', context_dict, context)
