@@ -132,4 +132,10 @@ HIKE DETAILS
 
 .trailMap {
     padding-top: 5px;
+    vertical-align: bottom;
+}
+
+.saveAll{
+    padding: 5px;
+    float: right;
 }

@@ -11,7 +11,7 @@
 <div class="body">
 <script src="{% static "js/hikes.js" %}"></script>
 
-    <h2>{{ hike }} - <span id="likes">{{ hike.likes }} likes</span></h2>
+    <h2 id="hike">{{ hike }} - <span id="likes">{{ hike.likes }} likes</span></h2>
     <div class="trailhead"><h4>{{ trailhead.name }} -
         <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ trailhead.latitude }}"
            data-lon="{{ trailhead.longitude }}" data-hiker-location="{{ hiker.location }}">map/directions</a></h4></div>
@@ -22,7 +22,7 @@
                 {{ hike.difficulty_level_explanation }}
             {% else %}
                 <a href="#" id="add_diff_exp"  onclick="toggleDisplay('diff_exp_form');">add an explanation?</a>
-                <input type="text" class="form-control" id="diff_exp_form" style="display: none">
+                <input type="text" class="form-control" id="diff_exp_form" style="display: none"  onkeydown="turnOnDisplay('save');">
             {% endif %}
         </div>
     </div>
@@ -59,7 +59,7 @@
                 {{ hike.description }}
             {% else %}
                 <a href="#" id="add_descrip"  onclick="toggleDisplay('add_descrip_form');">add a description?</a>
-                <textarea rows="3" class="form-control" id="add_descrip_form" style="display: none"></textarea>
+                <textarea rows="3" class="form-control" id="add_descrip_form" style="display: none" onkeydown="turnOnDisplay('save');"></textarea>
             {% endif %}
         </div>
         <div class="trailMap" id="trail_map">
@@ -67,11 +67,15 @@
                     Trail Map: {{ hike.trail_map }}
                 {% else %}
                     <a href="#" id="add_map"  onclick="toggleDisplay('add_map_form');">add a trail map?</a>
-                    <input type="file" id="add_map_form" style="display: none">
+                    <input type="file" id="add_map_form" style="display: none"  onclick="turnOnDisplay('save');">
                 {% endif %}
+        </div>
+
+        <div class="saveAll" id="save_all">
+            <input type="button" class='btn' id="save" style="display: none" value="Save" action="/hikes/hikesajax/" method="post">
         </div>
 
 
 </div>
-
+<script src="{% static "js/hike-details.js" %}"></script>
 {% endblock content %}

@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^region/(?P<region_url>\w+)/$', views.region, name='region'),
     url(r'^trailhead/(?P<trailhead_url>\w+)/$', views.trailhead, name='trailhead'),
     url(r'^hike/(?P<hike_url>\w+)/$', views.hike, name='hike'),
+    url(r'^hikesajax/$', views.hikes_ajax, name='hike ajax'),
     url(r'^admin/', include(admin.site.urls)),
 )

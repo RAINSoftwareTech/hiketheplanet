@@ -1,7 +1,7 @@
 # Views to display region/trailhead/hike information by list or browse
 
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.context_processors import csrf
@@ -114,5 +114,21 @@ def hike(request, hike_url):
 
     context_dict['form'] = form
 
-    print()
     return render_to_response('hikes/hike.html', context_dict, context)
+
+
+@csrf_exempt
+def hikes_ajax(request):
+
+    if request.method == 'POST':
+        hike_name = request.POST.get("name")
+        hike_details = Hike.objects.get(name=hike_name)
+        data = {}
+        hike_details.description = request.POST.get("description")
+        hike_details.difficulty_level_explanation = request.POST.get("difficulty")
+        hike_details.save()
+        data["description"] = hike_details.description
+        data["difficulty"] = hike_details.difficulty_level_explanation
+        return HttpResponse(dumps(data), content_type="application/json")
+    else:
+        return Http404
