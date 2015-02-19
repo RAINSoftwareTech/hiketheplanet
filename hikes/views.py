@@ -10,6 +10,7 @@ from hikes.models import Region, Trailhead, Hike, Hazards, Sights
 from json import dumps
 from Hiking.utils import encode_url, build_context_dict
 from hikes.forms import HikeForm
+from urllib import unquote
 
 
 @csrf_exempt
@@ -119,16 +120,24 @@ def hike(request, hike_url):
 
 @csrf_exempt
 def hikes_ajax(request):
-
+    print(request.method)
     if request.method == 'POST':
-        hike_name = request.POST.get("name")
+        hike_name = unquote(request.POST.get("name"))
+        print(hike_name)
         hike_details = Hike.objects.get(name=hike_name)
-        data = {}
-        hike_details.description = request.POST.get("description")
-        hike_details.difficulty_level_explanation = request.POST.get("difficulty")
+        print(hike_details)
+        data = []
+        if request.POST.get("description"):
+            hike_details.description = request.POST.get("description")
+
+        if request.POST.get("difficulty"):
+            hike_details.difficulty_level_explanation = request.POST.get("difficulty")
+
         hike_details.save()
-        data["description"] = hike_details.description
-        data["difficulty"] = hike_details.difficulty_level_explanation
+        data.append({
+            "description": hike_details.description,
+            "difficulty": hike_details.difficulty_level_explanation
+        })
         return HttpResponse(dumps(data), content_type="application/json")
     else:
         return Http404

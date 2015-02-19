@@ -11,7 +11,7 @@
 <div class="body">
 <script src="{% static "js/hikes.js" %}"></script>
 
-    <h2 id="hike">{{ hike }} - <span id="likes">{{ hike.likes }} likes</span></h2>
+    <h2 id="hike">{{ hike.name }}</h2> - <span id="likes">{{ hike.likes }} likes</span>
     <div class="trailhead"><h4>{{ trailhead.name }} -
         <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ trailhead.latitude }}"
            data-lon="{{ trailhead.longitude }}" data-hiker-location="{{ hiker.location }}">map/directions</a></h4></div>
