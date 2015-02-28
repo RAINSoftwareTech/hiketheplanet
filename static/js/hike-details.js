@@ -13,23 +13,28 @@
  //      grab form elements and call the save function
         var saveButton = document.getElementById("save");
         saveButton.onclick = function () {
-            var formDataList = [];
-            var name = document.getElementById("hike");
+            var form = new FormData();
+            var hikeName = document.getElementById("hike");
             var difficulty = document.getElementById("diff_exp_form");
             var description = document.getElementById("add_descrip_form");
             var fileSelect = document.getElementById("add_map_form");
 
-            formDataList.push("name=" + encodeURIComponent(name.innerHTML));
-
-            if(difficulty) {
-                formDataList.push("difficulty=" + encodeURIComponent(difficulty.value));
+            console.log(difficulty, description, fileSelect);
+            if(difficulty && difficulty.value.length > 0) {
+                form.append("difficulty", encodeURIComponent(difficulty.value));
             }
 
-            if(description) {
-                formDataList.push("description=" + encodeURIComponent(description.value));
+            if(description && difficulty.value. length > 0) {
+                form.append("description", encodeURIComponent(description.value));
             }
+
+            if(fileSelect && fileSelect.files[0]){
+                form.append("map", fileSelect.files[0])
+            }
+
+            form.append("hike", encodeURIComponent(hikeName.innerHTML));
             console.log("variables initialized");
-            saveForm(formDataList.join("&"));
+            saveForm(form);
             }
 
     }
@@ -40,7 +45,7 @@
         console.log("saveForm called");
         console.log(formData);
         ajaxRequest.open("POST", "/hikes/hikesajax/", true);
-        ajaxRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+//        ajaxRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         ajaxRequest.send(formData);
         ajaxRequest.onreadystatechange = stateChanged;
     }
@@ -52,11 +57,15 @@
         console.log("callback function");
         var descripResults = document.getElementById("hike_descrp");
         var diffResults = document.getElementById("diff_exp");
+//        var trailMap = document.getElementById("trail_map");
         if (data[0].description.length > 0) {
             descripResults.innerHTML = data[0].description;
         }
         if (data[0].difficulty.length > 0) {
             diffResults.innerHTML = data[0].difficulty;
+        }
+        if (data[0].map){
+            trailMap.innerHTML = "<img src='/media/" + data[0].map + "'>"
         }
     }
 

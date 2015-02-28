@@ -64,7 +64,7 @@
         </div>
         <div class="trailMap" id="trail_map">
                 {% if hike.trail_map %}
-                    Trail Map: {{ hike.trail_map }}
+                    Trail Map: <img src="/media/{{ hike.trail_map }}">
                 {% else %}
                     <a href="#" id="add_map"  onclick="toggleDisplay('add_map_form');">add a trail map?</a>
                     <input type="file" id="add_map_form" style="display: none"  onclick="turnOnDisplay('save');">

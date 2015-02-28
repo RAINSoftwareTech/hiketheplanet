@@ -35,7 +35,7 @@ def search_hikes(request):
 def search_distance(request):
     API_KEY = 'Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96'
     URL = 'http://www.mapquestapi.com/search/v2/radius?key={}&origin={}&hostedData={}&radius={}&maxMatches=800'
-    geo_url ='http://www.mapquestapi.com/geocoding/v1/address?key={}&location={}&maxResults=1'
+    geo_url ='http://open.mapquestapi.com/geocoding/v1/address?key={}&location={}&maxResults=1'
     hosted_data = 'mqap.149310_pdxhikes||'
 
     if request.method == 'GET':
@@ -51,8 +51,11 @@ def search_distance(request):
     print(starting_zip, max_distance)
 
     full_geo = geo_url.format(API_KEY, starting_zip)
+    print(full_geo)
     geo_data = urlopen(full_geo).read()
+    print(geo_data)
     geo_details = json.loads(geo_data)
+    print(geo_details)
 
     start_lat = geo_details['results'][0]['locations'][0]['latLng']['lat']
     print(start_lat)
@@ -65,13 +68,13 @@ def search_distance(request):
     print(full_url)
     data = urlopen(full_url).read()
     distances = json.loads(data)
-    # print(distances)
     search_results = distances['searchResults']
     results_list = []
     for result in search_results:
         fields = result['fields']
         name = fields['Hike']
         this_hike = Hike.objects.get(name=name)
+        print(this_hike)
         results_list.append({
             'hike': name,
             'distance': result['distance'],
@@ -79,7 +82,6 @@ def search_distance(request):
             'length': this_hike.distance,
             'hike_url': encode_url(this_hike.name)
         })
-    # mq_table()
     sorted_results = sorted(results_list, key=itemgetter('distance'), reverse=True)
     return HttpResponse(dumps(sorted_results), content_type="application/json")
 

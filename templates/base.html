@@ -24,7 +24,13 @@
             <span>
             <ul>
               <li> <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="126" width="87"></li>
-              <li><a href="#" class="login-link" data-toggle="modal" data-target="#loginModal">Login or Register</a></li>
+              <li>
+                  {% if user.is_authenticated %}
+                    <p class="login-link"><a href="#">Hello {{ user.username }}</a><small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>
+                  {% else %}
+                    <a href="{% url 'django.contrib.auth.views.login' %}" class="login-link">Login or Register</a>
+                  {% endif %}
+              </li>
             </ul>
             </span>
         </div>

@@ -1,0 +1,23 @@
+LOG:  database system was shut down at 2015-02-20 21:36:29 PST
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+FATAL:  database "/home/Fable/Hiking/Hiking.db" does not exist
+FATAL:  database "Fable" does not exist
+FATAL:  role "postgres" does not exist
+FATAL:  database "Fable" does not exist
+FATAL:  database "/home/Fable/Hiking/hiking" does not exist
+ERROR:  duplicate key value violates unique constraint "django_content_type_app_label_model_key"
+DETAIL:  Key (app_label, model)=(hikes, region) already exists.
+STATEMENT:  UPDATE "django_content_type" SET "name" = 'region', "app_label" = 'hikes', "model" = 'region' WHERE "django_content_type"."id" = 7 
+ERROR:  syntax error at or near "*" at character 6
+STATEMENT:  drop *;
+ERROR:  syntax error at or near "hikes_hike" at character 6
+STATEMENT:  drop hikes_hike;
+ERROR:  syntax error at or near "*" at character 12
+STATEMENT:  drop table *;
+ERROR:  duplicate key value violates unique constraint "django_content_type_app_label_model_key"
+DETAIL:  Key (app_label, model)=(hikes, region) already exists.
+STATEMENT:  UPDATE "django_content_type" SET "name" = 'region', "app_label" = 'hikes', "model" = 'region' WHERE "django_content_type"."id" = 7 
+LOG:  using stale statistics instead of current ones because stats collector is not responding
+LOG:  using stale statistics instead of current ones because stats collector is not responding
+WARNING:  could not open statistics file "pg_stat_tmp/global.stat": Permission denied

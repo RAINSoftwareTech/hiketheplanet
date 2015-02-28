@@ -4,7 +4,7 @@
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from hikes.models import Region, Trailhead, Hike, Hazards, Sights
 from json import dumps
@@ -118,26 +118,40 @@ def hike(request, hike_url):
     return render_to_response('hikes/hike.html', context_dict, context)
 
 
+@login_required
 @csrf_exempt
 def hikes_ajax(request):
     print(request.method)
     if request.method == 'POST':
-        hike_name = unquote(request.POST.get("name"))
+        hike_name = unquote(request.POST["hike"])
         print(hike_name)
         hike_details = Hike.objects.get(name=hike_name)
         print(hike_details)
         data = []
         if request.POST.get("description"):
-            hike_details.description = request.POST.get("description")
+            hike_details.description = unquote(request.POST["description"])
 
         if request.POST.get("difficulty"):
-            hike_details.difficulty_level_explanation = request.POST.get("difficulty")
+            hike_details.difficulty_level_explanation = unquote(request.POST["difficulty"])
+
+        try:
+            hike_details.trail_map = request.FILES["map"]
+        except KeyError:
+            pass
+
 
         hike_details.save()
-        data.append({
-            "description": hike_details.description,
-            "difficulty": hike_details.difficulty_level_explanation
-        })
+        if hike_details.trail_map:
+            data.append({
+                "description": hike_details.description,
+                "difficulty": hike_details.difficulty_level_explanation,
+                "map": hike_details.trail_map
+            })
+        else:
+            data.append({
+                "description": hike_details.description,
+                "difficulty": hike_details.difficulty_level_explanation
+            })
         return HttpResponse(dumps(data), content_type="application/json")
     else:
         return Http404

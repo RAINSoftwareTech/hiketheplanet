@@ -3,5 +3,4 @@ env
 *.pyc
 .idea
 *.json
-populate_hiking.py
 junk

@@ -1,0 +1,20 @@
+BEGIN;
+DELETE FROM "django_admin_log";
+DELETE FROM "auth_permission";
+DELETE FROM "auth_group";
+DELETE FROM "auth_group_permissions";
+DELETE FROM "django_session";
+DELETE FROM "auth_user_groups";
+DELETE FROM "auth_user_user_permissions";
+DELETE FROM "hikes_hazards";
+DELETE FROM "hikes_hike";
+DELETE FROM "registration_registrationprofile";
+DELETE FROM "hikes_sights";
+DELETE FROM "django_site";
+DELETE FROM "hikes_region";
+DELETE FROM "hikes_trailhead";
+DELETE FROM "auth_user";
+DELETE FROM "hikes_equipment";
+DELETE FROM "django_content_type";
+
+COMMIT;
