@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 CRISPY_TEMPLATE_APPS = 'bootstrap3'
 # Application definition
 
-ACCOUNT_ACTIVATION_DAYS = 7
 
 INSTALLED_APPS = (
     'django_admin_bootstrapped',
@@ -47,6 +46,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'hikes',
     'localflavor',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,4 +95,8 @@ MEDIA_URL = '/media/'
 # DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
 
 # Login
-LOGIN_REDIRECT_URL = '/hikes/'
+# LOGIN_REDIRECT_URL = '/hikes/'
+LOGIN_REDIRECT_URL = '/accounts/loggedin'
+ACCOUNT_ACTIVATION_DAYS = 7
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

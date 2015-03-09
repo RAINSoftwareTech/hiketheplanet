@@ -4,11 +4,12 @@
 <head lang="en">
     <meta charset="UTF-8">
     <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link href='http://fonts.googleapis.com/css?family=Gudea' rel='stylesheet' type='text/css'>
     <script src="{% static "js/jquery-1.11.1.js" %}"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{% static "css/hikes.css" %}" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="{% static "css/hikes.css" %}" media="screen"/>
     {% block head-block %}
     {% endblock %}
     {% block head-block2 %}
@@ -17,35 +18,36 @@
 </head>
 
 <body>
+<div id="wrapper">
     <div class="page-header">
         <h1><a href="/hikes">Hike the Planet: Pacific Northwest</a></h1>
 
         <div class="user-header">
             <span>
-            <ul>
-              <li> <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="126" width="87"></li>
-              <li>
+
                   {% if user.is_authenticated %}
                     <p class="login-link"><a href="#">Hello {{ user.username }}</a><small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>
                   {% else %}
-                    <a href="{% url 'django.contrib.auth.views.login' %}" class="login-link">Login or Register</a>
+                    <a href="{% url 'django.contrib.auth.views.login' %}" class="login-link" role="button">Login / Register</a>
                   {% endif %}
-              </li>
-            </ul>
+
+                   <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="80" width="70">
             </span>
         </div>
     </div>
 
-    {% block modal-block %}
-    {% endblock %}
 
-    <div class="content container">
-        <div class="row">
-            <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
-            </div>
-        </div>
+        {% block modal-block %}
+        {% endblock %}
+
+
+        {% block content %}
+        {% endblock %}
+    <div class="push"></div>
+</div>
+    <div class="page-footer">
+        <p>&copy; rainTech. All contents of this website, including text, images, and code are property of rainTech/Fable Turas.<br>
+           credit for index page UX design goes to <a href="http://45thparallelwebdesign.com/">45th Parallel Web Design, LLC.</a></p>
     </div>
 
 </body>

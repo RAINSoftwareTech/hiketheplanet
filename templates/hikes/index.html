@@ -1,60 +1,75 @@
 {% extends 'hikes/browse_map_modal.html' %}
 {% load staticfiles %}
 
-{% block head-block2 %}
-
-    {% endblock %}
-
 {% block content %}
 
-<div class="body">
-<script src="{% static "js/hikes.js" %}"></script>
-    <div class="search_browse">
-    <p><a href="#" onclick="toggleDisplay('browse_region');" id="search_browse_links">Browse Hikes by Locations</a></p>
 
-        <div id="browse_region" style="display: none">
+    <div class="intro" >
+        <img src="{% static "images/trees2.jpg" %}" alt="trees photo" class="trees-photo">
+        <p>
+            Hike the Planet is your ultimate hike-planning resource.
+            Find hikes using a variety of criteria. The use stats and
+            feedback from other hikers to help you decide which
+            adventure to embark on next!
+        </p>
+    </div>
+
+
+    <div id="search_by" style="display: block">
+        <div class="search_by_hike">
+            <h4>Search by Hike Name</h4>
+            <input type="text" id="hike_search" name="search" /><a href="#" class="hike_search" role="button">
+            <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></a>
+
+            <ul id="search-results">
+            </ul>
+        </div>
+
+        <div class="search_by_distance">
+            <h4>Search by Driving Distance</h4>
+
+            <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> <span>driving miles from</span>
+            <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span>zip code</span>
+            <button type="button" id="distance_search">
+            <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></button>
+
+            <ul id="distance-results">
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+
+    <div id="browse_region">
+        <h4>Browse Hikes by Region</h4>
+        <div class="row">
             {% if regions %}
-                <ul>
-                    {% for region in regions %}
-                    <h3><a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ region.name }}"> {{ region.name }}</a>
-                        - {{ region.num_hikes }} trailheads
-                        <span class="list-link"><a href="/hikes/region/{{ region.url }}">listview</a></span></h3>
 
-                    {% endfor %}
-                </ul>
+                {% for region in regions %}
+                 <div class="col-md-4">
+                    <p>{{ region.name }} ({{ region.num_hikes }} trailheads)
+                    <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ region.name }}" role="button">
+                        <img src="{% static "images/map-icon-18px.png" %}" alt="map icon" class="map_icon" height="14" width="14"></a>
+                    <a href="/hikes/region/{{ region.url }}"  class="list-link" role="button">
+                        <img src="{% static "images/list-icon-30px.png" %}" alt="list icon" class="list_icon" height="14" width="14">
+                    </a>
+                    </p>
+                </div>
+                {% endfor %}
+
             {% else %}
                 <strong>There are no regions present.</strong>
             {% endif %}
         </div>
-
-    <p><a href="#" onclick="toggleDisplay('search_by')" id="search_browse_links">Search By ...</a></p>
-        <div id="search_by" style="display: block">
-
-            <h3>Search by Hike</h3>
-
-            <div class="search">
-
-            <input type="text" id="hike_search" name="search" /> Hike Name
-            </div>
-            <ul id="search-results">
-
-            </ul>
-
-            <h3>Search by Driving Distance</h3>
-
-            <div class="search">
-                <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> Driving miles from
-                <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> Zip Code
-                <button type="button" id="distance_search">Search</button>
-
-            </div>
-            <ul id="distance-results">
-
-            </ul>
-        </div>
     </div>
-</div>
-<script src="{% static "js/search.js" %}"></script>
+
+
+
+
+
+    <script src="{% static "js/hikes.js" %}"></script>
+    <script src="{% static "js/search.js" %}"></script>
 {% endblock content %}
 
 

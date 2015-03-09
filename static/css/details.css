@@ -65,3 +65,40 @@ a {
   font-style: italic;
   color: #542107;
 }
+
+
+/*****************
+HIKE DETAILS
+******************/
+.description {
+    text-align: left;
+}
+
+.basic_details ul{
+    padding-top: 10px;
+    text-align: left;
+    width: 90%;
+}
+
+.basic_details li{
+    padding-top: 10px;
+    text-align: left;
+}
+
+.col1 {
+    width: 25%;
+}
+
+.col2 {
+    width: 65%;
+}
+
+.trailMap {
+    padding-top: 5px;
+    vertical-align: bottom;
+}
+
+.saveAll{
+    padding: 5px;
+    float: right;
+}

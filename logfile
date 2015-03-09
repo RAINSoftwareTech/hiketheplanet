@@ -21,3 +21,4 @@ STATEMENT:  UPDATE "django_content_type" SET "name" = 'region', "app_label" = 'h
 LOG:  using stale statistics instead of current ones because stats collector is not responding
 LOG:  using stale statistics instead of current ones because stats collector is not responding
 WARNING:  could not open statistics file "pg_stat_tmp/global.stat": Permission denied
+WARNING:  could not open statistics file "pg_stat_tmp/global.stat": Permission denied

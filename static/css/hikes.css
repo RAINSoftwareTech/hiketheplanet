@@ -1,13 +1,40 @@
+
+/*****************
+MISC
+******************/
+h1, h2, h3 {
+    font-family: 'Architects Daughter', cursive;
+}
+
 h3 a {
     color: #216629;
+}
+
+body{
+    font-family: 'Gudea', sans-serif;
+    height: 100%;
+}
+
+hr {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 40px;
+    margin-right: 40px;
+    border-style: inset;
+    border-width: 1px;
+    border-color: #0D6317;
 }
 
 .content {
     margin-left: 40px;
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Architects Daughter', cursive;
+.top-menu, .top-menu:hover, .top-menu:visited {
+    color: #ffffff;
+    float: right;
+    font-size: 26pt;
+    margin-right: 20px;
 }
 
 .date {
@@ -23,13 +50,6 @@ h1, h2, h3, h4 {
     width: 100%;
 }
 
-.top-menu, .top-menu:hover, .top-menu:visited {
-    color: #ffffff;
-    float: right;
-    font-size: 26pt;
-    margin-right: 20px;
-}
-
 .hike {
     margin-bottom: 70px;
 }
@@ -40,39 +60,33 @@ h1, h2, h3, h4 {
 
 .list-link {
     font-size: 12px;
-
-}
-
-#search_browse_links{
-    font-size: 24px;
-    color: #216629;
-    font-family: 'Architects Daughter', cursive;
-}
-
-#search_browse_links:visited{
-    color: #542107;
 }
 
 
 /******************
-HEADING
+HEADER
 ******************/
 
 .page-header {
     background-color: #0D6317;
-    margin: 0 0 30px 0;
-    padding: 5px 0 0 10px;
+    margin: 0;
+    padding: 0;
+    border: 0;
     width: 100%;
+    height: 100px;
+    overflow: hidden;
+
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
     color: #ffffff;
-    font-size: 36pt;
     text-decoration: none;
 }
 
 .page-header h1 {
     float: left;
+    font-size: 36pt;
+    padding-left: 40px;
 }
 
 
@@ -81,61 +95,304 @@ USER HEADER
 ******************/
 
 .user-header {
-  text-align:right;
-  padding:10px 0;
-  margin:20px 0 0;
-  display: inline;
+    float:right;
+    display: inline;
+    vertical-align: middle;
+    margin-right: 15px;
+    margin-top: 5px;
  }
 
-.user-header ul {
-  list-style:none;
-  margin:0 10px;
-  padding:5px;
-}
-
-.user-header li{
-  display:block;
-}
-
 .user-header a{
-  font-weight:800;
-  padding:15px 10px;
-  color: #ffffff;
+    font-weight:800;
+    padding:15px 10px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+a.login-link {
+    border: 2px solid #006600;
+    background-color: #CCEB8A;
+    color: #0D6317;
+    text-decoration: none;
+    margin : 20px;
+    padding: 10px 20px 10px 20px;
+    display: inline-block;
+}
+a.login-link:hover {
+    border: 2px solid #009900;
+    background-color: #00cc00;
+}
+
+
+/******************
+TREES PHOTO/INTRO
+******************/
+
+.intro {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.trees-photo {
+    width: 100%;
+    max-height: 275px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.intro p {
+    position: absolute;
+    left: 0;
+    top: 40px;
+    padding: 30px;
+    width: 625px;
+    color: #FFF;
+    margin: 5px;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+
+/******************
+SEARCHES
+******************/
+
+#search_by {
+    font-size: 14px;
+    color: #0D6317;
+    overflow: hidden;
+}
+
+#search_by span{
+    vertical-align: middle;
+    padding: 10px 10px 60px 10px;
+
+}
+
+#search_by input {
+    border-style: solid;
+    border-color: #0D6317;
+    height: 38px;
+    margin: 0;
+    text-align: right;
+    padding: 8px;
+}
+
+#search_by ul {
+    list-style-type: none;
+    padding: 10px 0;
+    margin: 0;
+}
+
+.search_by_hike {
+    width: 50%;
+    padding-left: 40px;
+    padding-top: 20px;
+    float: left;
+}
+
+.search_by_distance {
+    width: 50%;
+    padding-left: 40px;
+    padding-top: 20px;
+    float: right;
+}
+
+a.hike_search {
+    border: 2px solid #006600;
+    background-color: #0D6317;
+    margin : 0;
+    padding: 5px 15px 5px 15px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+a.hike_search:hover {
+    border: 2px solid #009900;
+    background-color: #00cc00;
+}
+
+#distance_search {
+    border: 2px solid #006600;
+    background-color: #0D6317;
+    margin : 0;
+    padding: 5px 15px 5px 15px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+#hike_search{
+    width: 200px;
+}
+
+#zip_search {
+    width: 80px;
+}
+
+/******************
+BROWSE
+******************/
+
+#browse_region {
+    font-size: 14px;
+    color: #0D6317;
+    overflow: hidden;
+    padding-left: 40px;
+    padding-top: 20px;
+    float: left;
+}
+
+
+#browse_region a {
+    border: 2px solid #006600;
+    background-color: #0D6317;
+    margin : 0;
+    padding: 0 0 4px 6px;
+    display: inline-block;
+    vertical-align: bottom;
+    height: 22px;
+    width: 28px;
+}
+#browse_region a:hover {
+    border: 2px solid #009900;
+    background-color: #00cc00;
+}
+
+#browse_region img {
+    vertical-align: middle;
+}
+
+.map_icon {
+    margin-bottom: 3px;
+}
+
+/******************
+FOOTER
+******************/
+
+#wrapper {
+    min-height: 100%;
+    padding: 0;
+}
+.push {
+    height: 50px;
+}
+
+.page-footer {
+    background-color: #59B364;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    text-align: center;
+    color: #FFFFFF;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.page-footer a, .page-footer a:visited, .page-footer a:active {
+    color: #ffffff;
+    text-decoration: underline;
 }
 
 
 /*****************
-HIKE DETAILS
+MEDIA QUERIES
 ******************/
-.description {
-    text-align: left;
+
+@media only screen and (max-width: 1080px) {
+    .page-header h1 {
+        font-size: 34px;
+    }
+
+    .intro p {
+        font-size: 19px;
+        width: 530px;
+    }
 }
 
-.basic_details ul{
-    padding-top: 10px;
-    text-align: left;
-    width: 90%;
+@media only screen and (max-width: 880px) {
+    .page-header h1 {
+        font-size: 27px;
+    }
+
+    .user-header a{
+        font-size: 12px;
+    }
+
+    .intro p {
+        font-size: 15px;
+        width: 430px;
+    }
 }
 
-.basic_details li{
-    padding-top: 10px;
-    text-align: left;
+@media only screen and (max-width: 730px) {
+    .page-header h1 {
+        font-size: 22px;
+    }
 }
 
-.col1 {
-    width: 25%;
+@media only screen and (max-width: 650px) {
+    .page-header h1 {
+        font-size: 18px;
+        padding-left: 10px;
+    }
+
+    .user-header a{
+        font-size: 10px;
+    }
+
+    .intro p {
+        top: 20px;
+        padding: 10px;
+        width: 400px;
+    }
+
+    .search_by_hike {
+        padding: 10px;
+    }
+
+    .search_by_distance {
+        padding: 10px;
+    }
 }
 
-.col2 {
-    width: 65%;
+@media only screen and (max-width: 540px) {
+    .page-header h1 {
+        max-width: 200px;
+    }
+
+    .user-header a{
+        font-size: 8px;
+    }
+
+    .intro p {
+        top: 10px;
+        font-size: 12px;
+        width: 320px;
+    }
+
+    .profile-photo {
+        display: none;
+    }
+
+    .user-header {
+        margin-right: 5px;
+    }
+
+    .search_by_hike {
+        width: 100%;
+    }
+
+    .search_by_distance {
+        width: 100%;
+    }
 }
 
-.trailMap {
-    padding-top: 5px;
-    vertical-align: bottom;
-}
 
-.saveAll{
-    padding: 5px;
-    float: right;
-}
+
