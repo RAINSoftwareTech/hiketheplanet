@@ -27,11 +27,13 @@
 
         <div class="search_by_distance">
             <h4>Search by Driving Distance</h4>
-
-            <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> <span>driving miles from</span>
-            <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span>zip code</span>
+            <span class="line_break">
+            <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> <span class="input_id">driving miles from</span>
+            </span><span class="line_break">
+            <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span class="input_id">zip code</span>
             <button type="button" id="distance_search">
             <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></button>
+            </span>
 
             <ul id="distance-results">
             </ul>
