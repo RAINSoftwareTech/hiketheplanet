@@ -57,7 +57,7 @@ class Hazards(models.Model):
         ('other', 'Other'),
     )
     hike = models.ForeignKey(Hike)
-    type = models.CharField(choices=HAZARD_TYPE)
+    type = models.CharField(choices=HAZARD_TYPE, max_length=15)
     description = models.TextField()
     date_reported = models.DateTimeField(default=datetime.now, blank=True)
     date_resolved = models.DateTimeField(blank=True)
@@ -93,10 +93,10 @@ class Sights(models.Model):
         ('fall', 'Fall'),
     )
     hike = models.ForeignKey(Hike)
-    type = models.CharField(choices=SIGHT_TYPE)
+    type = models.CharField(choices=SIGHT_TYPE, max_length=10)
     description = models.TextField()
-    best_time = models.CharField(choices=TIME_OF_DAY)
-    best_season = models.CharField(choices=SEASON)
+    best_time = models.CharField(choices=TIME_OF_DAY, max_length=10)
+    best_season = models.CharField(choices=SEASON, max_length=8)
 
     # hiker_shared = models.ForeignKey(????) need to link user posted reviews, photos, etc
 
