@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 # ie: 'Oregon Coast', 'Columbia Gorge'
@@ -49,12 +50,21 @@ class Hike(models.Model):
 # each hike may have multiple potential hazards - or none.
 # this section is meant to be editable by registered users
 class Hazards(models.Model):
+    HAZARD_TYPE = (
+        ('trail', 'Trail Damage'),
+        ('weather', 'Weather Effects'),
+        ('permanent', 'General/On-going Conditions'),
+        ('other', 'Other'),
+    )
     hike = models.ForeignKey(Hike)
-    trail_maintenance = models.CharField(max_length=200)
-    weather_effects = models.CharField(max_length=200)
-    user_reports = models.TextField()
-    user_reports_date = models.DateTimeField()
-    known_challenges = models.TextField()
+    type = models.CharField(choices=HAZARD_TYPE)
+    description = models.TextField()
+    date_reported = models.DateTimeField(default=datetime.now, blank=True)
+    date_resolved = models.DateTimeField(blank=True)
+    # added_by = hikers.username
+
+    def __unicode__(self):
+        return self.type
 
     class Meta:
         verbose_name = "Hazards"
@@ -64,10 +74,34 @@ class Hazards(models.Model):
 # this section is meant to be editable by registered users
 # and possibly pulled from "share" sections of user diaries
 class Sights(models.Model):
+    SIGHT_TYPE = (
+        ('view', 'View'),
+        ('wildlife', "Wildlife"),
+    )
+    TIME_OF_DAY = (
+        ('sunrise', 'Sunrise'),
+        ('morning', 'Morning'),
+        ('midday', 'Midday'),
+        ('evening', 'Early Evening'),
+        ('sunset', 'Sunset'),
+        ('dark', 'After Dark')
+    )
+    SEASON = (
+        ('winter', 'Winter'),
+        ('spring', 'Spring'),
+        ('summer', 'Summer'),
+        ('fall', 'Fall'),
+    )
     hike = models.ForeignKey(Hike)
-    views = models.TextField()
-    wildlife = models.TextField()
+    type = models.CharField(choices=SIGHT_TYPE)
+    description = models.TextField()
+    best_time = models.CharField(choices=TIME_OF_DAY)
+    best_season = models.CharField(choices=SEASON)
+
     # hiker_shared = models.ForeignKey(????) need to link user posted reviews, photos, etc
+
+    def __unicode__(self):
+        return self.type
 
     class Meta:
         verbose_name = "Sights"
@@ -77,6 +111,7 @@ class Sights(models.Model):
 class Equipment(models.Model):
     hike = models.ForeignKey(Hike)
     recommended_gear = models.CharField(max_length=200)
+    explanation = models.TextField()
 
     def __unicode__(self):
         return self.recommended_gear
