@@ -14,7 +14,7 @@ SECRET_KEY = r"{{ secret_key }}"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
-TEMPLATE_DEBUG = DEBUG
+TEMPLATES[0]['TEMPLATE_DEBUG'] = DEBUG
 
 ALLOWED_HOSTS = []
 

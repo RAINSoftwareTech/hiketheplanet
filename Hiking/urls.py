@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^accounts/loggedin/$', 'Hiking.views.loggedin', name='loggedin'),
 
     # registration Urls
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    # url(r'^accounts/', include('registration.backends.default.urls')),
 )
 
 if settings.DEBUG:
