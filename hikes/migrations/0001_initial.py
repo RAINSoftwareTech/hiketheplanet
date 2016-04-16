@@ -17,13 +17,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Hike',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=180, unique=True)),
                 ('hike_type', models.CharField(max_length=20)),
                 ('description', models.TextField()),
-                ('trail_map', models.FileField(blank=True, upload_to=b'trail_maps')),
-                ('difficulty_level', models.CharField(choices=[(b'0easy', 'Easy'), (b'1moderate', 'Moderate'), (b'2difficult', 'Difficult')], default=b'easy', max_length=20)),
-                ('difficulty_level_explanation', models.CharField(blank=True, max_length=250)),
+                ('trail_map', models.FileField(blank=True,
+                                               upload_to=b'trail_maps')),
+                ('difficulty_level', models.CharField(
+                    choices=[(b'0easy', 'Easy'), (b'1moderate', 'Moderate'),
+                             (b'2difficult', 'Difficult')],
+                    default=b'easy', max_length=20)),
+                ('difficulty_level_explanation', models.CharField(
+                    blank=True, max_length=250)),
                 ('distance', models.FloatField(default=0.0)),
                 ('elevation', models.IntegerField(default=0)),
                 ('high_point', models.IntegerField(default=0)),
@@ -35,7 +41,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Region',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
                 ('num_hikes', models.IntegerField(default=1)),
             ],
@@ -46,12 +53,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Trailhead',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=200)),
                 ('latitude', models.FloatField(default=0.0)),
                 ('longitude', models.FloatField(default=0.0)),
                 ('num_hikes', models.IntegerField(default=1)),
-                ('region', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='trailheads', to='hikes.Region')),
+                ('region', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='trailheads', to='hikes.Region')),
             ],
             options={
                 'ordering': ['region', '-num_hikes'],
@@ -60,6 +70,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='hike',
             name='trailhead',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='hikes', to='hikes.Trailhead'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='hikes', to='hikes.Trailhead'),
         ),
     ]

@@ -1,7 +1,6 @@
 from django.db import models
 from localflavor.us.us_states import STATE_CHOICES
-from localflavor.us.models import (USZipCodeField, USStateField,
-                                   PhoneNumberField)
+from localflavor.us.models import USZipCodeField, USStateField
 
 
 class TimeStampedModel(models.Model):

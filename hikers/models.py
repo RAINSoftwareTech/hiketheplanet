@@ -20,7 +20,8 @@ class Hiker(TimeStampedModel):
         ('4fit', _('Fit & Active')),
     )
 
-    hiker = models.OneToOneField(User, related_name='hiker')
+    hiker = models.OneToOneField(User, on_delete=models.CASCADE,
+                                 related_name='hiker')
     profile_pic = models.ImageField(upload_to='profile_images', blank=True)
     health_level = models.CharField(max_length=100, default='2average',
                                     choices=HEALTH_LEVELS)
@@ -44,7 +45,8 @@ class HikerAddress(AddressBase):
     if hiker chooses not to provide address information.
     Force cell number if emergency/late alerts (future feature) are desired.
     """
-    hiker = models.OneToOneField(Hiker, related_name='address')
+    hiker = models.OneToOneField(Hiker, on_delete=models.CASCADE,
+                                 related_name='address')
     cell_number = PhoneNumberField(null=True, blank=True)
 
 
@@ -53,8 +55,10 @@ class HikingDiaryEntry(TimeStampedModel):
     Each entry is private unless otherwise checked. both will be deleted on
     account removal."""
     # Todo: add validation on hike so that it is required if make_public
-    hiker = models.ForeignKey(Hiker, related_name='diaries')
-    hike = models.ForeignKey(Hike, related_name='diaries_by_hike',
+    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
+                              related_name='diaries')
+    hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
+                             related_name='diaries_by_hike',
                              blank=True, null=True)
     title = models.CharField(max_length=200)
     diary_entry = models.TextField()
@@ -77,8 +81,10 @@ class HikerPhotos(TimeStampedModel):
     diary_entry = models.ForeignKey(HikingDiaryEntry,
                                     related_name='diary_photos',
                                     null=True, blank=True)
-    hiker = models.ForeignKey(Hiker, related_name='hiker_photos')
-    hike = models.ForeignKey(Hike, related_name='hiker_photos_by_hike',
+    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
+                              related_name='hiker_photos')
+    hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
+                             related_name='hiker_photos_by_hike',
                              blank=True, null=True)
 
     photo = models.ImageField(upload_to='hike_photos', blank=True)
@@ -94,8 +100,10 @@ class FutureHike(TimeStampedModel):
     """Model for the list of hikes hiker has not yet taken, but might like to.
     Entries to be created/deleted by MyHike save functions.
     """
-    hike = models.ForeignKey(Hike, related_name='future_hikes')
-    hiker = models.ForeignKey(Hiker, related_name='future_hikes_by_hiker')
+    hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
+                             related_name='future_hikes')
+    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
+                              related_name='future_hikes_by_hiker')
 
     class Meta:
         ordering = ['-created']
@@ -115,8 +123,10 @@ class MyHike(models.Model):
         ('6hated', _('Hated It')),
     )
 
-    hike = models.ForeignKey(Hike, related_name='my_hikes')
-    hiker = models.ForeignKey(Hiker, related_name='my_hikes_by_hiker')
+    hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
+                             related_name='my_hikes')
+    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
+                              related_name='my_hikes_by_hiker')
     last_hiked = models.DateTimeField(blank=True, null=True)
     rating = models.CharField(max_length=20, choices=RATING_CHOICES,
                               default='0never')

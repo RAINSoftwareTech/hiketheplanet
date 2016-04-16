@@ -19,7 +19,8 @@ class Trailhead(models.Model):
     """Class for capturing base information about trailheads, the places where
     hikes start. presumptively the best approximation of parking locations.
     """
-    region = models.ForeignKey(Region, related_name='trailheads')
+    region = models.ForeignKey(Region, on_delete=models.CASCADE,
+                               related_name='trailheads')
     name = models.CharField(max_length=200)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
@@ -45,7 +46,8 @@ class Hike(models.Model):
         ('1moderate', _('Moderate')),
         ('2difficult', _('Difficult')),
     )
-    trailhead = models.ForeignKey(Trailhead, related_name='hikes')
+    trailhead = models.ForeignKey(Trailhead, on_delete=models.CASCADE,
+                                  related_name='hikes')
     name = models.CharField(max_length=180, unique=True)
 
     # style of Hike: 'Out and Back', 'Loop', 'One Way'

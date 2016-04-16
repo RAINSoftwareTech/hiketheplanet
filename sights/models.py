@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from core.models import TimeStampedModel
 from hikes.models import Hike
 from hikers.models import Hiker
+from hikers.utils import deleted_hiker_fallback
 
 
 class Sight(TimeStampedModel):
@@ -29,19 +30,24 @@ class Sight(TimeStampedModel):
         ('1summer', _('Summer')),
         ('2fall', _('Fall')),
     )
-    hike = models.ForeignKey(Hike, related_name='sights')
+    hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
+                             related_name='sights')
     type = models.CharField(choices=SIGHT_TYPE, max_length=10)
     description = models.TextField()
     best_time = models.CharField(choices=TIME_OF_DAY, max_length=10)
     best_season = models.CharField(choices=SEASON, max_length=8)
 
     # restrict edit to creator and admin
-    added_by = models.ForeignKey(Hiker, related_name='sights_added')
-
-    # hiker_shared = models.ForeignKey(????) need to link user posted reviews, photos, etc
+    added_by = models.ForeignKey(Hiker, on_delete=models.SET_NULL,
+                                 null=True, related_name='sights_added')
 
     class Meta:
         ordering = ['type', 'best_season', 'best_time', '-modified']
 
     def __unicode__(self):
         return self.type
+
+    def save(self, *args, **kwargs):
+        if not self.added_by:
+            self.added_by = deleted_hiker_fallback()
+        super(Sight, self).save(*args, **kwargs)
