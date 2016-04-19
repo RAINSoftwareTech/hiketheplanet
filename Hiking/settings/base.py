@@ -31,6 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'django.contrib.postgres',
     'hikes',
+    'hikers',
+    'equipment',
+    'hazards',
+    'reviews',
+    'sights',
     'localflavor',
 ]
 

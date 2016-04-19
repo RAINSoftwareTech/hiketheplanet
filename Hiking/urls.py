@@ -14,19 +14,20 @@ urlpatterns = patterns('',
     url(r'', include('authentication.urls')),
     url(r'', include(admin.site.urls)),
     url(r'', include('search.urls')),
+                       )
 
-    # login Urls - Todo: move accounts urls
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/hikes/'}, name='logout'),
-    url(r'^accounts/loggedin/$', 'Hiking.views.loggedin', name='loggedin'),
-
-    # registration Urls
-    # url(r'^accounts/', include('registration.backends.default.urls')),
-)
-
-if settings.DEBUG:
-    urlpatterns += patterns(
-        'django.views.static',
-        (r'media/(?P<path>.*)',
-        'serve',
-        {'document_root': settings.MEDIA_ROOT}), )
+#     # login Urls - Todo: move accounts urls
+#     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
+#     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/hikes/'}, name='logout'),
+#     url(r'^accounts/loggedin/$', 'Hiking.views.loggedin', name='loggedin'),
+#
+#     # registration Urls
+#     # url(r'^accounts/', include('registration.backends.default.urls')),
+# )
+#
+# if settings.DEBUG:
+#     urlpatterns += patterns(
+#         'django.views.static',
+#         (r'media/(?P<path>.*)',
+#         'serve',
+#         {'document_root': settings.MEDIA_ROOT}), )
