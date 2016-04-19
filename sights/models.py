@@ -32,7 +32,7 @@ class Sight(TimeStampedModel):
     )
     hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
                              related_name='sights')
-    type = models.CharField(choices=SIGHT_TYPE, max_length=10)
+    sight_type = models.CharField(choices=SIGHT_TYPE, max_length=10)
     description = models.TextField()
     best_time = models.CharField(choices=TIME_OF_DAY, max_length=10)
     best_season = models.CharField(choices=SEASON, max_length=8)
@@ -42,10 +42,10 @@ class Sight(TimeStampedModel):
                                  null=True, related_name='sights_added')
 
     class Meta:
-        ordering = ['type', 'best_season', 'best_time', '-modified']
+        ordering = ['sight_type', 'best_season', 'best_time', '-modified']
 
     def __unicode__(self):
-        return self.type
+        return '{} - {}'.format(self.hike.name, self.sight_type)
 
     def save(self, *args, **kwargs):
         if not self.added_by:

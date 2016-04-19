@@ -23,13 +23,18 @@ class HikeReview(TimeStampedModel):
     class Meta:
         ordering = ['-modified']
 
+    def __unicode__(self):
+        date_fmt = '%Y-%m-%d'
+        return '{} - {}'.format(self.hike.name,
+                                self.created.strftime(date_fmt))
+
     def save(self, *args, **kwargs):
         if not self.hiker:
             self.hiker = deleted_hiker_fallback()
         super(HikeReview, self).save(*args, **kwargs)
 
 
-class HikePhotos(TimeStampedModel):
+class HikePhoto(TimeStampedModel):
     """Model for capturing photos for each hike. Edit/delete should be limited
     to creator and admin. HikePhotos are always public. Not to be confused with
     hiker photos. Will not be deleted upon hiker deleting account."""
@@ -42,7 +47,12 @@ class HikePhotos(TimeStampedModel):
     class Meta:
         ordering = ['-modified']
 
+    def __unicode__(self):
+        date_fmt = '%Y-%m-%d'
+        return '{} - {}'.format(self.hike.name,
+                                self.created.strftime(date_fmt))
+
     def save(self, *args, **kwargs):
         if not self.hiker:
             self.hiker = deleted_hiker_fallback()
-        super(HikePhotos, self).save(*args, **kwargs)
+        super(HikePhoto, self).save(*args, **kwargs)

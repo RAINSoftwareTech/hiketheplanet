@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -31,10 +33,10 @@ class Hiker(TimeStampedModel):
     class Meta:
         ordering = ['-created']
 
-    def miles_calculated(self):
-        # add miles from hike each time hiker checks in/out of hike to
-        # total miles hiked since date_joined.
-        pass
+    # def miles_calculated(self):
+    #     # add miles from hike each time hiker checks in/out of hike to
+    #     # total miles hiked since date_joined.
+    #     pass
 
     def __unicode__(self):
         return self.hiker.username
@@ -50,7 +52,7 @@ class HikerAddress(AddressBase):
     cell_number = PhoneNumberField(null=True, blank=True)
 
 
-class HikingDiaryEntry(TimeStampedModel):
+class HikerDiaryEntry(TimeStampedModel):
     """Model for recording diary/blog entries for each hiker.
     Each entry is private unless otherwise checked. both will be deleted on
     account removal."""
@@ -60,25 +62,35 @@ class HikingDiaryEntry(TimeStampedModel):
     hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
                              related_name='diaries_by_hike',
                              blank=True, null=True)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True,)
     diary_entry = models.TextField()
 
-    make_public = models.BooleanField()
+    make_public = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-modified']
 
     def __unicode__(self):
-        return self.title
+        date_fmt = '%Y-%m-%d'
+        if self.title and self.hike:
+            return '{} - {}'.format(self.title, self.hike.name)
+        elif self.title:
+            return '{} - {}'.format(self.title,
+                                    self.created.strftime(date_fmt))
+        elif self.hike:
+            return '{} - {}'.format(self.hike.name,
+                                    self.created.strftime(date_fmt))
+        else:
+            return self.created.strftime(date_fmt)
 
 
-class HikerPhotos(TimeStampedModel):
+class HikerPhoto(TimeStampedModel):
     """Model for user photos. Can optionally be linked to hike or hiker
     diary. Can be public or private; both will be deleted on account
     removal.
     """
     # Todo: add validation on hike so that it is required if make_public
-    diary_entry = models.ForeignKey(HikingDiaryEntry,
+    diary_entry = models.ForeignKey(HikerDiaryEntry,
                                     related_name='diary_photos',
                                     null=True, blank=True)
     hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
@@ -90,10 +102,24 @@ class HikerPhotos(TimeStampedModel):
     photo = models.ImageField(upload_to='hike_photos', blank=True)
     title = models.CharField(max_length=100, blank=True, null=True)
 
-    make_public = models.BooleanField()
+    make_public = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-modified']
+
+    def __unicode__(self):
+        date_fmt = '%Y-%m-%d'
+        if self.title and self.hike:
+            return '{} - {}'.format(self.title, self.hike)
+        elif self.title:
+            return '{} - {}'.format(self.title,
+                                    self.created.strftime(date_fmt))
+        elif self.hike:
+            return '{} - {}'.format(self.hike.name,
+                                    self.created.strftime(date_fmt))
+        else:
+            return '{} - {}'.format(self.photo.name,
+                                    self.created.strftime(date_fmt))
 
 
 class FutureHike(TimeStampedModel):
@@ -108,6 +134,9 @@ class FutureHike(TimeStampedModel):
     class Meta:
         ordering = ['-created']
         unique_together = ("hike", "hiker")
+
+    def __unicode__(self):
+        return self.hike.name
 
 
 class MyHike(models.Model):
@@ -127,13 +156,16 @@ class MyHike(models.Model):
                              related_name='my_hikes')
     hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
                               related_name='my_hikes_by_hiker')
-    last_hiked = models.DateTimeField(blank=True, null=True)
+    last_hiked = models.DateField(blank=True, null=True)
     rating = models.CharField(max_length=20, choices=RATING_CHOICES,
                               default='0never')
 
     class Meta:
         ordering = ['rating']
         unique_together = ("hike", "hiker")
+
+    def __unicode__(self):
+        return '{} - {}'.format(self.hike.name, self.rating)
 
     def update_future_hikes(self):
         """Function to add, update, or delete entries from FutureHikes
@@ -159,6 +191,10 @@ class MyHike(models.Model):
         if not self.rating == '0never' and not self.last_hiked:
             raise ValidationError("Don't forget to add an estimated "
                                   "date for when you last took this hike.")
+        elif self.rating == '0never' and self.last_hiked:
+            raise ValidationError("You should not have a date for the last"
+                                  " time you took this hike. Please remove the"
+                                  " date or change your rating.")
 
     def save(self, *args, **kwargs):
         """Overrides default save function to force validation check on

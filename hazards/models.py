@@ -19,7 +19,7 @@ class Hazard(TimeStampedModel):
     )
     hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
                              related_name='hazards')
-    type = models.CharField(choices=HAZARD_TYPE, max_length=15)
+    hazard_type = models.CharField(choices=HAZARD_TYPE, max_length=15)
     description = models.TextField()
     date_resolved = models.DateTimeField(blank=True, null=True)
     reported_by = models.ForeignKey(Hiker, on_delete=models.SET_NULL,
@@ -33,11 +33,13 @@ class Hazard(TimeStampedModel):
         ordering = ['-created', '-date_resolved']
 
     def __unicode__(self):
-        return self.type
+        date_fmt = '%Y-%m-%d %H:%M'
+        return '{} - {}'.format(self.hazard_type,
+                                self.created.strftime(date_fmt))
 
     def save(self, *args, **kwargs):
         if not self.reported_by:
             self.reported_by = deleted_hiker_fallback()
-        if not self.resolution_reported_by:
+        if self.date_resolved and not self.resolution_reported_by:
             self.resolution_reported_by = deleted_hiker_fallback()
         super(Hazard, self).save(*args, **kwargs)

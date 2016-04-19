@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                                         serialize=False, verbose_name='ID')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
-                ('type', models.CharField(
+                ('sight_type', models.CharField(
                     choices=[(b'0view', 'View'),
                              (b'1wildlife', 'Wildlife'),
                              (b'2flora', 'Plants')], max_length=10)),
@@ -49,7 +49,8 @@ class Migration(migrations.Migration):
                     related_name='sights', to='hikes.Hike')),
             ],
             options={
-                'ordering': ['type', 'best_season', 'best_time', '-modified'],
+                'ordering': ['sight_type', 'best_season',
+                             'best_time', '-modified'],
             },
         ),
     ]

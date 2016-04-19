@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,7 +26,7 @@ class Equipment(TimeStampedModel):
 
     # restrict edit to creator and admin
     added_by = models.ForeignKey(Hiker, on_delete=models.SET_NULL,
-                                 null=True,
+                                 null=True, blank=True,
                                  related_name='equipment_recommended')
 
     class Meta:

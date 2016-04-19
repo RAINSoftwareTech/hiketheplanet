@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USZipCodeField, USStateField
@@ -13,6 +15,7 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
+        app_label = 'core'
 
 
 class AddressBase(models.Model):
@@ -25,6 +28,7 @@ class AddressBase(models.Model):
 
     class Meta:
         abstract = True
+        app_label = 'core'
 
     @property
     def short_address(self):

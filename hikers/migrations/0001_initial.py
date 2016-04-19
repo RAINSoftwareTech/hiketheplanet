@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='HikerPhotos',
+            name='HikerPhoto',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True,
                                         serialize=False, verbose_name='ID')),
@@ -126,22 +126,23 @@ class Migration(migrations.Migration):
                                             upload_to=b'hike_photos')),
                 ('title', models.CharField(blank=True,
                                            max_length=100, null=True)),
-                ('make_public', models.BooleanField()),
+                ('make_public', models.BooleanField(default=False)),
             ],
             options={
                 'ordering': ['-modified'],
             },
         ),
         migrations.CreateModel(
-            name='HikingDiaryEntry',
+            name='HikerDiaryEntry',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True,
                                         serialize=False, verbose_name='ID')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
-                ('title', models.CharField(max_length=200)),
+                ('title', models.CharField(max_length=200, blank=True,
+                                           null=True,)),
                 ('diary_entry', models.TextField()),
-                ('make_public', models.BooleanField()),
+                ('make_public', models.BooleanField(default=False)),
                 ('hike', models.ForeignKey(
                     blank=True, null=True,
                     on_delete=django.db.models.deletion.SET_NULL,
@@ -159,7 +160,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True,
                                         serialize=False, verbose_name='ID')),
-                ('last_hiked', models.DateTimeField(blank=True, null=True)),
+                ('last_hiked', models.DateField(blank=True, null=True)),
                 ('rating', models.CharField(
                     choices=[(b'0never', 'Never Hiked'),
                              (b'1loved', 'Loved It'), (b'2liked', 'Liked It'),
@@ -179,15 +180,15 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddField(
-            model_name='hikerphotos',
+            model_name='hikerphoto',
             name='diary_entry',
             field=models.ForeignKey(
                 blank=True, null=True,
                 on_delete=django.db.models.deletion.CASCADE,
-                related_name='diary_photos', to='hikers.HikingDiaryEntry'),
+                related_name='diary_photos', to='hikers.HikerDiaryEntry'),
         ),
         migrations.AddField(
-            model_name='hikerphotos',
+            model_name='hikerphoto',
             name='hike',
             field=models.ForeignKey(
                 blank=True, null=True,
@@ -195,7 +196,7 @@ class Migration(migrations.Migration):
                 related_name='hiker_photos_by_hike', to='hikes.Hike'),
         ),
         migrations.AddField(
-            model_name='hikerphotos',
+            model_name='hikerphoto',
             name='hiker',
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,

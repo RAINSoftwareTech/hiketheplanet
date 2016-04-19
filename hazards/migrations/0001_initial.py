@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                                         serialize=False, verbose_name='ID')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
-                ('type', models.CharField(
+                ('hazard_type', models.CharField(
                     choices=[(b'trail', b'Trail Damage'),
                              (b'weather', b'Weather Effects'),
                              (b'permanent', b'General/On-going Conditions'),

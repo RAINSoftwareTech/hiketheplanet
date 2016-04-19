@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -32,11 +34,11 @@ class Trailhead(models.Model):
     def __unicode__(self):
         return self.name
 
-    def miles_from_user(self):
-        pass
-
-    def hours_from_user(self):
-        pass
+    # def miles_from_user(self):
+    #     pass
+    #
+    # def hours_from_user(self):
+    #     pass
 
 
 class Hike(models.Model):
@@ -46,19 +48,25 @@ class Hike(models.Model):
         ('1moderate', _('Moderate')),
         ('2difficult', _('Difficult')),
     )
+    HIKE_TYPES = (
+        ('loop', _('Loop')),
+        ('out_and_back', _('Out and Back')),
+        ('lollipop', _('Lollipop/Dog Bone')),
+        ('point_to_point', _('Point-to-Point/Destination')),
+    )
     trailhead = models.ForeignKey(Trailhead, on_delete=models.CASCADE,
                                   related_name='hikes')
     name = models.CharField(max_length=180, unique=True)
 
-    # style of Hike: 'Out and Back', 'Loop', 'One Way'
-    hike_type = models.CharField(max_length=20,)
+    hike_type = models.CharField(max_length=50, default='loop',
+                                 choices=HIKE_TYPES)
     description = models.TextField()
 
-    # likes = models.IntegerField(default=0) - move to popularity app
+    # likes = models.IntegerField(default=0) - move to popularity/reviews app?
     trail_map = models.FileField(upload_to='trail_maps', blank=True)
 
     # specs
-    difficulty_level = models.CharField(max_length=20, default="easy",
+    difficulty_level = models.CharField(max_length=20, default="0easy",
                                         choices=DIFFICULTY)
     difficulty_level_explanation = models.CharField(max_length=250, blank=True)
     distance = models.FloatField(default=0.0)

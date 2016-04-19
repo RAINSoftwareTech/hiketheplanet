@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 ('recommended_gear', models.CharField(max_length=200)),
                 ('explanation', models.TextField()),
                 ('added_by', models.ForeignKey(
-                    null=True,
+                    null=True, blank=True,
                     on_delete=django.db.models.deletion.SET_NULL,
                     related_name='equipment_recommended', to='hikers.Hiker')),
                 ('hike', models.ForeignKey(
