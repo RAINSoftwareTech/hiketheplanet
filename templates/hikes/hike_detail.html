@@ -1,0 +1,64 @@
+{% extends 'hikes/directions_modal.html' %}
+{% load staticfiles %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "css/details.css" %}" />
+    {% block title %}{{ hike.name }}{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+
+    <h2 id="hike">{{ hike.name }}</h2>
+    <div class="trailhead"><h4>{{ hike.trailhead.name }} -
+        <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ hike.trailhead.latitude }}"
+           data-lon="{{ hike.trailhead.longitude }}" data-hiker-location="97219">map/directions</a></h4>
+    </div>
+
+    <div class="difficulty" id="{{ hike.difficulty_level }}">
+        {{ hike.difficulty_level }} - <a href="#" onclick="toggleDisplay('diff_exp');" id="diff_why">Why</a>
+        <div id="diff_exp" style="display: none">
+            {% if hike.difficulty_level_explanation %}
+                {{ hike.difficulty_level_explanation }}
+            {% else %}
+                No explanation provided
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="user_adds">
+        <ul>
+            <li><a href="#" id="favs">Add to favorites</a></li>
+            <li><a href="#" id="checkin">Check-in/Checkout</a></li>
+            <li>Last Hiked On: <a href="#" id="last_hiked"><i>login in to see</i></a></li>
+        </ul>
+    </div>
+
+    <div class="basic_details">
+        <ul>
+            <li class="col1">{{ hike.distance }} miles {{ hike.hike_type }}</li>
+            <li class="col2">
+            </li>
+            <li class="col1">elevation: {{ hike.elevation }}</li>
+            <li class="col2">high point: {{ hike.high_point }}</li>
+        </ul>
+        <div class="description" id="hike_descrp">
+            {% if hike.description %}
+                {{ hike.description }}
+            {% else %}
+                <a href="#" id="add_descrip"  onclick="toggleDisplay('add_descrip_form');">add a description?</a>
+                No description available
+            {% endif %}
+        </div>
+        <div class="trailMap" id="trail_map">
+                {% if hike.trail_map %}
+                    Trail Map: <img src="/media/{{ hike.trail_map }}">
+                {% else %}
+                    No trail map available
+                {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

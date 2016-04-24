@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block head-block %}
+{% block head %}
+    {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "leaflet/leaflet.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/modal.css" %}" />
-    <script type="text/javascript" src="{% static "leaflet/leaflet.js" %}"></script>
-    <script src="{% static "leaflet/leaflet_modal.js" %}"></script>
-    <script src="http://open.mapquestapi.com/sdk/js/v7.2.s/mqa.toolkit.js?key=Fmjtd%7Cluu82968l1%2Caa%3Do5-9w1xuf"></script>
- {% endblock head-block %}
+ {% endblock head %}
 
-{% block modal-block %}
+{% block modal %}
     <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -25,6 +23,13 @@
         </div>
       </div>
     </div>
+{% endblock modal %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "leaflet/leaflet.js" %}"></script>
+    <script src="{% static "leaflet/leaflet_modal.js" %}"></script>
+    <script src="http://open.mapquestapi.com/sdk/js/v7.2.s/mqa.toolkit.js?key=Fmjtd%7Cluu82968l1%2Caa%3Do5-9w1xuf"></script>
     <script>initmap()</script>
     <script src="{% static "js/pass_to_modal.js" %}"></script>
-{% endblock modal-block %}
+{% endblock %}

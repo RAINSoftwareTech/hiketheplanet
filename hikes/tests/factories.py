@@ -27,7 +27,7 @@ class RegionFactory(DjangoModelFactory):
         model = Region
 
     name = Faker('word')
-    num_hikes = randint(0, 600)
+    num_trailheads = randint(0, 600)
 
 
 class TrailheadFactory(DjangoModelFactory):

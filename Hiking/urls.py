@@ -7,14 +7,12 @@ from django.contrib.auth.decorators import login_required
 admin.autodiscover()
 admin.site.login = login_required(admin.site.login)
 
-urlpatterns = patterns('',
-
-    # app Urls
-    url(r'', include('hikes.urls')),
+urlpatterns = [
+    url(r'', include('hikes.urls', namespace='hikes')),
     url(r'', include('authentication.urls')),
     url(r'', include(admin.site.urls)),
     url(r'', include('search.urls')),
-                       )
+]
 
 #     # login Urls - Todo: move accounts urls
 #     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
