@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.db import models
+from django.utils.text import slugify
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USZipCodeField, USStateField
 
@@ -45,3 +46,15 @@ class AddressBase(models.Model):
 
     def __unicode__(self):
         return self.short_address
+
+
+class SlugifiedNameBase(models.Model):
+    slug = models.SlugField()
+
+    class Meta:
+        abstract = True
+        app_label = 'core'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(SlugifiedNameBase, self).save(*args, **kwargs)

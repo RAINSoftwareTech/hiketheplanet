@@ -48,7 +48,7 @@
         var maxll = bounds.getNorthEast();
 //    var region = 'Southwest Washington';
         region = encodeURI(region);
-        var msg = '/hikes/ajax/' + region;
+        var msg = '/maps/' + region;
         ajaxRequest.onreadystatechange = stateChanged;
         ajaxRequest.open('GET', msg, true);
         ajaxRequest.send(null);
@@ -62,13 +62,13 @@
             if (ajaxRequest.status == 200) {
                 plotlist = eval("(" + ajaxRequest.responseText + ")");
                 removeMarkers();
-                for (i = 0; i < plotlist.length; i++) {
+                for (var i = 0; i < plotlist.length; i++) {
                     var plotll = new L.LatLng(plotlist[i].lat, plotlist[i].lon, true);
                     bounds[bounds.length] = plotll;
                     var plotmark = new L.Marker(plotll);
                     plotmark.data = plotlist[i];
                     map.addLayer(plotmark);
-                    plotmark.bindPopup("<a href='/hikes/"
+                    plotmark.bindPopup("<a href='"
                         + plotlist[i].url + "'><h4>"
                         + plotlist[i].trailhead
                         + "</a></h4>Hikes starting here: "

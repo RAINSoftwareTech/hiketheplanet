@@ -3,12 +3,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from core.models import SlugifiedNameBase
 
-class Region(models.Model):
+
+class Region(SlugifiedNameBase):
     """Class for holding list of Regions: ie: 'Oregon Coast', 'Columbia Gorge'.
     """
-    name = models.CharField(max_length=50)
-    num_hikes = models.IntegerField(default=1)
+    name = models.CharField(max_length=50, unique=True)
+    num_trailheads = models.IntegerField(default=1)
 
     class Meta:
         ordering = ['name']
@@ -17,7 +19,7 @@ class Region(models.Model):
         return self.name
 
 
-class Trailhead(models.Model):
+class Trailhead(SlugifiedNameBase):
     """Class for capturing base information about trailheads, the places where
     hikes start. presumptively the best approximation of parking locations.
     """
@@ -30,9 +32,16 @@ class Trailhead(models.Model):
 
     class Meta:
         ordering = ['region', '-num_hikes']
+        unique_together = ('region', 'name')
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        super(Trailhead, self).save(*args, **kwargs)
+        trailhead_count = Trailhead.objects.filter(region=self.region).count()
+        self.region.num_trailheads = trailhead_count
+        self.region.save()
 
     # def miles_from_user(self):
     #     pass
@@ -41,7 +50,7 @@ class Trailhead(models.Model):
     #     pass
 
 
-class Hike(models.Model):
+class Hike(SlugifiedNameBase):
     """Class for capturing hike specific details."""
     DIFFICULTY = (
         ('0easy', _('Easy')),
@@ -75,6 +84,13 @@ class Hike(models.Model):
 
     class Meta:
         ordering = ['difficulty_level', 'distance']
+        unique_together = ('trailhead', 'name')
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        super(Hike, self).save(*args, **kwargs)
+        hike_count = Hike.objects.filter(trailhead=self.trailhead).count()
+        self.trailhead.num_hikes = hike_count
+        self.trailhead.save()

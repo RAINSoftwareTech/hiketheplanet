@@ -1,21 +1,17 @@
-<!DOCTYPE html>
 {% load staticfiles %}
+<!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Gudea' rel='stylesheet' type='text/css'>
-    <script src="{% static "js/jquery-1.11.1.js" %}"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-    <link rel="stylesheet" href="{% static "css/hikes.css" %}" media="screen"/>
-    {% block head-block %}
+    {% block head %}
+        <meta charset="UTF-8">
+        <link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Gudea' rel='stylesheet' type='text/css'>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="{% static "css/hikes.css" %}" media="screen"/>
+        <title>Hike the Planet: {% block title %}Pacific Northwest{% endblock %}</title>
     {% endblock %}
-    {% block head-block2 %}
-    {% endblock %}
-<title>Hike the Planet: {% block title_block %}Pacific Northwest{% endblock %}</title>
 </head>
 
 <body>
@@ -38,14 +34,17 @@
     </div>
 
 
-        {% block modal-block %}
+        {% block modal %}
         {% endblock %}
 
 
+    <div class="body">
         {% block content %}
         {% endblock %}
+    </div>
     <div class="push"></div>
 </div>
+
     <div class="page-footer">
         <div id="footer-spacer"> </div>
         <div id="footer-content">
@@ -54,5 +53,10 @@
         </div>
     </div>
 
+{% block javascript %}
+    <script src="{% static "js/jquery-1.11.1.js" %}"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="{% static "js/hikes.js" %}"></script>
+{% endblock %}
 </body>
 </html>

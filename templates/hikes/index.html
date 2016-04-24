@@ -45,34 +45,14 @@
 
 
     <div id="browse_region">
-        <h4>Browse Hikes by Region</h4>
-        <div class="row">
-            {% if regions %}
-
-                {% for region in regions %}
-                 <div class="col-md-4">
-                    <p>{{ region.name }} ({{ region.num_hikes }} trailheads)
-                    <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-whatever="{{ region.name }}" role="button">
-                        <img src="{% static "images/map-icon-18px.png" %}" alt="map icon" class="map_icon" height="14" width="14"></a>
-                    <a href="/hikes/region/{{ region.url }}"  class="list-link" role="button">
-                        <img src="{% static "images/list-icon-30px.png" %}" alt="list icon" class="list_icon" height="14" width="14">
-                    </a>
-                    </p>
-                </div>
-                {% endfor %}
-
-            {% else %}
-                <strong>There are no regions present.</strong>
-            {% endif %}
-        </div>
+        {% include 'hikes/region_list.html' %}
     </div>
 
 
-
-
-
-    <script src="{% static "js/hikes.js" %}"></script>
-    <script src="{% static "js/search.js" %}"></script>
 {% endblock content %}
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static "js/search.js" %}"></script>
+{% endblock %}
 
 
