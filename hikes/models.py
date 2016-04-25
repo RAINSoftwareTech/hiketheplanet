@@ -1,121 +1,96 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
-from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
+
+from core.models import SlugifiedNameBase
 
 
-# ie: 'Oregon Coast', 'Columbia Gorge'
-class Region(models.Model):
-    name = models.CharField(max_length=50)
-    num_hikes = models.IntegerField(default=1)
+class Region(SlugifiedNameBase):
+    """Class for holding list of Regions: ie: 'Oregon Coast', 'Columbia Gorge'.
+    """
+    name = models.CharField(max_length=50, unique=True)
+    num_trailheads = models.IntegerField(default=1)
+
+    class Meta:
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
 
 
-# places where hikes start. presumptively the best approximation of parking locations
-class Trailhead(models.Model):
-    region = models.ForeignKey(Region)
+class Trailhead(SlugifiedNameBase):
+    """Class for capturing base information about trailheads, the places where
+    hikes start. presumptively the best approximation of parking locations.
+    """
+    region = models.ForeignKey(Region, on_delete=models.CASCADE,
+                               related_name='trailheads')
     name = models.CharField(max_length=200)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
     num_hikes = models.IntegerField(default=1)
 
+    class Meta:
+        ordering = ['region', '-num_hikes']
+        unique_together = ('region', 'name')
+
     def __unicode__(self):
         return self.name
 
-    def miles_from_user(self):
-        pass
+    def save(self, *args, **kwargs):
+        super(Trailhead, self).save(*args, **kwargs)
+        trailhead_count = Trailhead.objects.filter(region=self.region).count()
+        self.region.num_trailheads = trailhead_count
+        self.region.save()
 
-    def hours_from_user(self):
-        pass
+    # def miles_from_user(self):
+    #     pass
+    #
+    # def hours_from_user(self):
+    #     pass
 
 
-# hikes and relevant one-to-one details
-class Hike(models.Model):
-    trailhead = models.ForeignKey(Trailhead)
+class Hike(SlugifiedNameBase):
+    """Class for capturing hike specific details."""
+    DIFFICULTY = (
+        ('0easy', _('Easy')),
+        ('1moderate', _('Moderate')),
+        ('2difficult', _('Difficult')),
+    )
+    HIKE_TYPES = (
+        ('loop', _('Loop')),
+        ('out_and_back', _('Out and Back')),
+        ('lollipop', _('Lollipop/Dog Bone')),
+        ('point_to_point', _('Point-to-Point/Destination')),
+    )
+    trailhead = models.ForeignKey(Trailhead, on_delete=models.CASCADE,
+                                  related_name='hikes')
     name = models.CharField(max_length=180, unique=True)
-    hike_type = models.CharField(max_length=20,)  # style of Hike: 'Out and Back', 'Loop', 'One Way'
-    likes = models.IntegerField(default=0)
+
+    hike_type = models.CharField(max_length=50, default='loop',
+                                 choices=HIKE_TYPES)
+    description = models.TextField()
+
+    # likes = models.IntegerField(default=0) - move to popularity/reviews app?
     trail_map = models.FileField(upload_to='trail_maps', blank=True)
-    difficulty_level = models.CharField(max_length=20, default="Easy")  #levels Easy, Moderate, Difficult
-    difficulty_level_explanation = models.CharField(max_length=250, blank=True)  # what makes this hike Easy, Moderate, or Difficult
+
+    # specs
+    difficulty_level = models.CharField(max_length=20, default="0easy",
+                                        choices=DIFFICULTY)
+    difficulty_level_explanation = models.CharField(max_length=250, blank=True)
     distance = models.FloatField(default=0.0)
     elevation = models.IntegerField(default=0)
     high_point = models.IntegerField(default=0)
-    description = models.TextField()
+
+    class Meta:
+        ordering = ['difficulty_level', 'distance']
+        unique_together = ('trailhead', 'name')
 
     def __unicode__(self):
         return self.name
 
-
-# each hike may have multiple potential hazards - or none.
-# this section is meant to be editable by registered users
-class Hazards(models.Model):
-    HAZARD_TYPE = (
-        ('trail', 'Trail Damage'),
-        ('weather', 'Weather Effects'),
-        ('permanent', 'General/On-going Conditions'),
-        ('other', 'Other'),
-    )
-    hike = models.ForeignKey(Hike)
-    type = models.CharField(choices=HAZARD_TYPE, max_length=15)
-    description = models.TextField()
-    date_reported = models.DateTimeField(default=datetime.now, blank=True)
-    date_resolved = models.DateTimeField(blank=True)
-    # added_by = hikers.username
-
-    def __unicode__(self):
-        return self.type
-
-    class Meta:
-        verbose_name = "Hazards"
-
-
-# each hike may have multiple Sights to watch for
-# this section is meant to be editable by registered users
-# and possibly pulled from "share" sections of user diaries
-class Sights(models.Model):
-    SIGHT_TYPE = (
-        ('view', 'View'),
-        ('wildlife', "Wildlife"),
-    )
-    TIME_OF_DAY = (
-        ('sunrise', 'Sunrise'),
-        ('morning', 'Morning'),
-        ('midday', 'Midday'),
-        ('evening', 'Early Evening'),
-        ('sunset', 'Sunset'),
-        ('dark', 'After Dark')
-    )
-    SEASON = (
-        ('winter', 'Winter'),
-        ('spring', 'Spring'),
-        ('summer', 'Summer'),
-        ('fall', 'Fall'),
-    )
-    hike = models.ForeignKey(Hike)
-    type = models.CharField(choices=SIGHT_TYPE, max_length=10)
-    description = models.TextField()
-    best_time = models.CharField(choices=TIME_OF_DAY, max_length=10)
-    best_season = models.CharField(choices=SEASON, max_length=8)
-
-    # hiker_shared = models.ForeignKey(????) need to link user posted reviews, photos, etc
-
-    def __unicode__(self):
-        return self.type
-
-    class Meta:
-        verbose_name = "Sights"
-
-
-# each hike may have multiple equipment recommendations: poles, waterproof boots, overnight gear, etc
-class Equipment(models.Model):
-    hike = models.ForeignKey(Hike)
-    recommended_gear = models.CharField(max_length=200)
-    explanation = models.TextField()
-
-    def __unicode__(self):
-        return self.recommended_gear
-
-    class Meta:
-        verbose_name = "Equipment"
-
+    def save(self, *args, **kwargs):
+        super(Hike, self).save(*args, **kwargs)
+        hike_count = Hike.objects.filter(trailhead=self.trailhead).count()
+        self.trailhead.num_hikes = hike_count
+        self.trailhead.save()
