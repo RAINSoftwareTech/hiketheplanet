@@ -1,36 +1,15 @@
-# -*- coding: utf-8 -*-
+from django.conf.urls import patterns, include, url
+from hikes import views
 
-from django.conf.urls import url
-from hikes.views import (RegionDetailView, RegionListView, TrailheadDetailView,
-                         HikeDetailView, TrailheadMapListView)
+from django.contrib import admin
+admin.autodiscover()
 
-urlpatterns = [
-    url(
-        r'^regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
-        r'hikes/(?P<hike_slug>[-\w\d]+)/$',
-        HikeDetailView.as_view(),
-        name='hike'
-        ),
-    url(
-        r'^regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/$',
-        TrailheadDetailView.as_view(),
-        name='trailhead'
-        ),
-    url(
-        r'^regions/(?P<region_slug>[-\w\d]+)/$',
-        RegionDetailView.as_view(),
-        name='region'
-        ),
-    url(
-        r'^maps/(?P<region_name>[\w|\W]+)/$',
-        TrailheadMapListView.as_view(),
-        name='trailheads_map'
-        ),
-    url(
-        r'^$',
-        RegionListView.as_view(),
-        name='region_list'
-        ),
-]
+urlpatterns = patterns('',
+    url(r'^$', views.index, name='index'),
+    url(r'^ajax/(?P<region_name>[\w|\W]+)/$', views.ajax, name='ajax'),
+    url(r'^region/(?P<region_url>\w+)/$', views.region, name='region'),
+    url(r'^trailhead/(?P<trailhead_url>\w+)/$', views.trailhead, name='trailhead'),
+    url(r'^hike/(?P<hike_url>\w+)/$', views.hike, name='hike'),
+    url(r'^hikesajax/$', views.hikes_ajax, name='hike ajax'),
+    url(r'^admin/', include(admin.site.urls)),
+)
