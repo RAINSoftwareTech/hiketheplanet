@@ -23,9 +23,9 @@
             <span>
 
                   {% if user.is_authenticated %}
-                    <p class="login-link"><a href="#">Hello {{ user.username }}</a><small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>
+{#                    <p class="login-link"><a href="#">Hello {{ user.username }}</a><small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>#}
                   {% else %}
-                    <a href="{% url 'django.contrib.auth.views.login' %}" class="login-link" role="button">Login / Register</a>
+                    Login / Register</a>
                   {% endif %}
 
                    <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="80" width="70">

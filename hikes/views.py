@@ -12,7 +12,7 @@ class RegionListView(ListView):
     """View to display list of regions. """
     model = Region
     context_object_name = 'region_list'
-    template_name = 'hikes/region_list.html'
+    template_name = 'hikes/index.html'
 
 
 class RegionDetailView(DetailView):
