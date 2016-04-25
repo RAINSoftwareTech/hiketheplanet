@@ -1,16 +1,16 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
-from django.contrib import admin
-from django.contrib.auth.decorators import login_required
-
-admin.autodiscover()
-admin.site.login = login_required(admin.site.login)
+# from django.contrib import admin
+# from django.contrib.auth.decorators import login_required
+#
+# admin.autodiscover()
+# admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
     url(r'', include('hikes.urls', namespace='hikes')),
-    url(r'', include('authentication.urls')),
-    url(r'', include(admin.site.urls)),
+    # url(r'', include('authentication.urls')),
+    # url(r'', include(admin.site.urls)),
     url(r'', include('search.urls')),
 ]
 
