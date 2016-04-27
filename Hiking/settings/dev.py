@@ -1,9 +1,6 @@
 """Development settings and globals."""
 
-
-from os.path import join, normpath
-
-from base import *
+from base import *  # noqa
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -31,11 +28,11 @@ DATABASES = {
     }
 }
 
-##------------- CACHE CONFIGURATION
+# ------------- CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
-##------------- END CACHE CONFIGURATION
+# ------------- END CACHE CONFIGURATION
