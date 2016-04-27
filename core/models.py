@@ -16,7 +16,6 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
-        app_label = 'core'
 
 
 class AddressBase(models.Model):
@@ -29,7 +28,6 @@ class AddressBase(models.Model):
 
     class Meta:
         abstract = True
-        app_label = 'core'
 
     @property
     def short_address(self):

@@ -3,7 +3,7 @@
 
 from os import environ
 
-from base import *
+from base import *  # noqa
 
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -19,7 +19,7 @@ def get_env_setting(setting):
     raise ImproperlyConfigured(error_msg)
 
 
-#-------------- DATABASE CONFIGURATION
+# -------------- DATABASE CONFIGURATION
 # CHECK HOST CONFIG BEFORE DEPLOY
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -33,22 +33,22 @@ DATABASES = {
     }
 }
 
-#-------------- END DATABASE CONFIGURATION
+# -------------- END DATABASE CONFIGURATION
 
 
-#-------------- CACHE CONFIGURATION
+# -------------- CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {}
-#-------------- END CACHE CONFIGURATION
+# -------------- END CACHE CONFIGURATION
 
 
-#-------------- SECRET CONFIGURATION
+# -------------- SECRET CONFIGURATION
 # SET SECRET KEY & SETTINGS IN ENV ON SERVER ON FIRST DEPLOY
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = get_env_setting('HIKING_SECRET_KEY')
-#-------------- END SECRET CONFIGURATION
+# -------------- END SECRET CONFIGURATION
 
-#-------------- MANAGER CONFIGURATION
+# -------------- MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
     ('Fable', 'fable@raintechpdx.com'),
@@ -56,7 +56,7 @@ ADMINS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
-#-------------- END MANAGER CONFIGURATION
+# -------------- END MANAGER CONFIGURATION
 
 ALLOWED_HOSTS = [
     '.hiketheplanet.??'

@@ -17,15 +17,15 @@
 <body>
 <div id="wrapper">
     <div class="page-header">
-        <h1><a href="/hikes">Hike the Planet: Pacific Northwest</a></h1>
+        <h1><a href="/">Hike the Planet: Pacific Northwest</a></h1>
 
         <div class="user-header">
             <span>
 
                   {% if user.is_authenticated %}
-{#                    <p class="login-link"><a href="#">Hello {{ user.username }}</a><small>(<a href="{% url 'django.contrib.auth.views.logout' %}">Log out</a>)</small></p>#}
+                    <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">Hello {{ user.username }}</a><small>(<a href="{% url 'account_logout' %}">Log out</a>)</small>
                   {% else %}
-                    Login / Register</a>
+                    <a href="{% url 'account_login' %}">Login</a> / <a href="{% url 'account_signup' %}"> Register</a>
                   {% endif %}
 
                    <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="80" width="70">

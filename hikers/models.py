@@ -3,6 +3,7 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from localflavor.us.models import PhoneNumberField
@@ -29,6 +30,7 @@ class Hiker(TimeStampedModel):
                                     choices=HEALTH_LEVELS)
     avg_walking_pace = models.FloatField(default=2.0)
     miles_walked = models.FloatField(default=0.0)
+    slug = models.SlugField(unique=True)
 
     class Meta:
         ordering = ['-created']
@@ -40,6 +42,11 @@ class Hiker(TimeStampedModel):
 
     def __unicode__(self):
         return self.hiker.username
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.slug = slugify(self.__unicode__())
+        super(Hiker, self).save(*args, **kwargs)
 
 
 class HikerAddress(AddressBase):
