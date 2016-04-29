@@ -4,20 +4,22 @@
 {% block head %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static "css/details.css" %}" />
-    {% block title %}{{ hike.name }}{% endblock %}
 {% endblock %}
+    {% block title %}{{ hike.name }}{% endblock %}
 
 {% block content %}
 
 
     <h2 id="hike">{{ hike.name }}</h2>
-    <div class="trailhead"><h4>{{ hike.trailhead.name }} -
+    <div class="trailhead">
+        <h4><a href="{% url 'hikes:trailhead' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug %}">
+            {{ hike.trailhead.name }}</a> -
         <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ hike.trailhead.latitude }}"
            data-lon="{{ hike.trailhead.longitude }}" data-hiker-location="97219">map/directions</a></h4>
     </div>
 
-    <div class="difficulty" id="{{ hike.difficulty_level }}">
-        {{ hike.difficulty_level }} - <a href="#" onclick="toggleDisplay('diff_exp');" id="diff_why">Why</a>
+    <div class="difficulty" id="{{ hike.get_difficulty_level_display }}">
+        {{ hike.get_difficulty_level_display }} - <a href="#" onclick="toggleDisplay('diff_exp');" id="diff_why">Why</a>
         <div id="diff_exp" style="display: none">
             {% if hike.difficulty_level_explanation %}
                 {{ hike.difficulty_level_explanation }}
@@ -38,7 +40,7 @@
 
     <div class="basic_details">
         <ul>
-            <li class="col1">{{ hike.distance }} miles {{ hike.hike_type }}</li>
+            <li class="col1">{{ hike.distance }} miles {{ hike.get_hike_type_display }}</li>
             <li class="col2">
             </li>
             <li class="col1">elevation: {{ hike.elevation }}</li>
