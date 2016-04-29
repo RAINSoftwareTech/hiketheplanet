@@ -6,7 +6,7 @@
             {% if region.trailheads.all %}
                 {% for trailhead in region.trailheads.all %}
                     <ul>
-                        <a href="{% url 'trailhead' region_slug=region.slug trailhead_slug=trailhead.slug %}">
+                        <a href="{% url 'hikes:trailhead' region_slug=region.slug trailhead_slug=trailhead.slug %}">
                             {{ trailhead.name }}
                         </a>
                         : lat: {{ trailhead.latitude }} | lng: {{ trailhead.longitude }}
@@ -16,5 +16,4 @@
             {% else %}
                     <strong>No locations currently in region.</strong>
             {% endif %}
-        {% endif %}
 {% endblock content %}
