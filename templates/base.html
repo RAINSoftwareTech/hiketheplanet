@@ -14,49 +14,33 @@
     <title>Hike the Planet: {% block title %}Pacific Northwest{% endblock %}</title>
 </head>
 
-<body>
-<div id="wrapper">
-    <div class="page-header">
-        <h1><a href="/">Hike the Planet: Pacific Northwest</a></h1>
+    <body>
+        <div id="wrapper">
 
-        <div class="user-header">
-            <span>
+            {% block header %}
+                {% include 'header.html' %}
+            {% endblock %}
 
-                  {% if user.is_authenticated %}
-                    <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">Hello {{ user.username }}</a><small>(<a href="{% url 'account_logout' %}">Log out</a>)</small>
-                  {% else %}
-                    <a href="{% url 'account_login' %}">Login</a> / <a href="{% url 'account_signup' %}"> Register</a>
-                  {% endif %}
 
-                   <img src="{% static "images/hiker.png" %}" alt="default photo" class="profile-photo" height="80" width="70">
-            </span>
+            {% block modal %}
+            {% endblock %}
+
+
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+{#            <div class="push"></div>#}
         </div>
-    </div>
 
-
-        {% block modal %}
+        {% block footer %}
+          {% include 'footer.html' %}
         {% endblock %}
 
-
-    <div class="content">
-        {% block content %}
+        {% block javascript %}
+            <script src="{% static "js/jquery-1.11.1.js" %}"></script>
+            <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+            <script src="{% static "js/hikes.js" %}"></script>
         {% endblock %}
-    </div>
-    <div class="push"></div>
-</div>
-
-    <div class="page-footer">
-        <div id="footer-spacer"> </div>
-        <div id="footer-content">
-        <p>&copy; rainTech. All contents of this website, including text, images, and code are property of rainTech/Fable Turas.<br>
-           credit for index page UX layout goes to <a href="http://45thparallelwebdesign.com/">45th Parallel Web Design, LLC.</a></p>
-        </div>
-    </div>
-
-{% block javascript %}
-    <script src="{% static "js/jquery-1.11.1.js" %}"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="{% static "js/hikes.js" %}"></script>
-{% endblock %}
-</body>
+    </body>
 </html>

@@ -1,0 +1,30 @@
+{% load static i18n %}
+
+<div class="page-header">
+    <h1><a href="/">Hike the Planet: Pacific Northwest</a></h1>
+
+    <div class="user-header">
+        <span>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">
+                    Hello {{ user.username }}
+                </a>
+                <small>(<a href="{% url 'account_logout' %}">Log out</a>)</small>
+            {% else %}
+                <a href="{% url 'account_login' %}">
+                    Login
+                </a> /
+                <a href="{% url 'account_signup' %}">
+                    Register
+                </a>
+            {% endif %}
+
+            {% if user.is_authenticated and user.hiker.profike_pic%}
+                <img src="{{ user.hiker.profile_pic }}" alt="profile photo" class="profile-photo" height="80" width="70">
+            {% else %}
+                <img src="{% static "images/hiker.png" %}" alt="default profile photo" class="profile-photo" height="80" width="70">
+            {% endif %}
+        </span>
+    </div>
+</div>
