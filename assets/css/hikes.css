@@ -10,7 +10,7 @@ h3 a {
     color: #216629;
 }
 
-body{
+html, body{
     font-family: 'Gudea', sans-serif;
     height: 100%;
 }
@@ -271,10 +271,12 @@ FOOTER
 
 #wrapper {
     min-height: 100%;
-    padding: 0;
+    padding-bottom: 70px;
 }
-.push {
-    height: 50px;
+#footer {
+    height: 60px;
+    margin-top: -60px;
+    padding-bottom: 5px;
 }
 
 .page-footer {
@@ -288,14 +290,6 @@ FOOTER
     text-align: center;
     color: #FFFFFF;
     position: relative;
-}
-#footer-spacer{
-    background-color: #FFFFFF;
-    height: 50px;
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
 }
 
 #footer-content{
