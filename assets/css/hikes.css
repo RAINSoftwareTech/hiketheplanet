@@ -278,9 +278,6 @@ FOOTER
     margin-top: -60px;
     padding-bottom: 5px;
 }
-.push {
-    height: 50px;
-}
 
 .page-footer {
     background-color: #59B364;
@@ -293,14 +290,6 @@ FOOTER
     text-align: center;
     color: #FFFFFF;
     position: relative;
-}
-#footer-spacer{
-    background-color: #FFFFFF;
-    height: 50px;
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 0;
 }
 
 #footer-content{
