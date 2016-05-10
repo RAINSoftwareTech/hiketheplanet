@@ -231,6 +231,24 @@ a.hike_search:hover {
 /******************
 BROWSE
 ******************/
+#region-heading {
+    margin: 15px 0;
+}
+#region-heading h2, .browse-link {
+    display: inline;
+}
+
+#region-heading-icon {
+    display: inline;
+    color: #0D6317;
+    overflow: hidden;
+    padding: 20px;
+}
+
+#region-list {
+    clear: both;
+    display: block;
+}
 
 #browse_region {
     font-size: 14px;
@@ -241,8 +259,7 @@ BROWSE
     float: left;
 }
 
-
-#browse_region a {
+.browse-link a {
     border: 2px solid #006600;
     background-color: #0D6317;
     margin : 0;
@@ -252,12 +269,12 @@ BROWSE
     height: 22px;
     width: 28px;
 }
-#browse_region a:hover {
+.browse-link a:hover {
     border: 2px solid #009900;
     background-color: #00cc00;
 }
 
-#browse_region img {
+.browse-link img {
     vertical-align: middle;
 }
 
