@@ -48,7 +48,7 @@
         var maxll = bounds.getNorthEast();
 //    var region = 'Southwest Washington';
         region = encodeURI(region);
-        var msg = '/maps/' + region;
+        var msg = '/search/maps/' + region;
         ajaxRequest.onreadystatechange = stateChanged;
         ajaxRequest.open('GET', msg, true);
         ajaxRequest.send(null);
