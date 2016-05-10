@@ -1,34 +1,8 @@
-//$(function(){
-//var search_text;
-//
-//    $('#hike_search').keyup(function(){
-//        console.log("keyup is activated");
-//        search_text = $('#hike_search').val();
-//        console.log(search_text);
-//        $('#search-results').html('&nbsp;').load('/search/?search_text=' + search_text);
-////        $.ajax({
-////           type: "POST",
-////           url: "/search/",
-////           data: search_text,
-////           success: searchSuccess,
-////           dataType: 'html'
-////        });
-//
-//    });
-//
-//});
-//
-//function searchSuccess(data, textStatus, jqXHR)
-//{
-//    $('#search-results').html(data);
-//}
-
 (function() {
     var ajaxRequest,
         searchType;
 
     function initSearch() {
-        console.log('init search');
         // set up AJAX request
         ajaxRequest = getXmlHttpObject();
         if (ajaxRequest == null) {
@@ -68,7 +42,6 @@
             search_text;
         if(searchType === 'hike') {
             search_text = searchField1.value;
-//          console.log(search_text);
             search = '/search/?search_text=' + encodeURI(search_text);
         }
 
@@ -88,19 +61,21 @@
     function stateChanged() {
         if (ajaxRequest.readyState == 4) {
             //use the info here that was returned
+            console.log('ready state 4');
             if (ajaxRequest.status == 200) {
+                console.log('status 200', ajaxRequest.responseText);
                 var data = JSON.parse(ajaxRequest.responseText);
                 if(searchType === 'hike') {
-                    searchResults(data);
+                    byNameResults(data);
                 }
                 if(searchType === 'miles') {
-                    distanceResults(data);
+                    byDistanceResults(data);
                 }
             }
         }
     }
 
-    function searchResults(data){
+    function byNameResults(data){
         var results,
             url,
             name,
@@ -109,8 +84,8 @@
             text;
         var output = [];
         results = document.getElementById("search-results");
-        for(i=0; i<data.length; i++) {
-            url = "/hikes/hike/" + data[i].hikeUrl;
+        for(var i=0; i<data.length; i++) {
+            url = data[i].hikeUrl;
             name = data[i].hike;
             distance = " | Length: " + data[i].distance;
             difficulty = " miles | Difficulty: " + data[i].difficulty;
@@ -118,13 +93,12 @@
                 + name + '</a> ' + distance + difficulty;
             output.push(text);
         }
-        console.log(ajaxRequest.responseText);
         results.innerHTML = "<li>" + output.join("</li><li>") + "</li>";
 
     }
 
 
-    function distanceResults(data){
+    function byDistanceResults(data){
         var results,
             url,
             name,
@@ -134,8 +108,8 @@
             text;
         var output = [];
         results = document.getElementById("distance-results");
-        for(i=0; i<data.length; i++) {
-            url = "/hikes/hike/" + data[i].hike_url;
+        for(var i=0; i<data.length; i++) {
+            url = data[i].hike_url;
             name = data[i].hike;
             miles = " | Driving Miles: " + data[i].distance;
             difficulty = " miles | Difficulty: " + data[i].difficulty;

@@ -2,7 +2,7 @@
 
 from django.conf.urls import url
 from hikes.views import (RegionDetailView, RegionListView, TrailheadDetailView,
-                         HikeDetailView, TrailheadMapListView)
+                         HikeDetailView)
 
 urlpatterns = [
     url(
@@ -22,11 +22,6 @@ urlpatterns = [
         r'^regions/(?P<region_slug>[-\w\d]+)/$',
         RegionDetailView.as_view(),
         name='region'
-        ),
-    url(
-        r'^maps/(?P<region_name>[\w|\W]+)/$',
-        TrailheadMapListView.as_view(),
-        name='trailheads_map'
         ),
     url(
         r'^$',

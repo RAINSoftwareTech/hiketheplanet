@@ -3,7 +3,6 @@
 from django.views.generic import DetailView, ListView
 
 from hikes.models import Region, Trailhead, Hike
-from hikes.serializers import trailheads_map_serializer
 
 # from hikes.forms import HikeForm
 
@@ -65,24 +64,6 @@ class HikeDetailView(DetailView):
             raise ValueError('{} does not represent a saved Trailhead. '
                              'Please check your url or add the Trailhead.'
                              ''.format(self.kwargs['trailhead_slug']))
-
-
-class TrailheadMapListView(ListView):
-    """View to supply list of trailheads to maps modal ajax call.
-    """
-    model = Trailhead
-    template_name = 'hikes/browse_map_modal.html'
-    context_object_name = 'trailheads'
-
-    def get_queryset(self):
-        try:
-            region = Region.objects.get(name=self.kwargs['region_name'])
-        except Region.DoesNotExist:
-            raise ValueError('{} does not represent a saved Region. '
-                             'Please check your url or add the '
-                             'Region.'.format(self.kwargs['region_name']))
-        trailheads = Trailhead.objects.filter(region=region, num_hikes__gt=0)
-        return trailheads_map_serializer(trailheads, region)
 
 # def trailhead(request, trailhead_url):
 #     context = RequestContext(request)

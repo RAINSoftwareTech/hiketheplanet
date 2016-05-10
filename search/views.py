@@ -1,34 +1,44 @@
 import json
-from urllib import urlopen, quote
-from Hiking.utils import encode_url
-from hikes.models import Hike, Trailhead
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
 from json import dumps
 from operator import itemgetter
+from urllib import urlopen
+
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
+
+from core.utils import encode_url
+from hikes.models import Hike, Trailhead, Region
+from search.serializers import trailheads_serializer, hikes_serializer
 
 
-@csrf_exempt
-def search_hikes(request):
-    # context = RequestContext(request)
-    if request.method == 'GET':
-        search_text = request.GET.get('search_text')
-    else:
-        search_text = ''
+class TrailheadMapListView(ListView):
+    """View to supply list of trailheads to maps modal ajax call.
+    """
+    model = Trailhead
+    template_name = 'hikes/browse_map_modal.html'
+    context_object_name = 'trailheads'
 
-    ajax_hikes_list = []
-    hikes = Hike.objects.filter(name__contains=search_text).order_by('name')
-    for hike in hikes:
-        hike.url = encode_url(hike.name)
-        ajax_hikes_list.append({
-            'hike': hike.name,
-            'distance': hike.distance,
-            'difficulty': hike.difficulty_level,
-            'hikeUrl': hike.url
-        })
+    def get_queryset(self):
+        try:
+            region = Region.objects.get(name=self.kwargs['region_name'])
+        except Region.DoesNotExist:
+            raise ValueError('{} does not represent a saved Region. '
+                             'Please check your url or add the '
+                             'Region.'.format(self.kwargs['region_name']))
+        trailheads = Trailhead.objects.filter(region=region, num_hikes__gt=0)
+        return trailheads_serializer(trailheads, region)
 
-     # return render_to_response('search.html', {'hikes': hikes}, context)
-    return HttpResponse(dumps(ajax_hikes_list), content_type="application/json")
+
+class SearchByHikeName(ListView):
+    model = Hike
+    template_name = 'search/search_list.html'
+
+    def get_queryset(self):
+        search_text = self.request.GET.get('search_text', '')
+        hikes = Hike.objects.filter(name__icontains=search_text
+                                    ).order_by('name')
+        return hikes_serializer(hikes)
 
 
 @csrf_exempt
