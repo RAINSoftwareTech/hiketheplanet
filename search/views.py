@@ -16,7 +16,7 @@ class TrailheadMapListView(ListView):
     """View to supply list of trailheads to maps modal ajax call.
     """
     model = Trailhead
-    template_name = 'hikes/browse_map_modal.html'
+    template_name = 'search/search_list.html'
     context_object_name = 'trailheads'
 
     def get_queryset(self):

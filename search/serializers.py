@@ -16,10 +16,7 @@ def trailheads_serializer(trailheads, region):
             'url': str(trailhead_url(trailhead, region))
         }
         trailheads_list.append(trailhead_details)
-    return json.dumps({
-        "success": 1,
-        "result": trailheads_list
-    })
+    return json.dumps(trailheads_list)
 
 
 def trailhead_url(trailhead, region):
