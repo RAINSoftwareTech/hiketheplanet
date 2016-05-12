@@ -8,9 +8,9 @@ class TimezoneMiddleware(object):
     def get_tz_name(self, request):
         """Return pacific US if user not logged in."""
         user = request.user
-        if user:
+        try:
             return user.hiker.timezone
-        else:
+        except AttributeError:
             return 'America/Los_Angeles'
 
     def process_request(self, request):
