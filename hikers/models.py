@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from localflavor.us.models import PhoneNumberField
+from timezones.zones import PRETTY_TIMEZONE_CHOICES
 
 from core.models import TimeStampedModel, AddressBase
 from hikes.models import Hike
@@ -30,6 +31,9 @@ class Hiker(TimeStampedModel):
                                     choices=HEALTH_LEVELS)
     avg_walking_pace = models.FloatField(default=2.0)
     miles_walked = models.FloatField(default=0.0)
+    timezone = models.CharField(max_length=255,
+                                choices=PRETTY_TIMEZONE_CHOICES,
+                                blank=True, default=b'America/Los_Angeles')
     slug = models.SlugField(unique=True)
 
     class Meta:
