@@ -23,10 +23,6 @@ hr {
     border-color: #0D6317;
 }
 
-.content {
-    margin-left: 40px;
-}
-
 .top-menu, .top-menu:hover, .top-menu:visited {
     color: #ffffff;
     float: right;
@@ -132,6 +128,9 @@ TREES PHOTO/INTRO
     position: relative;
 }
 
+.intro p {
+    margin-left: 40px;
+}
 .trees-photo {
     width: 100%;
     max-height: 275px;
@@ -193,8 +192,7 @@ SEARCHES
 
 .search_by_distance {
     width: 50%;
-    padding-left: 40px;
-    padding-top: 20px;
+    padding: 20px 40px 0;
     float: right;
 }
 
@@ -407,6 +405,7 @@ MEDIA QUERIES
 
     .search_by_distance {
         padding: 10px;
+        margin-right: 40px;
     }
 
     hr {

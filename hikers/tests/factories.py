@@ -52,7 +52,7 @@ class HikerPhotoFactory(DjangoModelFactory):
         model = HikerPhoto
 
     hiker = SubFactory(HikerFactory)
-    title = Faker('text', max_nb_chars=200)
+    title = Faker('text', max_nb_chars=10)
     photo = Faker('file_name', extension='jpg')
 
 

@@ -36,8 +36,8 @@
     }
 
     function searchRequest(searchField1, searchField2) {
-//    console.log('keyup');
-//    console.log(searchField);
+    console.log('keyup');
+    console.log(searchField1);
         var search,
             search_text;
         if(searchType === 'hike') {
@@ -111,14 +111,13 @@
         for(var i=0; i<data.length; i++) {
             url = data[i].hike_url;
             name = data[i].hike;
-            miles = " | Driving Miles: " + data[i].distance;
+            miles = " | Driving Miles: " + data[i].driving_distance;
             difficulty = " miles | Difficulty: " + data[i].difficulty;
-            length = " | Length " + data[i].length + ' miles';
+            length = " | Length " + data[i].distance + ' miles';
             text = '<a href="' + url + '">'
                 + name + '</a> ' + miles + difficulty + length;
             output.push(text);
         }
-        console.log(ajaxRequest.responseText);
         results.innerHTML = "<li>" + output.join("</li><li>") + "</li>";
 
     }

@@ -1,10 +1,11 @@
 from django.conf.urls import url
-from search.views import search_distance, TrailheadMapListView, SearchByHikeName
+from search.views import (SearchByDistance, SearchByHikeName,
+                          TrailheadMapListView)
 
 urlpatterns = [
     url(
         r'^distance/$',
-        search_distance,
+        SearchByDistance.as_view(),
         name='search_distance'),
     url(
         r'^maps/(?P<region_name>[\w|\W]+)/$',
