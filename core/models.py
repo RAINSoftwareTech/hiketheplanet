@@ -5,6 +5,8 @@ from django.utils.text import slugify
 from localflavor.us.us_states import STATE_CHOICES
 from localflavor.us.models import USZipCodeField, USStateField
 
+from django.contrib.gis.db import models as geomodels
+
 
 class TimeStampedModel(models.Model):
     """
@@ -56,3 +58,15 @@ class SlugifiedNameBase(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(SlugifiedNameBase, self).save(*args, **kwargs)
+
+
+class GeoSlugifiedNameBase(geomodels.Model):
+    slug = models.SlugField()
+
+    class Meta:
+        abstract = True
+        app_label = 'core'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(GeoSlugifiedNameBase, self).save(*args, **kwargs)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hikes.models import Region, Trailhead, Hike, Hazards, Sights, Equipment
+from hikes.models import Region, Trailhead, Hike
 
 
 class HikesInLine(admin.StackedInline):
@@ -40,9 +40,6 @@ class HikeAdmin(admin.ModelAdmin):
 admin.site.register(Region)
 admin.site.register(Trailhead, TrailheadAdmin)
 admin.site.register(Hike, HikeAdmin)
-admin.site.register(Hazards)
-admin.site.register(Sights)
-admin.site.register(Equipment)
 
 
 

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from django.contrib.gis.db import models as geomodels
+from django.contrib.gis.geos import Point
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from core.models import SlugifiedNameBase
+from core.models import SlugifiedNameBase, GeoSlugifiedNameBase
 
 
 class Region(SlugifiedNameBase):
@@ -19,7 +21,7 @@ class Region(SlugifiedNameBase):
         return self.name
 
 
-class Trailhead(SlugifiedNameBase):
+class Trailhead(GeoSlugifiedNameBase):
     """Class for capturing base information about trailheads, the places where
     hikes start. presumptively the best approximation of parking locations.
     """
@@ -30,6 +32,8 @@ class Trailhead(SlugifiedNameBase):
     longitude = models.FloatField(default=0.0)
     num_hikes = models.IntegerField(default=1)
 
+    point = geomodels.PointField(srid=4326)
+
     class Meta:
         ordering = ['region', '-num_hikes']
         unique_together = ('region', 'name')
@@ -38,6 +42,7 @@ class Trailhead(SlugifiedNameBase):
         return self.name
 
     def save(self, *args, **kwargs):
+        self.point = Point(self.longitude, self.latitude)
         super(Trailhead, self).save(*args, **kwargs)
         trailhead_count = Trailhead.objects.filter(region=self.region).count()
         self.region.num_trailheads = trailhead_count

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse_lazy
 from hikes.models import Hike
 
 
-def trailheads_serializer(trailheads, region):
+def trailheads_serializer(trailheads):
     trailheads_list = []
     for trailhead in trailheads:
         trailhead_details = {
@@ -13,17 +13,17 @@ def trailheads_serializer(trailheads, region):
             'lat': trailhead.latitude,
             'lon': trailhead.longitude,
             'num_hikes': trailhead.num_hikes,
-            'url': str(trailhead_url(trailhead, region))
+            'url': str(trailhead_url(trailhead))
         }
         trailheads_list.append(trailhead_details)
     return json.dumps(trailheads_list)
 
 
-def trailhead_url(trailhead, region):
+def trailhead_url(trailhead):
     url = reverse_lazy(
             'hikes:trailhead',
             kwargs={'trailhead_slug': trailhead.slug,
-                    'region_slug': region.slug})
+                    'region_slug': trailhead.region.slug})
     if trailhead.num_hikes == 1:
         try:
             hike = Hike.objects.get(trailhead=trailhead)
@@ -31,7 +31,7 @@ def trailhead_url(trailhead, region):
                 'hikes:hike',
                 kwargs={'hike_slug': hike.slug,
                         'trailhead_slug': trailhead.slug,
-                        'region_slug': region.slug})
+                        'region_slug': trailhead.region.slug})
         except Hike.DoesNotExist:
             pass
         except Hike.MultipleObjectsReturned:
@@ -44,12 +44,18 @@ def trailhead_url(trailhead, region):
 def hikes_serializer(hikes):
     hike_list = []
     for hike in hikes:
-        hike_list.append({
+        hike_dict = {
             'hike': hike.name,
             'distance': hike.distance,
             'difficulty': hike.get_difficulty_level_display(),
             'hikeUrl': str(hike_url(hike))
-        })
+        }
+        try:
+            hike_dict['driving_distance'] = '{0:.2f}'.format(
+                hike.trailhead.crow_distance.mi)
+        except AttributeError:
+            pass
+        hike_list.append(hike_dict)
     return json.dumps(hike_list)
 
 

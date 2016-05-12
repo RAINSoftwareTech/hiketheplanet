@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'django.contrib.postgres',
+    'django.contrib.gis',
     'django.contrib.sites',
     'localflavor',
     'allauth',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'hazards',
     'reviews',
     'sights',
+    'rest_framework',
 ]
 
 MIDDLEWARE_CLASSES = [

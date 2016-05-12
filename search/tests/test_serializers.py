@@ -15,34 +15,34 @@ from search.serializers import (hikes_serializer, hike_url,
 class HikesSerializersTests(TestCase):
 
     def setUp(self):  # noqa
-        self.region = RegionFactory()
-        self.trailhead = TrailheadFactory(region=self.region)
-        self.hike = HikeFactory(trailhead=self.trailhead)
+        self.region = RegionFactory(name='region')
+        self.trailhead = TrailheadFactory(region=self.region, name='trailhead')
+        self.hike = HikeFactory(trailhead=self.trailhead, name='hike')
 
     def test_trailhead_url(self):
         self.trailhead.num_hikes = 3
-        url0 = trailhead_url(self.trailhead, self.region)
+        url0 = trailhead_url(self.trailhead)
         self.assertIn(self.region.slug, url0)
         self.assertIn(self.trailhead.slug, url0)
         self.assertNotIn(self.hike.slug, url0)
 
         self.trailhead.num_hikes = 1
-        url1 = trailhead_url(self.trailhead, self.region)
+        url1 = trailhead_url(self.trailhead)
         self.assertIn(self.region.slug, url1)
         self.assertIn(self.trailhead.slug, url1)
         self.assertIn(self.hike.slug, url1)
 
-        HikeFactory(trailhead=self.trailhead)
+        HikeFactory(trailhead=self.trailhead, name='hike2')
         self.trailhead.num_hikes = 1
-        url2 = trailhead_url(self.trailhead, self.region)
+        url2 = trailhead_url(self.trailhead)
         self.assertIn(self.region.slug, url2)
         self.assertIn(self.trailhead.slug, url2)
         self.assertNotIn(self.hike.slug, url2)
         self.assertEquals(self.trailhead.num_hikes, 2)
 
-        trailhead1 = TrailheadFactory(region=self.region)
+        trailhead1 = TrailheadFactory(region=self.region, name='trailhead2')
         trailhead1.num_hikes = 1
-        url3 = trailhead_url(trailhead1, self.region)
+        url3 = trailhead_url(trailhead1)
         self.assertIn(self.region.slug, url3)
         self.assertIn(trailhead1.slug, url3)
         self.assertNotIn('hikes/', str(url3))
@@ -54,9 +54,8 @@ class HikesSerializersTests(TestCase):
             kwargs={'trailhead_slug': self.trailhead.slug,
                     'region_slug': self.region.slug})
         trailheads = Trailhead.objects.all()
-        serialized = json.loads(trailheads_serializer(trailheads,
-                                                      self.region))
-        self.assertEquals(len(serialized['result']), trailheads.count())
+        serialized = json.loads(trailheads_serializer(trailheads))
+        self.assertEquals(len(serialized), trailheads.count())
 
     def test_hike_url(self):
         url0 = hike_url(self.hike)
