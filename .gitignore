@@ -3,6 +3,6 @@ env
 *.pyc
 .idea
 *.json
-junk
+*junk
 .coverage
 htmlcov

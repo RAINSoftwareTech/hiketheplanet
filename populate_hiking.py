@@ -3499,7 +3499,6 @@ def add_hikes(name, trailhead, hike_type="out_and_back", distance=0.0,
               difficulty_level_explanation='', high_point=0):
     try:
         this_trailhead = Trailhead.objects.get(name=trailhead)
-        # print(this_trailhead)
     except Trailhead.DoesNotExist:
         region = Region.objects.get_or_create(name='Unknown')[0]
         this_trailhead = Trailhead.objects.create(name=trailhead,
@@ -3513,25 +3512,13 @@ def add_hikes(name, trailhead, hike_type="out_and_back", distance=0.0,
         difficulty_level_explanation=difficulty_level_explanation,
         high_point=high_point)[0]
 
-# def update_count():
-#     regions = Region.objects.all()
-#     for r in regions:
-#         these_trailheads = Trailhead.objects.filter(region=r)
-#         r.num_hikes = len(these_trailheads)
-#         print(len(these_trailheads), r.name, r.num_hikes)
-#         r.save()
-#     trailheads = Trailhead.objects.all()
-#     for t in trailheads:
-#         these_hikes = Hike.objects.filter(trailhead=t)
-#         t.num_hikes = len(these_hikes)
-#         t.save()
-#         print(len(these_hikes), t.name, t.num_hikes)
 
 if __name__ == '__main__':
     print('Starting Hike the World Population script...')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Hiking.settings.dev')
     django.setup()
     from hikes.models import Region, Trailhead, Hike
+    from django.apps import apps
     populate()
     print('Regions: {}'.format(Region.objects.all().count()))
     print('Trailheads: {}'.format(Trailhead.objects.all().count()))

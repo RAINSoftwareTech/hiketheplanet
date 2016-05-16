@@ -36,8 +36,6 @@
     }
 
     function searchRequest(searchField1, searchField2) {
-    console.log('keyup');
-    console.log(searchField1);
         var search,
             search_text;
         if(searchType === 'hike') {
@@ -61,9 +59,7 @@
     function stateChanged() {
         if (ajaxRequest.readyState == 4) {
             //use the info here that was returned
-            console.log('ready state 4');
             if (ajaxRequest.status == 200) {
-                console.log('status 200', ajaxRequest.responseText);
                 var data = JSON.parse(ajaxRequest.responseText);
                 if(searchType === 'hike') {
                     byNameResults(data);
