@@ -19,7 +19,6 @@
             var description = document.getElementById("add_descrip_form");
             var fileSelect = document.getElementById("add_map_form");
 
-            console.log(difficulty, description, fileSelect);
             if(difficulty && difficulty.value.length > 0) {
                 form.append("difficulty", encodeURIComponent(difficulty.value));
             }
@@ -33,7 +32,6 @@
             }
 
             form.append("hike", encodeURIComponent(hikeName.innerHTML));
-            console.log("variables initialized");
             saveForm(form);
             }
 
@@ -42,8 +40,6 @@
     function saveForm(formData) {
 //      stuff here to POST
 //      send form data to django database then call the state change test function
-        console.log("saveForm called");
-        console.log(formData);
         ajaxRequest.open("POST", "/hikes/hikesajax/", true);
 //        ajaxRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         ajaxRequest.send(formData);
@@ -54,7 +50,6 @@
     function refreshDetails(data) {
 //     callback function
 //     print form inputs back to the page
-        console.log("callback function");
         var descripResults = document.getElementById("hike_descrp");
         var diffResults = document.getElementById("diff_exp");
 //        var trailMap = document.getElementById("trail_map");
@@ -84,7 +79,6 @@
 
    function stateChanged() {
 //      test ajax state and call callback function
-        console.log('statechanged called');
         if (ajaxRequest.readyState == 4) {
             //use the info here that was returned
             if (ajaxRequest.status == 200) {

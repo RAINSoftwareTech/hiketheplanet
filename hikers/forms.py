@@ -1,19 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
 
 from localflavor.us.forms import USZipCodeField, USStateField
 from localflavor.us.us_states import STATE_CHOICES
 from timezones.zones import PRETTY_TIMEZONE_CHOICES
 
 from hikers.models import Hiker, HikerAddress
-
-
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
 
 
 class HikerRegistrationForm(forms.Form):
