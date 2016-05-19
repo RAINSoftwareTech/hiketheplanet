@@ -136,5 +136,6 @@ SITE_ID = 1
 
 # Profile/allauth settings
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/hikers/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_SIGNUP_FORM_CLASS = 'hikers.forms.HikerRegistrationForm'

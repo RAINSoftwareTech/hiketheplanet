@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from hikers.views import (HikerProfileView, InactiveRedirect, ProfileRedirect)
+from hikers.views import (HikerProfileView, InactiveRedirect, ProfileRedirect,
+                          ProfileIndexRedirect)
 
 urlpatterns = [
     url(
@@ -18,5 +19,10 @@ urlpatterns = [
         r'^inactive/$',
         InactiveRedirect.as_view(),
         name='inactive_redirect'
+        ),
+    url(
+        r'^',
+        ProfileIndexRedirect.as_view(),
+        name='index_redirect'
         ),
     ]

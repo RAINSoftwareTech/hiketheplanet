@@ -14,18 +14,23 @@ urlpatterns = [
         ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/$',
+        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/',
         TrailheadDetailView.as_view(),
         name='trailhead'
         ),
     url(
-        r'^regions/(?P<region_slug>[-\w\d]+)/$',
+        r'^regions/(?P<region_slug>[-\w\d]+)/',
         RegionDetailView.as_view(),
         name='region'
         ),
     url(
+        r'^regions/$',
+        RegionListView.as_view(template_name='hikes/regions.html'),
+        name='region_list'
+        ),
+    url(
         r'^$',
         RegionListView.as_view(),
-        name='region_list'
+        name='home'
         ),
 ]
