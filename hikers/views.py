@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from django.views.generic import DetailView, TemplateView
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import DetailView, TemplateView, RedirectView
 
 from hikers.models import Hiker
 from mixins.permission_mixins import HikerAccessMixin, ProfileAccessMixin
@@ -28,3 +29,12 @@ class InactiveRedirect(TemplateView):
     """
     system_admin_email = settings.ADMINS[0][1]
     template_name = 'hikers/inactive_redirect.html'
+
+
+class ProfileIndexRedirect(HikerAccessMixin, RedirectView):
+    """View to redirect selections of hikers or hikers/profile to logged in
+    user's profile, or login.
+    """
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse_lazy('hiker_profile',
+                            kwargs={'user_slug': self.request.user.hiker.slug})

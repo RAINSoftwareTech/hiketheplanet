@@ -1,0 +1,9 @@
+{% extends 'hikes/directions_modal.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <div id="browse_region" class="browse-link">
+        {% include 'hikes/region_list.html' %}
+    </div>
+{% endblock content %}
