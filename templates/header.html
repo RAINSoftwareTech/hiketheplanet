@@ -7,7 +7,7 @@
         <span>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">
+                <a href="{% url 'hiker_profile' user_slug=user.username %}">
                     Hello {{ user.username }}
                 </a>
                 <small>(<a href="{% url 'account_logout' %}">Log out</a>)</small>

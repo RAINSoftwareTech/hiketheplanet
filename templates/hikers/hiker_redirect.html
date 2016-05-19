@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div>
+    <h4>You are attempting to access a profile other than your own.</h4>
+    <p>Please sign in as a
+        <a href="{% url 'account_logout' %}" >different user</a>
+        or view
+        <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">
+            your own profile
+        </a>
+    </p>
+</div>
+{% endblock %}
