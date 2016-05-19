@@ -1,16 +1,7 @@
-import json
-from json import dumps
-from operator import itemgetter
-from urllib import urlopen
-from geopy.geocoders import GoogleV3
+# -*- coding: utf-8 -*-
 
-from django.contrib.gis.geos import Point
-from django.contrib.gis.measure import D
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
 
-from core.utils import encode_url
 from hikes.models import Hike, Trailhead, Region
 from search.serializers import trailheads_serializer, hikes_serializer
 from search.utils import trailheads_as_the_crow_flies

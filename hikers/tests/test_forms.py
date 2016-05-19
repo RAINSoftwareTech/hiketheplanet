@@ -15,7 +15,8 @@ class HikesViewsTests(TestCase):
         request = RequestFactory().get('/fake-path')
         form_data = {'zipcode': '97219',
                      'city': 'Portland',
-                     'state': 'OR'}
+                     'state': 'OR',
+                     'timezone': 'America/Los_Angeles'}
         hiker_form = HikerRegistrationForm(data=form_data)
         self.assertTrue(hiker_form.is_valid())
         hiker_form.signup(request=request, user=user)

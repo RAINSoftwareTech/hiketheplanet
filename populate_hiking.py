@@ -3513,6 +3513,22 @@ def add_hikes(name, trailhead, hike_type="out_and_back", distance=0.0,
         high_point=high_point)[0]
 
 
+def contrib_group(apps):
+    Group = apps.get_model('auth', 'Group')
+    Permission = apps.get_model('auth', 'Permission')
+
+    hikes = []
+    hikes += Permission.objects.filter(content_type__app_label='hikes')
+    hikes += Permission.objects.filter(content_type__app_label='trailheads')
+    hikes += Permission.objects.filter(content_type__app_label='regions')
+
+    contrib, created = Group.objects.get_or_create(name='Contributors')
+
+    for p in hikes:
+        if 'delete' not in p.name:
+            contrib.permissions.add(p)
+
+
 if __name__ == '__main__':
     print('Starting Hike the World Population script...')
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Hiking.settings.dev')
@@ -3520,6 +3536,7 @@ if __name__ == '__main__':
     from hikes.models import Region, Trailhead, Hike
     from django.apps import apps
     populate()
+    contrib_group(apps)
     print('Regions: {}'.format(Region.objects.all().count()))
     print('Trailheads: {}'.format(Trailhead.objects.all().count()))
     print('Hikes: {}'.format(Hike.objects.all().count()))

@@ -12,3 +12,11 @@ def deleted_hiker_fallback():
     empty_hiker, created = Hiker.objects.get_or_create(
         hiker=empty_user)
     return empty_hiker
+
+
+def get_hiker(user):
+    try:
+        hiker = user.hiker
+    except AttributeError:
+        hiker, created = Hiker.objects.get_or_create(hiker=user)
+    return hiker

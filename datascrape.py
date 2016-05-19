@@ -1,26 +1,25 @@
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
-from lxml import html
-import requests
 
 BASE_URL = "http://www.portlandhikersfieldguide.org"
-REGIONS = ['Gorge', 'Mount Hood', 'Central OR', 'OR Coast', 'East OR', 'South OR', 'Portland', 'SW WA', 'WA Coast']
+REGIONS = ['Gorge', 'Mount Hood', 'Central OR', 'OR Coast', 'East OR',
+           'South OR', 'Portland', 'SW WA', 'WA Coast']
 REGION_INDEXS = [
-    'http://www.portlandhikersfieldguide.org/wiki/Category:Columbia_River_Gorge',
+    'http://www.portlandhikersfieldguide.org/wiki/Category:Columbia_River_Gorge',  # noqa
     'http://www.portlandhikersfieldguide.org/wiki/Category:Mount_Hood_Area',
     'http://www.portlandhikersfieldguide.org/wiki/Category:Central_Oregon',
     'http://www.portlandhikersfieldguide.org/wiki/Category:Oregon_Coast',
     'http://www.portlandhikersfieldguide.org/wiki/Category:Eastern_Oregon',
     'http://www.portlandhikersfieldguide.org/wiki/Category:Southern_Oregon',
     'http://www.portlandhikersfieldguide.org/wiki/Category:Portland',
-    'http://www.portlandhikersfieldguide.org/wiki/Category:Southwest_Washington',
+    'http://www.portlandhikersfieldguide.org/wiki/Category:Southwest_Washington',  # noqa
     'http://www.portlandhikersfieldguide.org/wiki/Category:Washington_Coast'
 ]
 
 EXCLUDE_LINKS = [
     'http://www.portlandhikersfieldguide.org/wiki/148th_Avenue_Trailhead',
     'http://www.portlandhikersfieldguide.org/wiki/Quartz_Creek_Trailhead',
-    'http://www.portlandhikersfieldguide.org/wiki/Jefferson_Park_from_South_Breitenbush_Trailhead',
+    'http://www.portlandhikersfieldguide.org/wiki/Jefferson_Park_from_South_Breitenbush_Trailhead',  # noqa
     'http://www.portlandhikersfieldguide.org/wiki/Latourell_Falls_Trailhead',
 ]
 
@@ -107,7 +106,8 @@ hike_details_dict = {}
 # compile all the links for regional sub pages
 region_dict = create_regions_dict()
 
-# follow all region sub page links to gather links to trailheads and get count of trailheads per region
+# follow all region sub page links to gather links to trailheads and get
+# count of trailheads per region.
 for key, value in region_dict.items():
     trailhead_links = []
     for link in value:
@@ -116,7 +116,8 @@ for key, value in region_dict.items():
         trailhead_links_dict[key] = trailhead_links
     region_count_dict[key] = len(trailhead_links)
 
-# follow all trailhead links by region to get hike links and trailhead details (lat/long, count of hikes)
+# follow all trailhead links by region to get hike links and trailhead details
+# (lat/long, count of hikes).
 for key, value in trailhead_links_dict.items():
     for link in value:
         if link not in EXCLUDE_LINKS:
@@ -135,5 +136,3 @@ for key, value in hike_links_dict.items():
 
 write_to_file('hikedetails', hike_details_dict)
 write_to_file('trailheads', trailheads_dict)
-
-# print(get_hike_details('http://www.portlandhikersfieldguide.org/wiki/North_and_McKenzie_Heads_Hike'))

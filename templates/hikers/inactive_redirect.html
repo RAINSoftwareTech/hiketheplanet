@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div>
+    <h4>Your account is inactive.</h4>
+    <p>Please contact the
+        <a href="mailto:{{ view.system_admin_email }}?Subject=Reactivation" >system administrator</a>
+        to request reactivation or continue
+        <a href="/">
+            browsing the hikes
+        </a>
+         as a guest
+    </p>
+</div>
+{% endblock %}
