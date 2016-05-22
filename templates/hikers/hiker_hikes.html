@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="section">
+        {% if view.hiker.hiker.get_full_name %}
+            <h2>{{ view.hiker.hiker.get_full_name }}</h2>
+            <h4>{{ view.hiker.hiker.username }}</h4>
+        {% else %}
+            <h2>{{ view.hiker.hiker.username }}</h2>
+        {% endif %}
+    </div>
+    <div class="section">
+    <h4>Hikes I have taken</h4>
+        <ul class="hike-list">
+            {% if hikes %}
+                {% for hike in hikes %}
+                    <li class="hike">
+
+                        <a href="{% url 'hikes:hike' region_slug=hike.hike.trailhead.region.slug trailhead_slug=hike.hike.trailhead.slug  hike_slug=hike.hike.slug%}">
+                            {{ hike.name }}
+                        </a>
+                        :  Last hiked on: {{ hike.last_hiked }} | My rating: {{ hike.get_rating_display }}
+                        <br>difficulty level: {{ hike.get_difficulty_level_display }} | distance: {{ hike.distance }} | elevation gain: {{ hike.elevation }}
+
+                    </li>
+                {% endfor %}
+            {% else %}
+                No hikes added yet
+            {% endif %}
+        </ul>
+    </div>
+    <div class="section">
+    <h4>Hikes I would like to take</h4>
+        <ul class="hike-list">
+            {% if view.future_hikes %}
+                {% for hike in view.future_hikes %}
+                    <li class="hike">
+
+                        <a href="{% url 'hikes:hike' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug  hike_slug=hike.slug%}">
+                            {{ hike.name }}
+                        </a>
+                        :  difficulty level: {{ hike.get_difficulty_level_display }} | distance: {{ hike.distance }} | elevation gain: {{ hike.elevation }}
+
+                    </li>
+                {% endfor %}
+            {% else %}
+                No hikes added yet
+            {% endif %}
+        </ul>
+    </div>
+    <div class="section">
+        <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hiker_photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hiker_hikes' user_slug=view.hiker.slug %}">My Hikes</a>
+    </div>
+{% endblock %}

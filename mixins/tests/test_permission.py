@@ -120,7 +120,7 @@ class PermissionMixinsTests(TestCase):
         view = self.ProfileAccessView(
             template_name='test_views.html',
             model=Hiker)
-        view = setup_view(view, request, pk=self.hiker1.pk)
+        view = setup_view(view, request, user_slug=self.hiker1.slug)
 
         # returns false since profile attempted does not belong to user
         self.assertFalse(view.check_owner(request.user))
@@ -129,7 +129,7 @@ class PermissionMixinsTests(TestCase):
         self.assertTrue(view.check_owner(self.hiker1.hiker))
 
         # check method with non-existent profile
-        view = setup_view(view, request, pk=9999)
+        view = setup_view(view, request, user_slug='not-a-user')
         self.assertFalse(view.check_owner(self.hiker1.hiker))
 
     def test_owner_required(self):

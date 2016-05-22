@@ -5,8 +5,6 @@
     <link rel="stylesheet" type="text/css" href="{% static "leaflet/leaflet.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/modal.css" %}" />
     <script type="text/javascript" src="{% static "leaflet/leaflet.js" %}"></script>
-    <script src="http://www.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96"></script>
-    <script src="http://www.mapquestapi.com/sdk/leaflet/v1.s/mq-routing.js?key=Fmjtd%7Cluu82968l1%2Cag%3Do5-9w1x96"></script>
 
  {% endblock head-block %}
 
@@ -32,5 +30,8 @@
         </div>
       </div>
     </div>
-<script src="{% static "leaflet/leaflet_directions.js" %}"></script>
 {% endblock modal-block %}
+{% block javascript %}
+    {{ block.super }}
+    <script src="{% static "leaflet/leaflet_directions.js" %}"></script>
+{% endblock %}

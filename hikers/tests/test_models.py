@@ -72,7 +72,7 @@ class HikerModelsTests(TestCase):
 
     def test_my_hike_unicode(self):
         my_hike = MyHikeFactory(hike=self.test_hike, hiker=self.test_hiker,
-                                rating='0never')
+                                rating='0never', last_hiked=None)
         self.assertIsInstance(my_hike, MyHike)
         self.assertIn(my_hike.hike.name, my_hike.__unicode__())
         self.assertIn(my_hike.rating, my_hike.__unicode__())

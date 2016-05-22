@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="section">
+        {% if view.hiker.hiker.get_full_name %}
+            <h2>{{ view.hiker.hiker.get_full_name }}</h2>
+            <h4>{{ view.hiker.hiker.username }}</h4>
+        {% else %}
+            <h2>{{ view.hiker.hiker.username }}</h2>
+        {% endif %}
+    </div>
+    <div class="section">
+        <h4>My Hiking Photos</h4>
+        <ul class="photo-list">
+            {% if photos %}
+                {% for photo in photos %}
+                    <li class="photo">
+                        <h5 class="photo-title">{{ photo }}</h5>
+                        <p class="photo-image"><img src="{{ photo.photo.url }}"></p>
+                        <p class="photo-date">created on: {{ photo.created }}</p>
+                        <p class="photo-public">Publicly viewable: {{ photo.make_public }}</p>
+                    </li>
+                {% endfor %}
+            {% else %}
+                No photos yet
+            {% endif %}
+        </ul>
+    </div>
+    <div class="section">
+        <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hiker_photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hiker_hikes' user_slug=view.hiker.slug %}">My Hikes</a>
+    </div>
+{% endblock %}
