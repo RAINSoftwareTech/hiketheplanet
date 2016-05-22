@@ -1,8 +1,7 @@
 {% extends 'hikes/browse_map_modal.html' %}
 {% load staticfiles %}
 
-{% block content %}
-
+{% block subheader %}
 
     <div class="intro" >
         <img src="{% static "images/trees2.jpg" %}" alt="trees photo" class="trees-photo">
@@ -14,39 +13,46 @@
         </p>
     </div>
 
+{% endblock %}
 
-    <div id="search_by" style="display: block">
-        <div class="search_by_hike">
-            <h4>Search by Hike Name</h4>
-            <input type="text" id="hike_search" name="search" /><a href="#" class="hike_search" role="button">
-            <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></a>
 
-            <ul id="search-results">
-            </ul>
-        </div>
+{% block content %}
 
-        <div class="search_by_distance">
-            <h4>Search by Driving Distance</h4>
-            <span class="line_break">
-            <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> <span class="input_id">driving miles from</span>
-            </span><span class="line_break">
-            <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span class="input_id">zip code</span>
-            <button type="button" id="distance_search">
-            <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></button>
-            </span>
-            <p>Mapquest broke my search/directions <i>again</i>.  Until a resolution can be applied, driving distance is actually as the crow flies.
-             <i>Note: in the interest of performance and meaningful results, searches are limited to within 30 miles of your max distance.
-                     In other words, if you search for hikes 100 miles from your origin zipcode, you will get all hikes in the range of 70 to 100 miles from your origin, rather than all hikes between 0 and 100 miles. </i></p>
-            <ul id="distance-results">
-            </ul>
+    <div class="section">
+        <div id="search_by" style="display: block">
+            <div class="search_by_hike">
+                <h4>Search by Hike Name</h4>
+                <input type="text" id="hike_search" name="search" /><a href="#" class="hike_search" role="button">
+                <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></a>
+
+                <ul id="search-results">
+                </ul>
+            </div>
+
+            <div class="search_by_distance">
+                <h4>Search by Driving Distance</h4>
+                <span class="line_break">
+                <input type="text" id="miles_search" size="3" maxlength="3" value="9"  /> <span class="input_id">driving miles from</span>
+                </span><span class="line_break">
+                <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span class="input_id">zip code</span>
+                <button type="button" id="distance_search">
+                <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></button>
+                </span>
+                <p>Mapquest broke my search/directions <i>again</i>.  Until a resolution can be applied, driving distance is actually as the crow flies.
+                 <i>Note: in the interest of performance and meaningful results, searches are limited to within 30 miles of your max distance.
+                         In other words, if you search for hikes 100 miles from your origin zipcode, you will get all hikes in the range of 70 to 100 miles from your origin, rather than all hikes between 0 and 100 miles. </i></p>
+                <ul id="distance-results">
+                </ul>
+            </div>
         </div>
     </div>
 
     <hr>
 
-
-    <div id="browse_region" class="browse-link">
-        {% include 'hikes/region_list.html' %}
+    <div class="section">
+        <div id="browse_region" class="browse-link">
+            {% include 'hikes/region_list.html' %}
+        </div>
     </div>
 
 

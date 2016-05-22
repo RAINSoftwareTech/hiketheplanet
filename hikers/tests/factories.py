@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 from django.contrib.auth import get_user_model
 
 from factory.django import DjangoModelFactory
@@ -73,3 +74,4 @@ class MyHikeFactory(DjangoModelFactory):
     hike = SubFactory(HikeFactory)
     hiker = SubFactory(HikerFactory)
     rating = hike_rating
+    last_hiked = datetime.datetime.today() if not rating == '0never' else None

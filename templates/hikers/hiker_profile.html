@@ -1,3 +1,27 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-profile place holder
+{% block content %}
+    <div class="section">
+        {% if hiker.hiker.get_full_name %}
+            <h2>{{ hiker.hiker.get_full_name }}</h2>
+            <h4>{{ hiker.hiker.username }}</h4>
+        {% else %}
+            <h2>{{ hiker.hiker.username }}</h2>
+        {% endif %}
+        <h4>{{ hiker.hiker.email }}</h4>
+        <div></div>
+    </div>
+    <div class="section">
+        <p>Health Level - {{ hiker.get_health_level_display }}</p>
+        <p>Miles Hiked (with Hike the Planet) - {{ hiker.miles_walked }}</p>
+        <p>Average Hiking Pace - {{ hiker.avg_walking_pace }}</p>
+    </div>
+    <div class="section">
+        <p>Location: {{ hiker.address.short_address }}</p>
+    </div>
+    <div class="section">
+        <a href="{% url 'hiker_diaries' user_slug=hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hiker_photos' user_slug=hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hiker_hikes' user_slug=hiker.slug %}">My Hikes</a>
+    </div>
+{% endblock %}

@@ -7,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 
 from hikers.utils import get_hiker
+from hikers.models import Hiker
 
 
 class HikerAccessMixin(AccessMixin):
@@ -56,8 +57,9 @@ class ProfileAccessMixin(HikerAccessMixin):
 
     def check_owner(self, user):
         try:
-            return self.get_object() == get_hiker(user)
-        except Http404:
+            return get_hiker(user) == Hiker.objects.get(
+                slug=self.kwargs['user_slug'])
+        except Hiker.DoesNotExist:
             return False
 
 

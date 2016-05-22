@@ -35,11 +35,14 @@ class AddressBase(models.Model):
     def short_address(self):
         """Return short version of address"""
         if self.address_line1 and self.city:
-            address = "{}, {}".format(self.address_line1, self.city)
+            address = "{}, {} {}".format(self.address_line1, self.city,
+                                         self.state)
         elif self.city:
-            address = self.city
+            address = "{} {}".format(self.city, self.state)
         elif self.address_line1:
             address = self.address_line1
+        elif self.zipcode:
+            address = self.zipcode
         else:
             address = 'No Address'
         return address

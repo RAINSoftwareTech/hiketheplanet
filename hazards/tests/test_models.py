@@ -2,9 +2,8 @@
 
 import mock
 
-from datetime import datetime
-
 from django.test import TestCase
+from django.utils import timezone
 
 from hikers.tests.factories import HikerFactory
 
@@ -43,7 +42,7 @@ class HazardsModelTests(TestCase):
         save_hazard.save()
         self.assertEquals(mock_deleted_hiker_fallback.call_count, 1)
 
-        save_hazard.date_resolved = datetime.now()
+        save_hazard.date_resolved = timezone.now()
         save_hazard.save()
         self.assertEquals(mock_deleted_hiker_fallback.call_count, 1)
 
