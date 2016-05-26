@@ -69,4 +69,9 @@
         </div>
     </div>
 
+<div class="section">
+    {% if perms.hikes.edit_hike %}
+        <a href="{% url 'hikes:edit_hike'  region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug  hike_slug=hike.slug %}" class="btn btn-default">Update this hike</a>
+    {% endif %}
+</div>
 {% endblock content %}

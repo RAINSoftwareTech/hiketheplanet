@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.views.generic import DetailView, ListView
 
-from hikes.models import Region, Trailhead, Hike
+from core.views import FormsetCreateView, FormsetUpdateView
 
-# from hikes.forms import HikeForm
+from hikes.models import Region, Trailhead
+from hikes.forms import TrailheadForm, HikeFormset
+from hikes.utils import get_hike_queryset, get_trailhead_queryset
+
+from mixins.permission_mixins import GroupRequiredMixin
+
+CONTRIBUTOR_GROUP = settings.CONTRIBUTOR_GROUP_NAME
 
 
 class RegionListView(ListView):
@@ -31,14 +38,7 @@ class TrailheadDetailView(DetailView):
     context_object_name = 'trailhead'
 
     def get_queryset(self):
-        try:
-            region = Region.objects.get(slug=self.kwargs['region_slug'])
-            return Trailhead.objects.filter(
-                region=region).prefetch_related('hikes')
-        except Region.DoesNotExist:
-            raise ValueError('{} does not represent a saved Region. '
-                             'Please check your url or add the '
-                             'Region.'.format(self.kwargs['region_slug']))
+        return get_trailhead_queryset(self)
 
 
 class HikeDetailView(DetailView):
@@ -50,17 +50,26 @@ class HikeDetailView(DetailView):
     context_object_name = 'hike'
 
     def get_queryset(self):
-        try:
-            region = Region.objects.get(slug=self.kwargs['region_slug'])
-            trailhead = Trailhead.objects.get(
-                region=region, slug=self.kwargs['trailhead_slug'])
-            return Hike.objects.filter(
-                trailhead=trailhead).select_related('trailhead')
-        except Region.DoesNotExist:
-            raise ValueError('{} does not represent a saved Region. '
-                             'Please check your url or add the '
-                             'Region.'.format(self.kwargs['region_slug']))
-        except Trailhead.DoesNotExist:
-            raise ValueError('{} does not represent a saved Trailhead. '
-                             'Please check your url or add the Trailhead.'
-                             ''.format(self.kwargs['trailhead_slug']))
+        return get_hike_queryset(self)
+
+
+class TrailheadCreateView(GroupRequiredMixin, FormsetCreateView):
+    model = Trailhead
+    group_required = CONTRIBUTOR_GROUP
+    form_class = TrailheadForm
+    template_name = 'hikes/trailhead_form.html'
+    formset_classes = [HikeFormset]
+
+
+class HikeUpdateView(GroupRequiredMixin, FormsetUpdateView):
+    # ToDo: Add views and links to preselect hike/trailhead/region for form
+    # by kwarg slugs. Add delete views. Add staff_required mixin.
+    model = Trailhead
+    group_required = CONTRIBUTOR_GROUP
+    form_class = TrailheadForm
+    slug_url_kwarg = 'trailhead_slug'
+    template_name = 'hikes/trailhead_form.html'
+    formset_classes = [HikeFormset]
+
+    def get_queryset(self):
+        return get_trailhead_queryset(self)

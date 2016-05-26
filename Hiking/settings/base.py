@@ -139,3 +139,5 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/hikers/login/'
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_SIGNUP_FORM_CLASS = 'hikers.forms.HikerRegistrationForm'
+
+CONTRIBUTOR_GROUP_NAME = 'Contributors'
