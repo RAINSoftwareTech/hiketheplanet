@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="section">
+        {{ form.as_p }}
+    </div>
+
+    {% for formset in formsets %}
+        <div class="section">
+            {{ formset.management_form }}
+            {{ formset.non_form_errors }}
+            {% for form in formset %}
+                {{ form.as_p }}
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock content %}

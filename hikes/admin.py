@@ -1,18 +1,15 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
+
 from hikes.models import Region, Trailhead, Hike
 
+from mixins.admin_mixins import DynamicExtrasMixin
 
-class HikesInLine(admin.StackedInline):
+
+class HikesInLine(DynamicExtrasMixin, admin.StackedInline):
     model = Hike
     extra = 2
-
-    def get_extra (self, request, obj=None, **kwargs):
-        """Dynamically sets the number of extra forms. 0 if the related object
-        already exists or the extra configuration otherwise."""
-        if obj:
-            # Don't add any extra forms if the related object already exists.
-            return 0
-        return self.extra
 
 
 class TrailheadAdmin(admin.ModelAdmin):
@@ -40,7 +37,3 @@ class HikeAdmin(admin.ModelAdmin):
 admin.site.register(Region)
 admin.site.register(Trailhead, TrailheadAdmin)
 admin.site.register(Hike, HikeAdmin)
-
-
-
-

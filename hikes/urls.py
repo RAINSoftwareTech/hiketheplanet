@@ -2,9 +2,22 @@
 
 from django.conf.urls import url
 from hikes.views import (RegionDetailView, RegionListView, TrailheadDetailView,
-                         HikeDetailView)
+                         HikeDetailView, TrailheadCreateView,
+                         HikeUpdateView)
 
 urlpatterns = [
+    url(
+        r'^regions/add/$',
+        TrailheadCreateView.as_view(),
+        name='add_hike'
+        ),
+    url(
+        r'^regions/(?P<region_slug>[-\w\d]+)/'
+        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
+        r'hikes/(?P<hike_slug>[-\w\d]+)/edit$',
+        HikeUpdateView.as_view(),
+        name='edit_hike'
+        ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/'
         r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'

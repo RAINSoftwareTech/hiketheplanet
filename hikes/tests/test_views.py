@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 
+from mock import patch
 from django.test import TestCase, RequestFactory
 
 from core.utils import setup_view
 
-from hikes.models import Trailhead, Hike
 from hikes.tests.factories import RegionFactory, TrailheadFactory, HikeFactory
-from hikes.views import TrailheadDetailView, HikeDetailView
+from hikes.views import (TrailheadDetailView, HikeDetailView,
+                         HikeUpdateView)
 
 
 class HikesViewsTests(TestCase):
 
-    def test_trailhead_detail_queryset(self):
+    @patch('hikes.views.get_trailhead_queryset')
+    def test_trailhead_detail_queryset(self, mock_queryset):
+        mock_queryset.return_value = 'queryset'
         region = RegionFactory()
         trailhead = TrailheadFactory(region=region)
         request = RequestFactory().get('/fake-path')
@@ -20,18 +23,15 @@ class HikesViewsTests(TestCase):
                           trailhead_slug=trailhead.slug)
 
         qs = view.get_queryset()
-        self.assertQuerysetEqual(qs,
-                                 map(repr, Trailhead.objects.filter(
-                                     region=region)
-                                     ))
+        self.assertEquals(mock_queryset.return_value, qs)
+        view1 = HikeUpdateView(template_name='test_views.html')
+        view1 = setup_view(view1, request)
+        qs1 = view1.get_queryset()
+        self.assertEquals(mock_queryset.return_value, qs1)
 
-        view1 = TrailheadDetailView(template_name='test_views.html')
-        view1 = setup_view(view1, request, region_slug='bad_region',
-                           trailhead_slug=trailhead.slug)
-        with self.assertRaises(ValueError):
-            view1.get_queryset()
-
-    def test_hike_detail_queryset(self):
+    @patch('hikes.views.get_hike_queryset')
+    def test_hike_detail_queryset(self, mock_queryset):
+        mock_queryset.return_value = 'queryset'
         region = RegionFactory()
         trailhead = TrailheadFactory(region=region)
         hike = HikeFactory(trailhead=trailhead)
@@ -41,19 +41,4 @@ class HikesViewsTests(TestCase):
                           trailhead_slug=trailhead.slug, hike_slug=hike.slug)
 
         qs = view.get_queryset()
-        self.assertQuerysetEqual(qs,
-                                 map(repr, Hike.objects.filter(
-                                     trailhead=trailhead)
-                                     ))
-
-        view1 = HikeDetailView(template_name='test_views.html')
-        view1 = setup_view(view1, request, region_slug='bad_region',
-                           trailhead_slug=trailhead.slug, hike_slug=hike.slug)
-        with self.assertRaises(ValueError):
-            view1.get_queryset()
-
-        view2 = HikeDetailView(template_name='test_views.html')
-        view2 = setup_view(view2, request, region_slug=region.slug,
-                           trailhead_slug='bad_trailhead', hike_slug=hike.slug)
-        with self.assertRaises(ValueError):
-            view2.get_queryset()
+        self.assertEquals(mock_queryset.return_value, qs)
