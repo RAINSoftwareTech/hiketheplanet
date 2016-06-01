@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from mock import patch, MagicMock
-
 from django.http import HttpResponseRedirect
 from django.test import TestCase, RequestFactory
 from django.views.generic import CreateView
+from mock import patch, MagicMock
 
 from core.utils import setup_view
-
 from mixins.formset_mixins import FormsetViewMixin
 from mixins.tests.testing_models import (TestParentModel, TestChildModel,
                                          TestChildFormset, TestParentForm)

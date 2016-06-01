@@ -56,7 +56,6 @@ class SlugifiedNameBase(models.Model):
 
     class Meta:
         abstract = True
-        app_label = 'core'
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -68,7 +67,6 @@ class GeoSlugifiedNameBase(geomodels.Model):
 
     class Meta:
         abstract = True
-        app_label = 'core'
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

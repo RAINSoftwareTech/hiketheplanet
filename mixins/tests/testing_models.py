@@ -3,11 +3,11 @@
 from django import forms
 from django.db import models
 
-from factory.fuzzy import FuzzyText
+from factory import Faker
 
 
 class TestParentModel(models.Model):
-    foo = models.CharField(max_length=15, default=FuzzyText(length=5))
+    foo = models.CharField(max_length=15, default=Faker('name'))
 
     class Meta:
         app_label = 'mixins'
@@ -15,7 +15,7 @@ class TestParentModel(models.Model):
 
 class TestChildModel(models.Model):
     foo = models.ForeignKey(TestParentModel)
-    bar = models.CharField(max_length=15, default=FuzzyText(length=5))
+    bar = models.CharField(max_length=15, default=Faker('name'))
 
     class Meta:
         app_label = 'mixins'
