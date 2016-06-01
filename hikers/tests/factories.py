@@ -24,7 +24,7 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    username = Faker('safe_email')
+    username = Faker('user_name')
 
 
 class HikerFactory(DjangoModelFactory):

@@ -3,6 +3,8 @@ function pause(){
    read -p "Press Enter to continue testing or Ctrl+c to quit"
 }
 
+find . -type f -name '*.pyc' -delete
+
 coverage run --source=equipment --omit="*/migrations*" manage.py test equipment.tests --settings=Hiking.settings.tests
 coverage report -m
 pause
@@ -28,6 +30,14 @@ coverage report -m
 pause
 
 coverage run --source=sights --omit="*/migrations*" manage.py test sights.tests --settings=Hiking.settings.tests
+coverage report -m
+pause
+
+coverage run --source=core manage.py test core.tests --settings=Hiking.settings.tests
+coverage report -m
+pause
+
+coverage run --source=middleware manage.py test middleware.tests --settings=Hiking.settings.tests
 coverage report -m
 pause
 

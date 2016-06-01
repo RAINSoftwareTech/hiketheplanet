@@ -20,7 +20,7 @@ from mixins.permission_mixins import (HikerAccessMixin, ProfileAccessMixin,
 
 
 class PermissionMixinsTests(TestCase):
-    """Tests for all functions in core Models."""
+    """Tests for all functions in permissions mixins."""
 
     class HikerAccessView(HikerAccessMixin, TemplateView):
         pass

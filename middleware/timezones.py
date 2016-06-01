@@ -2,6 +2,8 @@ import pytz
 
 from django.utils import timezone
 
+default_tz_name = 'America/Los_Angeles'
+
 
 class TimezoneMiddleware(object):
 
@@ -11,7 +13,7 @@ class TimezoneMiddleware(object):
         try:
             return user.hiker.timezone
         except AttributeError:
-            return 'America/Los_Angeles'
+            return default_tz_name
 
     def process_request(self, request):
         tzname = self.get_tz_name(request)
