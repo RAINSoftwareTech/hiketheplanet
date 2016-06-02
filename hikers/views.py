@@ -121,3 +121,10 @@ class ProfileIndexRedirect(HikerAccessMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return reverse_lazy('hiker_profile',
                             kwargs={'user_slug': self.request.user.hiker.slug})
+
+
+class PermissionDeniedRedirect(HikerAccessMixin, TemplateView):
+    """View to offer redirection options for users attempting to access a
+    hiker profile other than their own.
+    """
+    template_name = 'hikers/denied_redirect.html'

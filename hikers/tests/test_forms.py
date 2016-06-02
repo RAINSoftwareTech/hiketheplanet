@@ -4,8 +4,7 @@ from django.test import TestCase, RequestFactory
 
 from factory import Faker
 
-from hikers.forms import (HikerRegistrationForm, HikerBasicInfoForm,
-                          HikerAddressForm)
+from hikers.forms import (HikerRegistrationForm, HikerBasicInfoForm)
 from hikers.models import Hiker
 from hikers.tests.factories import UserFactory, HikerFactory
 
@@ -53,7 +52,3 @@ class HikersFormsTests(TestCase):
         info_form.save()
         self.assertEquals(self.user1.last_name,
                           self.info_form_data['last_name'])
-
-    def test_hiker_address_init(self):
-        address_form = HikerAddressForm()
-        self.assertFalse(address_form.fields['city'].required)

@@ -86,6 +86,7 @@ class ObjectOwnershipRequiredMixin(HikerAccessMixin):
 class GroupRequiredMixin(HikerAccessMixin):
     superuser_allowed = True
     group_required = None
+    group_failure_path = reverse_lazy('denied_redirect')
 
     def check_group(self, user):
         if self.group_required:

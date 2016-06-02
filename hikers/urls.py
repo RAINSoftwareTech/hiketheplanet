@@ -5,7 +5,8 @@ from hikers.views import (HikerProfileView, HikerBasicInfoUpdateView,
                           HikerStatsUpdateView, HikerAddressUpdateView,
                           HikerDiaryEntriesView,
                           HikerPhotosView, HikerHikesView, InactiveRedirect,
-                          ProfileRedirect, ProfileIndexRedirect)
+                          ProfileRedirect, ProfileIndexRedirect,
+                          PermissionDeniedRedirect)
 
 urlpatterns = [
     url(
@@ -27,6 +28,11 @@ urlpatterns = [
         r'^invalid_profile/$',
         ProfileRedirect.as_view(),
         name='profile_redirect'
+        ),
+    url(
+        r'^denied/$',
+        PermissionDeniedRedirect.as_view(),
+        name='denied_redirect'
         ),
     url(
         r'^inactive/$',

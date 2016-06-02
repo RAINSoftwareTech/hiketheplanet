@@ -70,9 +70,3 @@ class HikerAddressForm(forms.ModelForm):
         model = HikerAddress
         fields = ('address_line1', 'address_line2',
                   'city', 'state', 'zipcode', 'cell_number')
-
-    def __init__(self, *args, **kwargs):
-        super(HikerAddressForm, self).__init__(*args, **kwargs)
-        self.fields['address_line1'].required = False
-        self.fields['city'].required = False
-        self.fields['state'].required = False
