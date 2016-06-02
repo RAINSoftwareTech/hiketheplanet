@@ -7,8 +7,8 @@ from factory.django import DjangoModelFactory
 from factory import Faker, SubFactory
 from random import uniform, choice
 
-from hikers.models import (Hiker, HikerDiaryEntry, HikerPhoto, FutureHike,
-                           MyHike)
+from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
+                           FutureHike, MyHike)
 from hikes.tests.factories import HikeFactory
 
 User = get_user_model()
@@ -36,6 +36,14 @@ class HikerFactory(DjangoModelFactory):
     health_level = health
     avg_walking_pace = uniform(0.1, 4.5)
     miles_walked = uniform(0.1, 1000.0)
+
+
+class HikerAddressFactory(DjangoModelFactory):
+
+    class Meta:
+        model = HikerAddress
+
+    hiker = SubFactory(HikerFactory)
 
 
 class HikerDiaryEntryFactory(DjangoModelFactory):

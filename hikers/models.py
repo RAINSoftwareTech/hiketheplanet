@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -47,6 +48,9 @@ class Hiker(TimeStampedModel):
     def __unicode__(self):
         return self.hiker.username
 
+    def get_absolute_url(self):
+        return reverse('hiker_profile', kwargs={'user_slug': self.slug})
+
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify(self.__unicode__())
@@ -61,6 +65,10 @@ class HikerAddress(AddressBase):
     hiker = models.OneToOneField(Hiker, on_delete=models.CASCADE,
                                  related_name='address')
     cell_number = PhoneNumberField(null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('hiker_profile',
+                       kwargs={'user_slug': self.hiker.slug})
 
 
 class HikerDiaryEntry(TimeStampedModel):
@@ -93,6 +101,10 @@ class HikerDiaryEntry(TimeStampedModel):
                                     self.created.strftime(date_fmt))
         else:
             return self.created.strftime(date_fmt)
+
+    def get_absolute_url(self):
+        return reverse('hiker_diaries',
+                       kwargs={'user_slug': self.hiker.slug})
 
 
 class HikerPhoto(TimeStampedModel):
@@ -132,6 +144,10 @@ class HikerPhoto(TimeStampedModel):
             return '{} - {}'.format(self.photo.name,
                                     self.created.strftime(date_fmt))
 
+    def get_absolute_url(self):
+        return reverse('hiker_photos',
+                       kwargs={'user_slug': self.hiker.slug})
+
 
 class FutureHike(TimeStampedModel):
     """Model for the list of hikes hiker has not yet taken, but might like to.
@@ -148,6 +164,10 @@ class FutureHike(TimeStampedModel):
 
     def __unicode__(self):
         return self.hike.name
+
+    def get_absolute_url(self):
+        return reverse('hiker_hikes',
+                       kwargs={'user_slug': self.hiker.slug})
 
 
 class MyHike(models.Model):
@@ -177,6 +197,10 @@ class MyHike(models.Model):
 
     def __unicode__(self):
         return '{} - {}'.format(self.hike.name, self.rating)
+
+    def get_absolute_url(self):
+        return reverse('hiker_hikes',
+                       kwargs={'user_slug': self.hiker.slug})
 
     def update_future_hikes(self):
         """Function to add, update, or delete entries from FutureHikes

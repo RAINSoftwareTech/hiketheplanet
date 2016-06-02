@@ -329,6 +329,10 @@ OTHER
     font-size: 12px;
 }
 
+p.indented {
+    text-indent: 20px;
+}
+
 /*****************
 MEDIA QUERIES
 ******************/

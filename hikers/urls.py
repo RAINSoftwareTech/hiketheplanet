@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from hikers.views import (HikerProfileView, HikerDiaryEntriesView,
+from hikers.views import (HikerProfileView, HikerBasicInfoUpdateView,
+                          HikerStatsUpdateView, HikerAddressUpdateView,
+                          HikerDiaryEntriesView,
                           HikerPhotosView, HikerHikesView, InactiveRedirect,
                           ProfileRedirect, ProfileIndexRedirect)
 
@@ -30,6 +32,21 @@ urlpatterns = [
         r'^inactive/$',
         InactiveRedirect.as_view(),
         name='inactive_redirect'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/stats/edit/$',
+        HikerStatsUpdateView.as_view(),
+        name='hiker_stats_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/address/edit/$',
+        HikerAddressUpdateView.as_view(),
+        name='hiker_address_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/edit/$',
+        HikerBasicInfoUpdateView.as_view(),
+        name='hiker_profile_edit'
         ),
     url(
         r'^(?P<user_slug>[-\w\d]+)/$',

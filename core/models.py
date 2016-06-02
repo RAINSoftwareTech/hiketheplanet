@@ -22,11 +22,11 @@ class TimeStampedModel(models.Model):
 
 class AddressBase(models.Model):
     """US addresses base abstract model. """
-    address_line1 = models.CharField(max_length=50)
-    address_line2 = models.CharField(max_length=50, blank=True)
+    address_line1 = models.CharField(blank=True, max_length=50)
+    address_line2 = models.CharField(blank=True, max_length=50)
     zipcode = USZipCodeField(blank=True, default='97219')
-    city = models.CharField(max_length=50, default='Portland')
-    state = USStateField(choices=STATE_CHOICES, default='OR')
+    city = models.CharField(blank=True, max_length=50, default='Portland')
+    state = USStateField(blank=True, choices=STATE_CHOICES, default='OR')
 
     class Meta:
         abstract = True
