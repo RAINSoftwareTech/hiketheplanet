@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form method="post" role="form" action="." class="form-group">
+    <div class="section">
+        {{ form.as_p }}
+    </div>
+    {% csrf_token %}
+        <div class="form-inline">
+            <div class="form-group">
+                <input name="submit" type="submit" value="Submit" id="submit_button" class="btn btn-primary" />
+                <input type='button' onclick="history.go(-1);" class='btn btn-warning' value='Cancel'/>
+            </div>
+
+        </div>
+    </form>
+{% endblock %}

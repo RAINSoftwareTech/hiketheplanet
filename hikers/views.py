@@ -2,10 +2,11 @@
 
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import (DetailView, ListView,
+from django.views.generic import (DetailView, ListView, UpdateView,
                                   TemplateView, RedirectView)
 
-from hikers.models import (Hiker, HikerDiaryEntry, HikerPhoto,
+from hikers.forms import (HikerBasicInfoForm, HikerStatsForm, HikerAddressForm)
+from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
                            FutureHike, MyHike)
 from mixins.permission_mixins import HikerAccessMixin, ProfileAccessMixin
 
@@ -18,6 +19,29 @@ class HikerProfileView(ProfileAccessMixin, DetailView):
     context_object_name = 'hiker'
     queryset = Hiker.objects.prefetch_related(
         'address').select_related('hiker')
+
+
+class HikerBasicInfoUpdateView(ProfileAccessMixin, UpdateView):
+    model = Hiker
+    template_name = 'hikers/hiker_profile_forms.html'
+    slug_url_kwarg = 'user_slug'
+    queryset = Hiker.objects.select_related('hiker')
+    form_class = HikerBasicInfoForm
+
+
+class HikerStatsUpdateView(ProfileAccessMixin, UpdateView):
+    model = Hiker
+    template_name = 'hikers/hiker_profile_forms.html'
+    slug_url_kwarg = 'user_slug'
+    form_class = HikerStatsForm
+
+
+class HikerAddressUpdateView(ProfileAccessMixin, UpdateView):
+    model = HikerAddress
+    template_name = 'hikers/hiker_profile_forms.html'
+    form_class = HikerAddressForm
+    slug_field = 'hiker__slug'
+    slug_url_kwarg = 'user_slug'
 
 
 class HikerDiaryEntriesView(ProfileAccessMixin, ListView):

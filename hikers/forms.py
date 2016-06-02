@@ -24,3 +24,55 @@ class HikerRegistrationForm(forms.Form):
                                     zipcode=self.cleaned_data['zipcode'],
                                     city=self.cleaned_data['city'],
                                     state=self.cleaned_data['state'])
+
+
+class HikerBasicInfoForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+    email = forms.EmailField(required=False)
+
+    class Meta:
+        model = Hiker
+        fields = ('first_name', 'last_name', 'email',
+                  'timezone', 'profile_pic')
+
+    def __init__(self, *args, **kwargs):
+        super(HikerBasicInfoForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:
+            raise ValueError('{} should not be called from a CreateView.'
+                             'New Hiker instances should only be created from'
+                             'the registration.'.format(self))
+        else:
+            hiker = self.instance.hiker
+            self.initial['first_name'] = hiker.first_name
+            self.initial['last_name'] = hiker.last_name
+            self.initial['email'] = hiker.email
+
+    def save(self, *args, **kwargs):
+        hiker = self.instance.hiker
+        hiker.first_name = self.cleaned_data['first_name']
+        hiker.last_name = self.cleaned_data['last_name']
+        hiker.email = self.cleaned_data['email']
+        hiker.save()
+        return super(HikerBasicInfoForm, self).save(*args, **kwargs)
+
+
+class HikerStatsForm(forms.ModelForm):
+
+    class Meta:
+        model = Hiker
+        fields = ('health_level', 'avg_walking_pace')
+
+
+class HikerAddressForm(forms.ModelForm):
+
+    class Meta:
+        model = HikerAddress
+        fields = ('address_line1', 'address_line2',
+                  'city', 'state', 'zipcode', 'cell_number')
+
+    def __init__(self, *args, **kwargs):
+        super(HikerAddressForm, self).__init__(*args, **kwargs)
+        self.fields['address_line1'].required = False
+        self.fields['city'].required = False
+        self.fields['state'].required = False

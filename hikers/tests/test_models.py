@@ -9,7 +9,7 @@ from hikers.models import (Hiker, HikerDiaryEntry, HikerPhoto, FutureHike,
                            MyHike)
 from hikers.tests.factories import (HikerFactory, HikerDiaryEntryFactory,
                                     HikerPhotoFactory, FutureHikeFactory,
-                                    MyHikeFactory)
+                                    MyHikeFactory, HikerAddressFactory)
 
 
 class HikerModelsTests(TestCase):
@@ -101,3 +101,16 @@ class HikerModelsTests(TestCase):
             forgot_date.last_hiked_validator()
         with self.assertRaises(ValidationError):
             never_hiked.last_hiked_validator()
+
+    def test_absolute_urls(self):
+        address = HikerAddressFactory(hiker=self.test_hiker)
+        diary = HikerDiaryEntryFactory(hiker=self.test_hiker)
+        photo = HikerPhotoFactory(hiker=self.test_hiker)
+        future_hike = FutureHikeFactory(hiker=self.test_hiker)
+        myhike = MyHikeFactory(hiker=self.test_hiker)
+        self.assertIn(self.test_hiker.slug, address.get_absolute_url())
+        self.assertIn(self.test_hiker.slug, diary.get_absolute_url())
+        self.assertIn(self.test_hiker.slug, photo.get_absolute_url())
+        self.assertIn(self.test_hiker.slug, future_hike.get_absolute_url())
+        self.assertIn(self.test_hiker.slug, myhike.get_absolute_url())
+        self.assertIn(self.test_hiker.slug, self.test_hiker.get_absolute_url())
