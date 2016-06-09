@@ -5,9 +5,11 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (DetailView, ListView, UpdateView,
                                   TemplateView, RedirectView)
 
-from hikers.forms import (HikerBasicInfoForm, HikerStatsForm, HikerAddressForm)
+from hikers.forms import (HikerBasicInfoForm, HikerStatsForm, HikerAddressForm,
+                          HikerDiaryForm, HikerPhotoForm)
 from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
                            FutureHike, MyHike)
+from hikers.utils import HikerCreateView
 from mixins.permission_mixins import HikerAccessMixin, ProfileAccessMixin
 
 
@@ -61,6 +63,12 @@ class HikerDiaryEntriesView(ProfileAccessMixin, ListView):
             hiker=self.hiker).prefetch_related('diary_photos')
 
 
+class HikerDairyEntryCreateView(ProfileAccessMixin, HikerCreateView):
+    model = HikerDiaryEntry
+    form_class = HikerDiaryForm
+    template_name = 'hikers/hiker_profile_forms.html'
+
+
 class HikerPhotosView(ProfileAccessMixin, ListView):
     """View for displaying all photos by current user."""
     model = HikerPhoto
@@ -74,8 +82,13 @@ class HikerPhotosView(ProfileAccessMixin, ListView):
         :return: queryset of current hiker photos.
         """
         self.hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
-        return HikerPhoto.objects.filter(
-            hiker=self.hiker)
+        return HikerPhoto.objects.filter(hiker=self.hiker)
+
+
+class HikerPhotosCreateView(ProfileAccessMixin, HikerCreateView):
+    model = HikerPhoto
+    form_class = HikerPhotoForm
+    template_name = 'hikers/hiker_photo_forms.html'
 
 
 class HikerHikesView(ProfileAccessMixin, ListView):

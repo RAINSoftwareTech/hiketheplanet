@@ -11,6 +11,8 @@ from localflavor.us.models import PhoneNumberField
 from timezones.zones import PRETTY_TIMEZONE_CHOICES
 
 from core.models import TimeStampedModel, AddressBase
+from core.utils import (hiker_photos_upload_path, profile_pics_upload_path,
+                        validate_file_upload_size, validate_file_has_extension)
 from hikes.models import Hike
 
 
@@ -27,7 +29,10 @@ class Hiker(TimeStampedModel):
 
     hiker = models.OneToOneField(User, on_delete=models.CASCADE,
                                  related_name='hiker')
-    profile_pic = models.ImageField(upload_to='profile_images', blank=True)
+    profile_pic = models.ImageField(upload_to=profile_pics_upload_path,
+                                    blank=True,
+                                    validators=[validate_file_upload_size,
+                                                validate_file_has_extension])
     health_level = models.CharField(max_length=100, default='2average',
                                     choices=HEALTH_LEVELS)
     avg_walking_pace = models.FloatField(default=2.0)
@@ -81,7 +86,7 @@ class HikerDiaryEntry(TimeStampedModel):
     hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
                              related_name='diaries_by_hike',
                              blank=True, null=True)
-    title = models.CharField(max_length=200, blank=True, null=True,)
+    title = models.CharField(max_length=200, blank=True, null=True)
     diary_entry = models.TextField()
 
     make_public = models.BooleanField(default=False)
@@ -122,7 +127,9 @@ class HikerPhoto(TimeStampedModel):
                              related_name='hiker_photos_by_hike',
                              blank=True, null=True)
 
-    photo = models.ImageField(upload_to='hike_photos', blank=True)
+    photo = models.ImageField(upload_to=hiker_photos_upload_path, blank=True,
+                              validators=[validate_file_upload_size,
+                                          validate_file_has_extension])
     title = models.CharField(max_length=100, blank=True, null=True)
 
     make_public = models.BooleanField(default=False)
@@ -141,8 +148,7 @@ class HikerPhoto(TimeStampedModel):
             return '{} - {}'.format(self.hike.name,
                                     self.created.strftime(date_fmt))
         else:
-            return '{} - {}'.format(self.photo.name,
-                                    self.created.strftime(date_fmt))
+            return '{}'.format(self.created.strftime(date_fmt))
 
     def get_absolute_url(self):
         return reverse('hiker_photos',

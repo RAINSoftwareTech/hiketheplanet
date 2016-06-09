@@ -3,8 +3,9 @@
 from django.conf.urls import url
 from hikers.views import (HikerProfileView, HikerBasicInfoUpdateView,
                           HikerStatsUpdateView, HikerAddressUpdateView,
-                          HikerDiaryEntriesView,
-                          HikerPhotosView, HikerHikesView, InactiveRedirect,
+                          HikerDiaryEntriesView, HikerDairyEntryCreateView,
+                          HikerPhotosView, HikerPhotosCreateView,
+                          HikerHikesView, InactiveRedirect,
                           ProfileRedirect, ProfileIndexRedirect,
                           PermissionDeniedRedirect)
 
@@ -15,12 +16,22 @@ urlpatterns = [
         name='hiker_hikes'
         ),
     url(
-        r'^(?P<user_slug>[-\w\d]+)/photos',
+        r'^(?P<user_slug>[-\w\d]+)/photos/new/$',
+        HikerPhotosCreateView.as_view(),
+        name='hiker_photos_new'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/photos/?$',
         HikerPhotosView.as_view(),
         name='hiker_photos'
         ),
     url(
-        r'^(?P<user_slug>[-\w\d]+)/diaries',
+        r'^(?P<user_slug>[-\w\d]+)/diaries/new/$',
+        HikerDairyEntryCreateView.as_view(),
+        name='hiker_diaries_new'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/diaries/?$',
         HikerDiaryEntriesView.as_view(),
         name='hiker_diaries'
         ),

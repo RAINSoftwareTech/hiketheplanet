@@ -61,3 +61,5 @@ MANAGERS = ADMINS
 ALLOWED_HOSTS = [
     '.hiketheplanet.??'
 ]
+
+MAX_UPLOAD_SIZE_IN_MB = 4

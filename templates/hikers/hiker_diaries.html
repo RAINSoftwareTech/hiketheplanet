@@ -17,17 +17,24 @@
                     <li class="diary-entry">
                         <h5 class="diary-entry-title">{{ diary }}</h5>
                         <p class="diary-entry-body">{{ diary.diary_entry }}</p>
-                        {% for photo in diary.diary_photos %}
-                            <img src="{{ photo.photo.url }}">
-                        {% endfor %}
                         <p class="diary-entry-date">created on: {{ diary.created }}</p>
                         <p class="diary-entry-public">Publicly viewable: {{ diary.make_public }}</p>
+                        {% if diary.diary_photos.all %}
+                            <div class="photo-list container-fluid">
+                                {% for photo in diary.diary_photos.all %}
+                                    <div class="photo col-md-3">
+                                        {% if photo.photo %}<img src="{{ photo.photo.url }}">{% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </li>
                 {% endfor %}
             {% else %}
                 No diary entries yet
             {% endif %}
         </ul>
+    <a href="{% url 'hiker_diaries_new' user_slug=view.hiker.slug %}">Add new diary entry</a>
     </div>
     <div class="section">
         <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |

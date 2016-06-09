@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from django.test import TestCase
+from django.http import HttpResponseRedirect
+from django.test import TestCase, RequestFactory
+from mock import MagicMock
 
-from hikers.models import Hiker
-from hikers.tests.factories import UserFactory
-from hikers.utils import deleted_user, deleted_hiker_fallback, get_hiker
+from hikers.models import Hiker, HikerDiaryEntry
+from hikers.tests.factories import UserFactory, HikerFactory
+from hikers.utils import (deleted_user, deleted_hiker_fallback, get_hiker,
+                          HikerCreateView)
+
+from core.utils import setup_view
 
 
 class HikersUtilsTests(TestCase):
@@ -22,3 +27,16 @@ class HikersUtilsTests(TestCase):
         # but hiker now exists for user after method is run
         hiker = get_hiker(empty_user)
         self.assertEquals(hiker, get_hiker(empty_user))
+
+    def test_hiker_create_view_valid(self):
+        request = RequestFactory().get('/fake-path')
+        view = HikerCreateView(template_name='test_views.html',
+                               model=HikerDiaryEntry)
+        view = setup_view(view, request)
+        request.user = UserFactory()
+        request.user.hiker = HikerFactory()
+        form = MagicMock()
+        form.is_valid = MagicMock()
+        form.is_valid.return_value = True
+        self.assertIsInstance(view.form_valid(form),
+                              HttpResponseRedirect)

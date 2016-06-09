@@ -24,6 +24,18 @@ hr {
 
 
 /******************
+IMAGES
+******************/
+img {
+    max-width: 100%;
+    height: auto;
+}
+#profile-photo-thumb {
+    max-width: 70px;
+    max-height: 80px;
+}
+
+/******************
 HEADER
 ******************/
 
@@ -59,23 +71,27 @@ HEADER
 
 .user-header a{
     font-weight:800;
-    padding:15px 10px;
     color: #ffffff;
     font-size: 14px;
 }
 
-a.login-link {
+.login-link-box {
     border: 2px solid #006600;
     background-color: #CCEB8A;
-    color: #0D6317;
-    text-decoration: none;
-    margin : 20px;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 0;
     display: inline-block;
 }
+
+a.login-link {
+    color: #0D6317;
+    text-decoration: none;
+    padding: 10px;
+}
+
 a.login-link:hover {
     border: 2px solid #009900;
     background-color: #00cc00;
+    padding: 10px;
 }
 
 
