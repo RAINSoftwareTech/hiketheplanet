@@ -62,7 +62,6 @@ class HikerModelsTests(TestCase):
 
         photo3 = HikerPhotoFactory(title='')
         self.assertIn(photo3.created.strftime(date_fmt), photo3.__unicode__())
-        self.assertIn(photo3.photo.name, photo3.__unicode__())
 
     def test_future_hike_unicode(self):
         future_hike = FutureHikeFactory(hike=self.test_hike,

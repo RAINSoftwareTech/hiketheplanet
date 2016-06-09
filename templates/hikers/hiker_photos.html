@@ -11,20 +11,26 @@
     </div>
     <div class="section">
         <h4>My Hiking Photos</h4>
-        <ul class="photo-list">
+        <div class="photo-list container-fluid">
             {% if photos %}
                 {% for photo in photos %}
-                    <li class="photo">
+                    <div class="photo col-md-3">
                         <h5 class="photo-title">{{ photo }}</h5>
-                        <p class="photo-image"><img src="{{ photo.photo.url }}"></p>
+                        {% if photo.photo %}
+                            <p class="photo-image"><img src="{{ photo.photo.url }}" class="hiker-photo"></p>
+                        {% else %}
+                            <p class="photo-missing">Photo missing or not added.
+                                Edit title or Delete Title</p>
+                        {% endif %}
                         <p class="photo-date">created on: {{ photo.created }}</p>
                         <p class="photo-public">Publicly viewable: {{ photo.make_public }}</p>
-                    </li>
+                    </div>
                 {% endfor %}
             {% else %}
                 No photos yet
             {% endif %}
-        </ul>
+        </div>
+    <a href="{% url 'hiker_photos_new' user_slug=view.hiker.slug %}">Add new photo</a>
     </div>
     <div class="section">
         <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |

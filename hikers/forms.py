@@ -4,7 +4,7 @@ from localflavor.us.forms import USZipCodeField, USStateField
 from localflavor.us.us_states import STATE_CHOICES
 from timezones.zones import PRETTY_TIMEZONE_CHOICES
 
-from hikers.models import Hiker, HikerAddress
+from hikers.models import Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto
 
 
 class HikerRegistrationForm(forms.Form):
@@ -70,3 +70,21 @@ class HikerAddressForm(forms.ModelForm):
         model = HikerAddress
         fields = ('address_line1', 'address_line2',
                   'city', 'state', 'zipcode', 'cell_number')
+
+
+class HikerDiaryForm(forms.ModelForm):
+
+    class Meta:
+        model = HikerDiaryEntry
+        fields = ('title', 'diary_entry', 'hike', 'make_public')
+
+
+class HikerPhotoForm(forms.ModelForm):
+
+    class Meta:
+        model = HikerPhoto
+        fields = ('title', 'photo', 'hike', 'diary_entry', 'make_public')
+
+    def __init__(self, *args, **kwargs):
+        super(HikerPhotoForm, self).__init__(*args, **kwargs)
+        self.fields['photo'].required = True
