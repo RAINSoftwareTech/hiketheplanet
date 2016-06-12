@@ -21,14 +21,14 @@ def trailheads_serializer(trailheads):
 
 def trailhead_url(trailhead):
     url = reverse_lazy(
-            'hikes:trailhead',
+            'hikes:trailhead_detail',
             kwargs={'trailhead_slug': trailhead.slug,
                     'region_slug': trailhead.region.slug})
     if trailhead.num_hikes == 1:
         try:
             hike = Hike.objects.get(trailhead=trailhead)
             url = reverse_lazy(
-                'hikes:hike',
+                'hikes:hike_detail',
                 kwargs={'hike_slug': hike.slug,
                         'trailhead_slug': trailhead.slug,
                         'region_slug': trailhead.region.slug})
@@ -60,7 +60,7 @@ def hikes_serializer(hikes):
 
 
 def hike_url(hike):
-    return reverse_lazy('hikes:hike',
+    return reverse_lazy('hikes:hike_detail',
                         kwargs={'hike_slug': hike.slug,
                                 'trailhead_slug': hike.trailhead.slug,
                                 'region_slug': hike.trailhead.region.slug})

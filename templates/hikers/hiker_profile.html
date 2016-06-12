@@ -8,25 +8,28 @@
         {% else %}
             <h2>{{ hiker.hiker.username }}</h2>
         {% endif %}
-    <a href="{% url 'hiker_profile_edit' user_slug=hiker.slug %}">Edit</a>
+        {% if hiker.profile_pic %}
+            <img src="{{ user.hiker.profile_pic.url }}" alt="profile photo" class="profile-photo" width="140">
+        {% endif %}
+    <p><a href="{% url 'hikers:profile_edit' user_slug=hiker.slug %}">Edit</a></p>
         <h4>{{ hiker.hiker.email }}</h4>
         <div></div>
     </div>
     <div class="section">
         <h4>Stats:</h4>
-            <a href="{% url 'hiker_stats_edit' user_slug=hiker.slug %}">Edit</a>
+            <a href="{% url 'hikers:stats_edit' user_slug=hiker.slug %}">Edit</a>
         <p class="indented">Health Level - {{ hiker.get_health_level_display }}</p>
 {#        <p>Miles Hiked (with Hike the Planet) - {{ hiker.miles_walked }}</p>#}
         <p class="indented">Average Hiking Pace - {{ hiker.avg_walking_pace }}</p>
     </div>
     <div class="section">
         <h4>Location:</h4>
-            <a href="{% url 'hiker_address_edit' user_slug=hiker.slug %}">Edit</a>
+            <a href="{% url 'hikers:address_edit' user_slug=hiker.slug %}">Edit</a>
         <p class="indented">{{ hiker.address.short_address }}</p>
     </div>
     <div class="section">
-        <a href="{% url 'hiker_diaries' user_slug=hiker.slug %}">Hiking Diary</a> |
-        <a href="{% url 'hiker_photos' user_slug=hiker.slug %}">Hiking Photos</a> |
-        <a href="{% url 'hiker_hikes' user_slug=hiker.slug %}">My Hikes</a>
+        <a href="{% url 'hikers:diaries' user_slug=hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hikers:photos' user_slug=hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hikers:myhikes' user_slug=hiker.slug %}">My Hikes</a>
     </div>
 {% endblock %}

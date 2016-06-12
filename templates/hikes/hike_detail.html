@@ -12,7 +12,7 @@
     <div class="section">
         <h2 id="hike">{{ hike.name }}</h2>
         <div class="trailhead">
-            <h4><a href="{% url 'hikes:trailhead' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug %}">
+            <h4><a href="{% url 'hikes:trailhead_detail' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug %}">
                 {{ hike.trailhead.name }}</a> -
             <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ hike.trailhead.latitude }}"
                data-lon="{{ hike.trailhead.longitude }}" data-hiker-location="97219">map/directions</a></h4>
@@ -71,7 +71,7 @@
 
 <div class="section">
     {% if perms.hikes.edit_hike %}
-        <a href="{% url 'hikes:edit_hike'  region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug  hike_slug=hike.slug %}" class="btn btn-default">Update this hike</a>
+        <a href="{% url 'hikes:hike_edit'  region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug  hike_slug=hike.slug %}" class="btn btn-default">Update this hike</a>
     {% endif %}
 </div>
 {% endblock content %}

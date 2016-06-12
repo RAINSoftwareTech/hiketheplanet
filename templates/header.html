@@ -7,7 +7,7 @@
         <span>
             <div class="login-link-box">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'hiker_profile' user_slug=user.username %}" class="login-link" role="button">
+                    <a href="{% url 'hikers:profile' user_slug=user.username %}" class="login-link" role="button">
                         Hello {{ user.username }}
                     </a>
                     <small><a href="{% url 'account_logout' %}" class="login-link" role="button">( Log out )</a></small>
@@ -21,8 +21,8 @@
                     </a>
                 {% endif %}
             </div>
-            {% if user.is_authenticated and user.hiker.profile_pic%}
-                <img src="{{ user.hiker.profile_pic }}" alt="profile photo" id="profile-photo-thumb" class="profile-photo" height="80" width="70">
+            {% if user.is_authenticated and user.hiker.profile_pic %}
+                <img src="{{ user.hiker.profile_pic.url }}" alt="profile photo" id="profile-photo-thumb" class="profile-photo" height="80" width="70">
             {% else %}
                 <img src="{% static "images/hiker.png" %}" alt="default profile photo" id="profile-photo-thumb" class="profile-photo" height="80" width="70">
             {% endif %}

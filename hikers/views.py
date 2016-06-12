@@ -25,7 +25,7 @@ class HikerProfileView(ProfileAccessMixin, DetailView):
 
 class HikerBasicInfoUpdateView(ProfileAccessMixin, UpdateView):
     model = Hiker
-    template_name = 'hikers/hiker_profile_forms.html'
+    template_name = 'hikers/hiker_photo_forms.html'
     slug_url_kwarg = 'user_slug'
     queryset = Hiker.objects.select_related('hiker')
     form_class = HikerBasicInfoForm
@@ -132,7 +132,7 @@ class ProfileIndexRedirect(HikerAccessMixin, RedirectView):
     user's profile, or login.
     """
     def get_redirect_url(self, *args, **kwargs):
-        return reverse_lazy('hiker_profile',
+        return reverse_lazy('hikers:profile',
                             kwargs={'user_slug': self.request.user.hiker.slug})
 
 

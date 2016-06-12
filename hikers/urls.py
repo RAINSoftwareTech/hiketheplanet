@@ -13,27 +13,47 @@ urlpatterns = [
     url(
         r'^(?P<user_slug>[-\w\d]+)/myhikes',
         HikerHikesView.as_view(),
-        name='hiker_hikes'
+        name='myhikes'
         ),
     url(
-        r'^(?P<user_slug>[-\w\d]+)/photos/new/$',
+        r'^(?P<user_slug>[-\w\d]+)/photos/add/$',
         HikerPhotosCreateView.as_view(),
-        name='hiker_photos_new'
+        name='photos_add'
         ),
     url(
         r'^(?P<user_slug>[-\w\d]+)/photos/?$',
         HikerPhotosView.as_view(),
-        name='hiker_photos'
+        name='photos'
         ),
     url(
-        r'^(?P<user_slug>[-\w\d]+)/diaries/new/$',
+        r'^(?P<user_slug>[-\w\d]+)/diaries/add/$',
         HikerDairyEntryCreateView.as_view(),
-        name='hiker_diaries_new'
+        name='diaries_add'
         ),
     url(
         r'^(?P<user_slug>[-\w\d]+)/diaries/?$',
         HikerDiaryEntriesView.as_view(),
-        name='hiker_diaries'
+        name='diaries'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/stats/edit/$',
+        HikerStatsUpdateView.as_view(),
+        name='stats_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/address/edit/$',
+        HikerAddressUpdateView.as_view(),
+        name='address_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/edit/$',
+        HikerBasicInfoUpdateView.as_view(),
+        name='profile_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/$',
+        HikerProfileView.as_view(),
+        name='profile'
         ),
     url(
         r'^invalid_profile/$',
@@ -49,26 +69,6 @@ urlpatterns = [
         r'^inactive/$',
         InactiveRedirect.as_view(),
         name='inactive_redirect'
-        ),
-    url(
-        r'^(?P<user_slug>[-\w\d]+)/stats/edit/$',
-        HikerStatsUpdateView.as_view(),
-        name='hiker_stats_edit'
-        ),
-    url(
-        r'^(?P<user_slug>[-\w\d]+)/address/edit/$',
-        HikerAddressUpdateView.as_view(),
-        name='hiker_address_edit'
-        ),
-    url(
-        r'^(?P<user_slug>[-\w\d]+)/edit/$',
-        HikerBasicInfoUpdateView.as_view(),
-        name='hiker_profile_edit'
-        ),
-    url(
-        r'^(?P<user_slug>[-\w\d]+)/$',
-        HikerProfileView.as_view(),
-        name='hiker_profile'
         ),
     url(
         r'^',

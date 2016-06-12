@@ -50,7 +50,7 @@ class HikesSerializersTests(TestCase):
     @mock.patch('search.serializers.trailhead_url')
     def test_trailheads_serializer(self, mock_url):
         mock_url.return_value = reverse_lazy(
-            'hikes:trailhead',
+            'hikes:trailhead_detail',
             kwargs={'trailhead_slug': self.trailhead.slug,
                     'region_slug': self.region.slug})
         trailheads = Trailhead.objects.all()
@@ -66,7 +66,7 @@ class HikesSerializersTests(TestCase):
     @mock.patch('search.serializers.hike_url')
     def test_hikes_serializer(self, mock_url):
         mock_url.return_value = reverse_lazy(
-            'hikes:hike',
+            'hikes:hike_detail',
             kwargs={'trailhead_slug': self.trailhead.slug,
                     'region_slug': self.region.slug,
                     'hike_slug': self.hike.slug})

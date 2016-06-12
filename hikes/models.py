@@ -2,6 +2,7 @@
 
 from django.contrib.gis.db import models as geomodels
 from django.contrib.gis.geos import Point
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,6 +20,10 @@ class Region(SlugifiedNameBase):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('hikes:region_detail',
+                       kwargs={'region_slug': self.slug})
 
 
 class Trailhead(GeoSlugifiedNameBase):
@@ -40,6 +45,11 @@ class Trailhead(GeoSlugifiedNameBase):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('hikes:trailhead_detail',
+                       kwargs={'region_slug': self.region.slug,
+                               'trailhead_slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.point = Point(self.longitude, self.latitude)
@@ -93,6 +103,12 @@ class Hike(SlugifiedNameBase):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('hikes:hike_detail',
+                       kwargs={'region_slug': self.trailhead.region.slug,
+                               'trailhead_slug': self.trailhead.slug,
+                               'hike_slug': self.slug})
 
     def save(self, *args, **kwargs):
         super(Hike, self).save(*args, **kwargs)

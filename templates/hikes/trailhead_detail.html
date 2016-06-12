@@ -3,12 +3,12 @@
 
 {% block content %}
     <div class="section">
-        <h2>{{ trailhead.name }} - <a href="{% url 'hikes:region' region_slug=trailhead.region.slug %}">
+        <h2>{{ trailhead.name }} - <a href="{% url 'hikes:region_detail' region_slug=trailhead.region.slug %}">
             {{ trailhead.region }}</a></h2>
             {% if trailhead.hikes.all %}
                 {% for hike in trailhead.hikes.all %}
                     <ul>
-                        <a href="{% url 'hikes:hike' region_slug=trailhead.region.slug trailhead_slug=trailhead.slug  hike_slug=hike.slug%}">
+                        <a href="{% url 'hikes:hike_detail' region_slug=trailhead.region.slug trailhead_slug=trailhead.slug  hike_slug=hike.slug%}">
                             {{ hike.name }}
                         </a>
                         :  difficulty level: {{ hike.get_difficulty_level_display }} | distance: {{ hike.distance }} | elevation gain: {{ hike.elevation }}

@@ -34,11 +34,11 @@
                 No diary entries yet
             {% endif %}
         </ul>
-    <a href="{% url 'hiker_diaries_new' user_slug=view.hiker.slug %}">Add new diary entry</a>
+    <a href="{% url 'hikers:diaries_add' user_slug=view.hiker.slug %}">Add new diary entry</a>
     </div>
     <div class="section">
-        <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
-        <a href="{% url 'hiker_photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
-        <a href="{% url 'hiker_hikes' user_slug=view.hiker.slug %}">My Hikes</a>
+        <a href="{% url 'hikers:diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hikers:photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hikers:myhikes' user_slug=view.hiker.slug %}">My Hikes</a>
     </div>
 {% endblock %}
