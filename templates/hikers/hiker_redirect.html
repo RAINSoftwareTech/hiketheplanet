@@ -6,7 +6,7 @@
     <p>Please sign in as a
         <a href="{% url 'account_logout' %}" >different user</a>
         or view
-        <a href="{% url 'hiker_profile' user_slug=user.hiker.slug %}">
+        <a href="{% url 'hikers:profile' user_slug=user.hiker.slug %}">
             your own profile
         </a>
     </p>

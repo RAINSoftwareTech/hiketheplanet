@@ -9,32 +9,32 @@ urlpatterns = [
     url(
         r'^regions/add/$',
         TrailheadCreateView.as_view(),
-        name='add_hike'
+        name='hike_add'
         ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/'
         r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
         r'hikes/(?P<hike_slug>[-\w\d]+)/edit$',
         HikeUpdateView.as_view(),
-        name='edit_hike'
+        name='hike_edit'
         ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/'
         r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
         r'hikes/(?P<hike_slug>[-\w\d]+)/$',
         HikeDetailView.as_view(),
-        name='hike'
+        name='hike_detail'
         ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/'
         r'trailheads/(?P<trailhead_slug>[-\w\d]+)/',
         TrailheadDetailView.as_view(),
-        name='trailhead'
+        name='trailhead_detail'
         ),
     url(
         r'^regions/(?P<region_slug>[-\w\d]+)/',
         RegionDetailView.as_view(),
-        name='region'
+        name='region_detail'
         ),
     url(
         r'^regions/$',

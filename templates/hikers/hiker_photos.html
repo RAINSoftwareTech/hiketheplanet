@@ -22,6 +22,9 @@
                             <p class="photo-missing">Photo missing or not added.
                                 Edit title or Delete Title</p>
                         {% endif %}
+                        {% if photo.hike %}
+                            <a href="{{ photo.hike.get_absolute_url }}">{{ photo.hike }}</a>
+                        {% endif %}
                         <p class="photo-date">created on: {{ photo.created }}</p>
                         <p class="photo-public">Publicly viewable: {{ photo.make_public }}</p>
                     </div>
@@ -30,11 +33,11 @@
                 No photos yet
             {% endif %}
         </div>
-    <a href="{% url 'hiker_photos_new' user_slug=view.hiker.slug %}">Add new photo</a>
+    <a href="{% url 'hikers:photos_add' user_slug=view.hiker.slug %}">Add new photo</a>
     </div>
     <div class="section">
-        <a href="{% url 'hiker_diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
-        <a href="{% url 'hiker_photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
-        <a href="{% url 'hiker_hikes' user_slug=view.hiker.slug %}">My Hikes</a>
+        <a href="{% url 'hikers:diaries' user_slug=view.hiker.slug %}">Hiking Diary</a> |
+        <a href="{% url 'hikers:photos' user_slug=view.hiker.slug %}">Hiking Photos</a> |
+        <a href="{% url 'hikers:myhikes' user_slug=view.hiker.slug %}">My Hikes</a>
     </div>
 {% endblock %}

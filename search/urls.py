@@ -6,15 +6,15 @@ urlpatterns = [
     url(
         r'^distance/$',
         SearchByDistance.as_view(),
-        name='search_distance'),
+        name='by_distance'),
     url(
         r'^maps/(?P<region_name>[\w|\W]+)/$',
         TrailheadMapListView.as_view(),
-        name='trailheads_map'
+        name='by_map'
         ),
     url(
         r'^$',
         SearchByHikeName.as_view(),
-        name='search_name'
+        name='by_name'
     ),
 ]

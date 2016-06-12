@@ -14,7 +14,7 @@ class HikerAccessMixin(AccessMixin):
     """
     CBV mixin which verifies that the current user is authenticated nd active.
     """
-    inactive_redirect_path = reverse_lazy('inactive_redirect')
+    inactive_redirect_path = reverse_lazy('hikers:inactive_redirect')
     ownership_failure_path = None
     group_failure_path = None
 
@@ -53,7 +53,7 @@ class HikerAccessMixin(AccessMixin):
 
 
 class ProfileAccessMixin(HikerAccessMixin):
-    ownership_failure_path = reverse_lazy('profile_redirect')
+    ownership_failure_path = reverse_lazy('hikers:profile_redirect')
 
     def check_owner(self, user):
         try:
@@ -86,7 +86,7 @@ class ObjectOwnershipRequiredMixin(HikerAccessMixin):
 class GroupRequiredMixin(HikerAccessMixin):
     superuser_allowed = True
     group_required = None
-    group_failure_path = reverse_lazy('denied_redirect')
+    group_failure_path = reverse_lazy('hikers:denied_redirect')
 
     def check_group(self, user):
         if self.group_required:

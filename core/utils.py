@@ -2,6 +2,7 @@
 
 from uuid import uuid4
 
+from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 
@@ -64,6 +65,11 @@ def randomize_filename(filename):
 def user_directory_path(instance):
     # file will be uploaded to
     # MEDIA_ROOT/hikers/hiker_slug/model_name/<filename>
+    Hiker = apps.get_model('hikers', 'Hiker')
+    if isinstance(instance, Hiker):
+        return '{0}/{1}'.format('hikers',
+                                instance.slug)
+
     try:
         return '{0}/{1}'.format('hikers',
                                 instance.hiker.slug)
@@ -76,6 +82,7 @@ def user_directory_path(instance):
 
 def profile_pics_upload_path(instance, filename):
     hiker_path = user_directory_path(instance)
+    print(hiker_path, 'path')
     return '{0}/profile_pics/{1}'.format(hiker_path,
                                          randomize_filename(filename))
 

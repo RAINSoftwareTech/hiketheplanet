@@ -13,6 +13,8 @@ from core.utils import (validate_file_upload_size, get_max_mb,
                         trail_map_upload_path, get_file_attr,
                         validate_file_has_extension)
 
+from hikers.tests.factories import HikerFactory
+
 
 class CoreUtilsTests(TestCase):
 
@@ -73,6 +75,11 @@ class CoreUtilsTests(TestCase):
         instance = TestSlugifiedName()
         with self.assertRaises(ImproperlyConfigured):
             user_directory_path(instance)
+
+        instance = HikerFactory()
+        self.assertIn(instance.slug, user_directory_path(instance))
+
+        instance = MagicMock()
         instance.hiker = MagicMock()
         instance.hiker.slug = 'hiker-slug'
         self.assertIn(instance.hiker.slug, user_directory_path(instance))

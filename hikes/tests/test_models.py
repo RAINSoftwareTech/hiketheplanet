@@ -42,3 +42,14 @@ class HikesModelsTests(TestCase):
         test_hike.save()
         hike_count = Hike.objects.filter(trailhead=test_trailhead).count()
         self.assertEquals(test_trailhead.num_hikes, hike_count)
+
+    def test_absolute_urls(self):
+        region = RegionFactory()
+        trailhead = TrailheadFactory(region=region)
+        hike = HikeFactory(trailhead=trailhead)
+        self.assertIn(region.slug, region.get_absolute_url())
+        self.assertIn(region.slug, trailhead.get_absolute_url())
+        self.assertIn(trailhead.slug, trailhead.get_absolute_url())
+        self.assertIn(region.slug, hike.get_absolute_url())
+        self.assertIn(trailhead.slug, hike.get_absolute_url())
+        self.assertIn(hike.slug, hike.get_absolute_url())

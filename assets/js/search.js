@@ -12,7 +12,8 @@
         var searchField1 = document.getElementById("hike_search");
         searchField1.onkeyup = function () {
             searchType = 'hike';
-            searchRequest(searchField1, '');
+            var searchUrl = searchField1.dataset.searchUrl;
+            searchRequest(searchField1, '', searchUrl);
             };
 
         var searchButton = document.getElementById("distance_search");
@@ -20,7 +21,9 @@
             searchType = 'miles';
             var searchField1 = document.getElementById("miles_search");
             var searchField2 = document.getElementById("zip_search");
-            searchRequest(searchField1, searchField2);
+            var searchUrl = searchField1.dataset.searchUrl;
+
+            searchRequest(searchField1, searchField2, searchUrl);
             }
 
     }
@@ -35,17 +38,17 @@
         return null;
     }
 
-    function searchRequest(searchField1, searchField2) {
+    function searchRequest(searchField1, searchField2, searchUrl) {
         var search,
             search_text;
         if(searchType === 'hike') {
             search_text = searchField1.value;
-            search = '/search/?search_text=' + encodeURI(search_text);
+            search = encodeURI(searchUrl) + '?search_text=' + encodeURI(search_text);
         }
 
         if(searchType === 'miles'){
             search_text = searchField1.value.concat('_', searchField2.value);
-            search = '/search/distance/?search_text=' + encodeURI(search_text);
+            search = encodeURI(searchUrl) + '?search_text=' + encodeURI(search_text);
         }
 
 

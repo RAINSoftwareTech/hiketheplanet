@@ -54,7 +54,7 @@ class Hiker(TimeStampedModel):
         return self.hiker.username
 
     def get_absolute_url(self):
-        return reverse('hiker_profile', kwargs={'user_slug': self.slug})
+        return reverse('hikers:profile', kwargs={'user_slug': self.slug})
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -72,7 +72,7 @@ class HikerAddress(AddressBase):
     cell_number = PhoneNumberField(null=True, blank=True)
 
     def get_absolute_url(self):
-        return reverse('hiker_profile',
+        return reverse('hikers:profile',
                        kwargs={'user_slug': self.hiker.slug})
 
 
@@ -108,7 +108,8 @@ class HikerDiaryEntry(TimeStampedModel):
             return self.created.strftime(date_fmt)
 
     def get_absolute_url(self):
-        return reverse('hiker_diaries',
+        # todo: do I want to add a detailview and slug for diary
+        return reverse('hikers:diaries',
                        kwargs={'user_slug': self.hiker.slug})
 
 
@@ -151,7 +152,8 @@ class HikerPhoto(TimeStampedModel):
             return '{}'.format(self.created.strftime(date_fmt))
 
     def get_absolute_url(self):
-        return reverse('hiker_photos',
+        # todo: do I want to add a detailview and slug for photo
+        return reverse('hikers:photos',
                        kwargs={'user_slug': self.hiker.slug})
 
 
@@ -172,7 +174,8 @@ class FutureHike(TimeStampedModel):
         return self.hike.name
 
     def get_absolute_url(self):
-        return reverse('hiker_hikes',
+        # todo: do I wnt to add a separate listview for future hikes
+        return reverse('hikers:myhikes',
                        kwargs={'user_slug': self.hiker.slug})
 
 
@@ -205,7 +208,7 @@ class MyHike(models.Model):
         return '{} - {}'.format(self.hike.name, self.rating)
 
     def get_absolute_url(self):
-        return reverse('hiker_hikes',
+        return reverse('hikers:myhikes',
                        kwargs={'user_slug': self.hiker.slug})
 
     def update_future_hikes(self):
