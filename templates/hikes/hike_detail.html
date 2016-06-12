@@ -12,7 +12,7 @@
     <div class="section">
         <h2 id="hike">{{ hike.name }}</h2>
         <div class="trailhead">
-            <h4><a href="{% url 'hikes:trailhead_detail' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug %}">
+            <h4><a href="{{ hike.trailhead.get_absolute_url }}">
                 {{ hike.trailhead.name }}</a> -
             <a class="region-modal-link" data-toggle="modal" data-target="#mapModal" data-lat="{{ hike.trailhead.latitude }}"
                data-lon="{{ hike.trailhead.longitude }}" data-hiker-location="97219">map/directions</a></h4>

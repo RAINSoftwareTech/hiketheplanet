@@ -22,6 +22,9 @@
                             <p class="photo-missing">Photo missing or not added.
                                 Edit title or Delete Title</p>
                         {% endif %}
+                        {% if photo.hike %}
+                            <a href="{{ photo.hike.get_absolute_url }}">{{ photo.hike }}</a>
+                        {% endif %}
                         <p class="photo-date">created on: {{ photo.created }}</p>
                         <p class="photo-public">Publicly viewable: {{ photo.make_public }}</p>
                     </div>

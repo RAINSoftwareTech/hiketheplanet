@@ -18,7 +18,7 @@
                 {% if region.trailheads.all %}
                     {% for trailhead in region.trailheads.all %}
                         <ul>
-                            <a href="{% url 'hikes:trailhead_detail' region_slug=region.slug trailhead_slug=trailhead.slug %}">
+                            <a href="{{ trailhead.get_absolute_url }}">
                                 {{ trailhead.name }}
                             </a>
                             : lat: {{ trailhead.latitude }} | lng: {{ trailhead.longitude }}

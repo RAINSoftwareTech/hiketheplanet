@@ -16,7 +16,7 @@
                 {% for hike in hikes %}
                     <li class="hike">
 
-                        <a href="{% url 'hikes:hike_detail' region_slug=hike.hike.trailhead.region.slug trailhead_slug=hike.hike.trailhead.slug  hike_slug=hike.hike.slug%}">
+                        <a href="{{ hike.get_absolute_url }}">
                             {{ hike.name }}
                         </a>
                         :  Last hiked on: {{ hike.last_hiked }} | My rating: {{ hike.get_rating_display }}
@@ -36,7 +36,7 @@
                 {% for hike in view.future_hikes %}
                     <li class="hike">
 
-                        <a href="{% url 'hikes:_detail' region_slug=hike.trailhead.region.slug trailhead_slug=hike.trailhead.slug  hike_slug=hike.slug%}">
+                        <a href="{{ hike.get_absolute_url }}">
                             {{ hike.name }}
                         </a>
                         :  difficulty level: {{ hike.get_difficulty_level_display }} | distance: {{ hike.distance }} | elevation gain: {{ hike.elevation }}

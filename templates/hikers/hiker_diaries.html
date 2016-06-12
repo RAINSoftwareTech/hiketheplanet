@@ -16,6 +16,9 @@
                 {% for diary in diaries %}
                     <li class="diary-entry">
                         <h5 class="diary-entry-title">{{ diary }}</h5>
+                        {% if diary.hike %}
+                            <a href="{{ diary.hike.get_absolute_url }}">{{ diary.hike }}</a>
+                        {% endif %}
                         <p class="diary-entry-body">{{ diary.diary_entry }}</p>
                         <p class="diary-entry-date">created on: {{ diary.created }}</p>
                         <p class="diary-entry-public">Publicly viewable: {{ diary.make_public }}</p>
