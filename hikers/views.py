@@ -9,7 +9,7 @@ from hikers.forms import (HikerBasicInfoForm, HikerStatsForm, HikerAddressForm,
                           HikerDiaryForm, HikerPhotoForm)
 from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
                            FutureHike, MyHike)
-from hikers.utils import HikerCreateView
+from hikers.utils import HikerCreateView, HikerUpdateView, get_hiker
 from mixins.permission_mixins import HikerAccessMixin, ProfileAccessMixin
 
 
@@ -60,13 +60,21 @@ class HikerDiaryEntriesView(ProfileAccessMixin, ListView):
         """
         self.hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
         return HikerDiaryEntry.objects.filter(
-            hiker=self.hiker).prefetch_related('diary_photos')
+            hiker=self.hiker).prefetch_related(
+            'diary_photos').select_related('hike')
 
 
 class HikerDairyEntryCreateView(ProfileAccessMixin, HikerCreateView):
     model = HikerDiaryEntry
     form_class = HikerDiaryForm
     template_name = 'hikers/hiker_profile_forms.html'
+
+
+class HikerDairyEntryUpdateView(ProfileAccessMixin, HikerUpdateView):
+    model = HikerDiaryEntry
+    form_class = HikerDiaryForm
+    template_name = 'hikers/hiker_profile_forms.html'
+    slug_url_kwarg = 'diary_slug'
 
 
 class HikerPhotosView(ProfileAccessMixin, ListView):
@@ -82,13 +90,21 @@ class HikerPhotosView(ProfileAccessMixin, ListView):
         :return: queryset of current hiker photos.
         """
         self.hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
-        return HikerPhoto.objects.filter(hiker=self.hiker)
+        return HikerPhoto.objects.filter(
+            hiker=self.hiker).select_related('diary_entry', 'hike')
 
 
 class HikerPhotosCreateView(ProfileAccessMixin, HikerCreateView):
     model = HikerPhoto
     form_class = HikerPhotoForm
     template_name = 'hikers/hiker_photo_forms.html'
+
+    def get_form(self, form_class=None):
+        form = super(HikerPhotosCreateView, self).get_form(form_class)
+        hiker = get_hiker(self.request.user)
+        form.fields['diary_entry'].queryset = HikerDiaryEntry.objects.filter(
+            hiker=hiker)
+        return form
 
 
 class HikerHikesView(ProfileAccessMixin, ListView):

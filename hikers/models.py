@@ -12,7 +12,8 @@ from timezones.zones import PRETTY_TIMEZONE_CHOICES
 
 from core.models import TimeStampedModel, AddressBase
 from core.utils import (hiker_photos_upload_path, profile_pics_upload_path,
-                        validate_file_upload_size, validate_file_has_extension)
+                        validate_file_upload_size, validate_file_has_extension,
+                        unique_slugify, unicode_by_title_hike_or_date)
 from hikes.models import Hike
 
 
@@ -90,27 +91,23 @@ class HikerDiaryEntry(TimeStampedModel):
     diary_entry = models.TextField()
 
     make_public = models.BooleanField(default=False)
+    slug = models.SlugField()
 
     class Meta:
         ordering = ['-modified']
 
     def __unicode__(self):
-        date_fmt = '%Y-%m-%d'
-        if self.title and self.hike:
-            return '{} - {}'.format(self.title, self.hike.name)
-        elif self.title:
-            return '{} - {}'.format(self.title,
-                                    self.created.strftime(date_fmt))
-        elif self.hike:
-            return '{} - {}'.format(self.hike.name,
-                                    self.created.strftime(date_fmt))
-        else:
-            return self.created.strftime(date_fmt)
+        return unicode_by_title_hike_or_date(self)
 
     def get_absolute_url(self):
         # todo: do I want to add a detailview and slug for diary
         return reverse('hikers:diaries',
                        kwargs={'user_slug': self.hiker.slug})
+
+    def save(self, *args, **kwargs):
+        hiker_qs = HikerDiaryEntry.objects.filter(hiker=self.hiker)
+        self.slug = unique_slugify(hiker_qs, self.__unicode__())
+        return super(HikerDiaryEntry, self).save(*args, **kwargs)
 
 
 class HikerPhoto(TimeStampedModel):
@@ -134,27 +131,23 @@ class HikerPhoto(TimeStampedModel):
     title = models.CharField(max_length=100, blank=True, null=True)
 
     make_public = models.BooleanField(default=False)
+    slug = models.SlugField()
 
     class Meta:
         ordering = ['-modified']
 
     def __unicode__(self):
-        date_fmt = '%Y-%m-%d'
-        if self.title and self.hike:
-            return '{} - {}'.format(self.title, self.hike)
-        elif self.title:
-            return '{} - {}'.format(self.title,
-                                    self.created.strftime(date_fmt))
-        elif self.hike:
-            return '{} - {}'.format(self.hike.name,
-                                    self.created.strftime(date_fmt))
-        else:
-            return '{}'.format(self.created.strftime(date_fmt))
+        return unicode_by_title_hike_or_date(self)
 
     def get_absolute_url(self):
         # todo: do I want to add a detailview and slug for photo
         return reverse('hikers:photos',
                        kwargs={'user_slug': self.hiker.slug})
+
+    def save(self, *args, **kwargs):
+        hiker_qs = HikerPhoto.objects.filter(hiker=self.hiker)
+        self.slug = unique_slugify(hiker_qs, self.__unicode__())
+        super(HikerPhoto, self).save(*args, **kwargs)
 
 
 class FutureHike(TimeStampedModel):

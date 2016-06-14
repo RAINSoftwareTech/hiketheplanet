@@ -8,8 +8,8 @@ from django.test import TestCase
 
 from hikes.models import Trailhead, Hike
 from hikes.tests.factories import RegionFactory, TrailheadFactory, HikeFactory
-from search.serializers import (hikes_serializer, hike_url,
-                                trailheads_serializer, trailhead_url)
+from search.serializers import (hikes_serializer, trailheads_serializer,
+                                trailhead_or_hike_url)
 
 
 class HikesSerializersTests(TestCase):
@@ -21,20 +21,20 @@ class HikesSerializersTests(TestCase):
 
     def test_trailhead_url(self):
         self.trailhead.num_hikes = 3
-        url0 = trailhead_url(self.trailhead)
+        url0 = trailhead_or_hike_url(self.trailhead)
         self.assertIn(self.region.slug, url0)
         self.assertIn(self.trailhead.slug, url0)
         self.assertNotIn(self.hike.slug, url0)
 
         self.trailhead.num_hikes = 1
-        url1 = trailhead_url(self.trailhead)
+        url1 = trailhead_or_hike_url(self.trailhead)
         self.assertIn(self.region.slug, url1)
         self.assertIn(self.trailhead.slug, url1)
         self.assertIn(self.hike.slug, url1)
 
         HikeFactory(trailhead=self.trailhead, name='hike2')
         self.trailhead.num_hikes = 1
-        url2 = trailhead_url(self.trailhead)
+        url2 = trailhead_or_hike_url(self.trailhead)
         self.assertIn(self.region.slug, url2)
         self.assertIn(self.trailhead.slug, url2)
         self.assertNotIn(self.hike.slug, url2)
@@ -42,12 +42,12 @@ class HikesSerializersTests(TestCase):
 
         trailhead1 = TrailheadFactory(region=self.region, name='trailhead2')
         trailhead1.num_hikes = 1
-        url3 = trailhead_url(trailhead1)
+        url3 = trailhead_or_hike_url(trailhead1)
         self.assertIn(self.region.slug, url3)
         self.assertIn(trailhead1.slug, url3)
         self.assertNotIn('hikes/', str(url3))
 
-    @mock.patch('search.serializers.trailhead_url')
+    @mock.patch('search.serializers.trailhead_or_hike_url')
     def test_trailheads_serializer(self, mock_url):
         mock_url.return_value = reverse_lazy(
             'hikes:trailhead_detail',
@@ -57,19 +57,7 @@ class HikesSerializersTests(TestCase):
         serialized = json.loads(trailheads_serializer(trailheads))
         self.assertEquals(len(serialized), trailheads.count())
 
-    def test_hike_url(self):
-        url0 = hike_url(self.hike)
-        self.assertIn(self.region.slug, url0)
-        self.assertIn(self.trailhead.slug, url0)
-        self.assertIn(self.hike.slug, url0)
-
-    @mock.patch('search.serializers.hike_url')
-    def test_hikes_serializer(self, mock_url):
-        mock_url.return_value = reverse_lazy(
-            'hikes:hike_detail',
-            kwargs={'trailhead_slug': self.trailhead.slug,
-                    'region_slug': self.region.slug,
-                    'hike_slug': self.hike.slug})
+    def test_hikes_serializer(self):
         hikes = Hike.objects.all()
         serialized = json.loads(hikes_serializer(hikes))
         self.assertEquals(len(serialized), hikes.count())

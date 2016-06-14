@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 
+
+from datetime import datetime
+
 from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.db import models
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils.text import slugify
 from mock import MagicMock, patch
+from faker import Faker
 
 from core.tests.test_models import TestSlugifiedName
 from core.utils import (validate_file_upload_size, get_max_mb,
@@ -11,9 +17,18 @@ from core.utils import (validate_file_upload_size, get_max_mb,
                         profile_pics_upload_path, hiker_photos_upload_path,
                         hike_directory_path, hike_photo_upload_path,
                         trail_map_upload_path, get_file_attr,
-                        validate_file_has_extension)
+                        validate_file_has_extension, unique_slugify,
+                        unicode_by_title_hike_or_date, truncate_slug_text)
 
 from hikers.tests.factories import HikerFactory
+
+
+class TestSlugifying(models.Model):
+    name = models.CharField(max_length=25)
+    slug = models.SlugField(blank=True)
+
+    class Meta:
+        app_label = 'core'
 
 
 class CoreUtilsTests(TestCase):
@@ -128,3 +143,84 @@ class CoreUtilsTests(TestCase):
         mock_path.return_value = 'hike/path'
         self.assertIn('photos',
                       hike_photo_upload_path('instance', 'filename'))
+
+    def test_unique_slugify(self):
+        name = 'Non-unique name'
+        slug1 = TestSlugifying.objects.create(name=name)
+        slug2 = TestSlugifying.objects.create(name=name)
+        slugqs = TestSlugifying.objects.all()
+        unique_slug = unique_slugify(slugqs, name)
+        self.assertEquals(slugify(name), unique_slug)
+        slug1.slug = unique_slug
+        slug1.save()
+        unique_slug2 = unique_slugify(slugqs, name)
+        self.assertIn('1', unique_slug2)
+        slug2.slug = slugify('{}-{}'.format(name, 2))
+        slug2.save()
+        unique_slug3 = unique_slugify(slugqs, name)
+        self.assertIn('3', unique_slug3)
+
+    def test_unicode_by_title_hike_or_date(self):
+
+        class TestBadUnicodeMethod(models.Model):
+            foo = models.CharField(max_length=25)
+
+            def __unicode__(self):
+                return unicode_by_title_hike_or_date(self)
+
+        obj = TestBadUnicodeMethod(foo='bar')
+        with self.assertRaises(ImproperlyConfigured):
+            obj.__unicode__()
+
+        date_fmt = '%Y-%m-%d'
+        uni_date = datetime.today().strftime(date_fmt)
+        obj = MagicMock()
+        obj.title = 'Title'
+        obj.hike.name = 'Hike Name'
+        self.assertIn(obj.title, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.hike.name, unicode_by_title_hike_or_date(obj))
+
+        obj.hike = None
+        obj.created = datetime.today()
+        self.assertIn(obj.title, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.created.strftime(date_fmt),
+                      unicode_by_title_hike_or_date(obj))
+
+        obj.title = ''
+        obj.hike = MagicMock()
+        obj.hike.name = 'New Hike Name'
+        self.assertIn(obj.hike.name, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.created.strftime(date_fmt),
+                      unicode_by_title_hike_or_date(obj))
+
+        obj.pk = ''
+        obj.title = ''
+        obj.hike = None
+        obj.created = None
+        self.assertIn(uni_date, unicode_by_title_hike_or_date(obj))
+
+    def test_truncate_slug_text(self):
+        fake = Faker()
+        begin = fake.text(max_nb_chars=200)
+        mid1 = fake.text(max_nb_chars=25)
+        mid2 = fake.text(max_nb_chars=25)
+        date_fmt = '%Y-%m-%d'
+        end_date = datetime.today().strftime(date_fmt)
+        slug_text = fake.text(max_nb_chars=50)
+        self.assertEquals(slug_text, truncate_slug_text(slug_text))
+
+        slug_from_begin = truncate_slug_text(begin)
+        self.assertNotEquals(begin, slug_from_begin)
+        self.assertIn(slug_from_begin, begin)
+        self.assertTrue(len(slug_from_begin) <= 50)
+
+        slug_text = '{} - {}'.format(begin, end_date)
+        slug_from_begin_date = truncate_slug_text(slug_text)
+        self.assertIn(end_date, slug_from_begin_date)
+        self.assertTrue(len(slug_from_begin_date) <= 50)
+
+        slug_text = '{} - {} - {} - {}'.format(begin, mid1, mid2, end_date)
+        slug_from_many = truncate_slug_text(slug_text)
+        self.assertIn(mid1[:9], slug_from_many)
+        self.assertNotIn(mid2[:9], slug_from_many)
+        self.assertTrue(len(slug_from_many) <= 50)

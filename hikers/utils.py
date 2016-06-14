@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.models import User
 
 from hikers.models import Hiker
@@ -29,3 +29,14 @@ class HikerCreateView(CreateView):
         hiker_object = form.save(commit=False)
         hiker_object.hiker = get_hiker(self.request.user)
         return super(HikerCreateView, self).form_valid(form)
+
+
+class HikerUpdateView(UpdateView):
+
+    def get_queryset(self):
+        """Filter queryset to only return objects for the user profile defined
+        by url kwargs. ProfileAccessMixin handles bad user_slug.
+        :return: queryset of model objects associated with current hiker.
+        """
+        hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
+        return self.model.objects.filter(hiker=hiker)

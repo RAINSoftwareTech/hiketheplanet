@@ -5,9 +5,10 @@ from django.test import TestCase, RequestFactory
 from mock import MagicMock
 
 from hikers.models import Hiker, HikerDiaryEntry
-from hikers.tests.factories import UserFactory, HikerFactory
+from hikers.tests.factories import (UserFactory, HikerFactory,
+                                    HikerDiaryEntryFactory)
 from hikers.utils import (deleted_user, deleted_hiker_fallback, get_hiker,
-                          HikerCreateView)
+                          HikerCreateView, HikerUpdateView)
 
 from core.utils import setup_view
 
@@ -40,3 +41,17 @@ class HikersUtilsTests(TestCase):
         form.is_valid.return_value = True
         self.assertIsInstance(view.form_valid(form),
                               HttpResponseRedirect)
+
+    def test_hiker_update_view_queryset(self):
+        hiker = HikerFactory()
+        diary = HikerDiaryEntryFactory(hiker=hiker)
+        diary2 = HikerDiaryEntryFactory()
+        request = RequestFactory().get('/fake-path')
+        view = HikerUpdateView(template_name='test_views.html',
+                               model=HikerDiaryEntry)
+        view = setup_view(view, request, user_slug=hiker.slug)
+        request.user = UserFactory()
+        request.user.hiker = HikerFactory()
+        qs = view.get_queryset()
+        self.assertIn(diary, qs)
+        self.assertNotIn(diary2, qs)
