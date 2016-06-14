@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import re
 from uuid import uuid4
+
+from datetime import datetime
 
 from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.utils.text import slugify
 
 
 def setup_view(view, request, *args, **kwargs):
@@ -82,7 +86,6 @@ def user_directory_path(instance):
 
 def profile_pics_upload_path(instance, filename):
     hiker_path = user_directory_path(instance)
-    print(hiker_path, 'path')
     return '{0}/profile_pics/{1}'.format(hiker_path,
                                          randomize_filename(filename))
 
@@ -118,3 +121,81 @@ def hike_photo_upload_path(instance, filename):
     hike_path = hike_directory_path(instance)
     return '{0}/photos/{1}'.format(hike_path,
                                    randomize_filename(filename))
+
+
+def unique_slugify(queryset, slug_text):
+    slug = slugify(truncate_slug_text(slug_text))
+    count = queryset.filter(slug__startswith=slug).count()
+    if count == 0:
+        return slug
+
+    unique_slug = '{}-{}'.format(slug, count)
+    while queryset.filter(slug=unique_slug).exists():
+        count += 1
+        unique_slug = '{}-{}'.format(slug, count)
+    return unique_slug
+
+
+def unicode_by_title_hike_or_date(obj):
+    """Receives a instance object from any model that contains the following
+    attributes: 'hike', 'title', 'created'
+    :param obj: model instance with attributes: 'hike', 'title', 'created'
+    :return: unicode suitable string
+    """
+    date_fmt = '%Y-%m-%d'
+    try:
+        if not obj.pk:
+            uni_date = datetime.today().strftime(date_fmt)
+        else:
+            uni_date = obj.created.strftime(date_fmt)
+
+        if obj.title and obj.hike:
+            return '{} - {}'.format(obj.title, obj.hike.name)
+        elif obj.title:
+            return '{} - {}'.format(obj.title, uni_date)
+        elif obj.hike:
+            return '{} - {}'.format(obj.hike.name, uni_date)
+        else:
+            return uni_date
+    except AttributeError:
+        raise ImproperlyConfigured('You are attempting to use a unicode '
+                                   'creation method on a model that is does '
+                                   'not have one of the following attributes: '
+                                   '"title", "hike", or "created".')
+
+
+def truncate_slug_text(slug_text, parts_char='-'):
+    """Assumes that the first, second and last sections of slug_text are the
+    important parts to build a slug from.
+    :param slug_text: text, such as the return from __unicode__ to be converted
+    to slug
+    :param parts_char: optional character that separates sections of slug_text
+        default is '-'
+    :return: string with max 3 sections from slug_text truncated to 50 chars
+    """
+    slug_max = 50
+    if len(slug_text) <= slug_max:  # already within max range, return whole
+        return slug_text
+
+    date_reg_exp = re.compile('\d{4}[-/]\d{2}[-/]\d{2}')
+    all_dates = date_reg_exp.findall(slug_text)
+    new_slug_text = []
+    if all_dates:
+        new_slug_text.append(all_dates[-1])  # if dates, keep the last date
+        slug_max -= len(new_slug_text[0]) + 1  # pad by one for join char
+        for date in all_dates:  # then remove all dates from starting text
+            re.sub(date, '', slug_text)
+
+    slug_parts = slug_text.split(parts_char)
+    if len(slug_parts) == 1 and not all_dates:
+        # only one section found, simple truncation
+        return slug_text[:slug_max]
+
+    if len(slug_parts) >= 2:
+        # middle section: not as important as beginning or date
+        new_slug_text.insert(0, slug_parts[1][:15])
+        slug_max -= len(new_slug_text[0]) + 1  # pad by one for join char
+
+    # simple truncation of beginning up to remaining max characters
+    new_slug_text.insert(0, slug_parts[0][:slug_max])
+    return '-'.join(new_slug_text)
