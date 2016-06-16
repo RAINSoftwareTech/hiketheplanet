@@ -18,4 +18,9 @@
                     <strong>No locations currently at this trailhead.</strong>
             {% endif %}
     </div>
+<div class="section">
+    {% if perms.hikes.add_hike %}
+        <a href="{% url 'hikes:hike_add' region_slug=trailhead.region.slug trailhead_slug=trailhead.slug %}" class="btn btn-default">Add a hike</a>
+    {% endif %}
+</div>
 {% endblock content %}

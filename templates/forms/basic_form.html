@@ -2,7 +2,7 @@
 
 
 {% block content %}
-    <form method="post" role="form" action="." class="form-group">
+    <form method="post" role="form" action="" class="form-group">
     <div class="section">
         {{ form.as_p }}
     </div>
@@ -11,6 +11,12 @@
             <div class="form-group">
                 <input name="submit" type="submit" value="Submit" id="submit_button" class="btn btn-primary" />
                 <input type='button' onclick="history.go(-1);" class='btn btn-warning' value='Cancel'/>
+                {% if object.get_delete_url %}
+                    <div class="btn-group deletebutton">
+                        <a href="{{ object.get_delete_url }}" class="btn btn-danger" role="button" >Delete
+                        </a>
+                    </div>
+                {% endif %}
             </div>
 
         </div>

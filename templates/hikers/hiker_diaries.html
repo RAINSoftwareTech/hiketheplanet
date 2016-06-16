@@ -16,8 +16,13 @@
                 {% for diary in diaries %}
                     <li class="diary-entry">
                         <h5 class="diary-entry-title">{{ diary }}</h5>
+                        <span>
+                            <a href="{% url 'hikers:diaries_edit'  user_slug=diary.hiker.slug diary_slug=diary.slug %}" >Edit</a>
+                             /
+                            <a href="{{ diary.get_delete_url }}">Delete</a>
+                        </span>
                         {% if diary.hike %}
-                            <a href="{{ diary.hike.get_absolute_url }}">{{ diary.hike }}</a>
+                            <p><a href="{{ diary.hike.get_absolute_url }}">{{ diary.hike }}</a></p>
                         {% endif %}
                         <p class="diary-entry-body">{{ diary.diary_entry }}</p>
                         <p class="diary-entry-date">created on: {{ diary.created }}</p>

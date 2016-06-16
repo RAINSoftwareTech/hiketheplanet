@@ -60,7 +60,9 @@ class Hiker(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.slug = slugify(self.__unicode__())
-        super(Hiker, self).save(*args, **kwargs)
+        if not hasattr(self, 'address') and self.pk:
+            HikerAddress.objects.create(hiker=self)
+        return super(Hiker, self).save(*args, **kwargs)
 
 
 class HikerAddress(AddressBase):
@@ -100,9 +102,16 @@ class HikerDiaryEntry(TimeStampedModel):
         return unicode_by_title_hike_or_date(self)
 
     def get_absolute_url(self):
-        # todo: do I want to add a detailview and slug for diary
+        # todo: do I want to add a detailview or change return to updateview?
         return reverse('hikers:diaries',
                        kwargs={'user_slug': self.hiker.slug})
+
+    def get_delete_url(self):
+        if not self.pk:
+            return None
+        return reverse('hikers:diaries_delete',
+                       kwargs={'user_slug': self.hiker.slug,
+                               'diary_slug': self.slug})
 
     def save(self, *args, **kwargs):
         hiker_qs = HikerDiaryEntry.objects.filter(hiker=self.hiker)
@@ -140,9 +149,16 @@ class HikerPhoto(TimeStampedModel):
         return unicode_by_title_hike_or_date(self)
 
     def get_absolute_url(self):
-        # todo: do I want to add a detailview and slug for photo
+        # todo: do I want to add a detailview or change return to updateview?
         return reverse('hikers:photos',
                        kwargs={'user_slug': self.hiker.slug})
+
+    def get_delete_url(self):
+        if not self.pk:
+            return None
+        return reverse('hikers:photos_delete',
+                       kwargs={'user_slug': self.hiker.slug,
+                               'photo_slug': self.slug})
 
     def save(self, *args, **kwargs):
         hiker_qs = HikerPhoto.objects.filter(hiker=self.hiker)

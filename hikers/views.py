@@ -9,7 +9,8 @@ from hikers.forms import (HikerBasicInfoForm, HikerStatsForm, HikerAddressForm,
                           HikerDiaryForm, HikerPhotoForm)
 from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
                            FutureHike, MyHike)
-from hikers.utils import HikerCreateView, HikerUpdateView, get_hiker
+from hikers.utils import (HikerCreateView, HikerUpdateView, HikerDeleteView,
+                          get_hiker)
 from mixins.permission_mixins import HikerAccessMixin, ProfileAccessMixin
 
 
@@ -25,7 +26,7 @@ class HikerProfileView(ProfileAccessMixin, DetailView):
 
 class HikerBasicInfoUpdateView(ProfileAccessMixin, UpdateView):
     model = Hiker
-    template_name = 'hikers/hiker_photo_forms.html'
+    template_name = 'forms/photo_forms.html'
     slug_url_kwarg = 'user_slug'
     queryset = Hiker.objects.select_related('hiker')
     form_class = HikerBasicInfoForm
@@ -33,14 +34,14 @@ class HikerBasicInfoUpdateView(ProfileAccessMixin, UpdateView):
 
 class HikerStatsUpdateView(ProfileAccessMixin, UpdateView):
     model = Hiker
-    template_name = 'hikers/hiker_profile_forms.html'
+    template_name = 'forms/basic_form.html'
     slug_url_kwarg = 'user_slug'
     form_class = HikerStatsForm
 
 
 class HikerAddressUpdateView(ProfileAccessMixin, UpdateView):
     model = HikerAddress
-    template_name = 'hikers/hiker_profile_forms.html'
+    template_name = 'forms/basic_form.html'
     form_class = HikerAddressForm
     slug_field = 'hiker__slug'
     slug_url_kwarg = 'user_slug'
@@ -67,14 +68,21 @@ class HikerDiaryEntriesView(ProfileAccessMixin, ListView):
 class HikerDairyEntryCreateView(ProfileAccessMixin, HikerCreateView):
     model = HikerDiaryEntry
     form_class = HikerDiaryForm
-    template_name = 'hikers/hiker_profile_forms.html'
+    template_name = 'forms/basic_form.html'
 
 
 class HikerDairyEntryUpdateView(ProfileAccessMixin, HikerUpdateView):
     model = HikerDiaryEntry
     form_class = HikerDiaryForm
-    template_name = 'hikers/hiker_profile_forms.html'
+    template_name = 'forms/basic_form.html'
     slug_url_kwarg = 'diary_slug'
+
+
+class HikerDairyEntryDeleteView(ProfileAccessMixin, HikerDeleteView):
+    model = HikerDiaryEntry
+    template_name = 'hikers/delete.html'
+    slug_url_kwarg = 'diary_slug'
+    success_url_name = 'hikers:diaries'
 
 
 class HikerPhotosView(ProfileAccessMixin, ListView):
@@ -95,9 +103,10 @@ class HikerPhotosView(ProfileAccessMixin, ListView):
 
 
 class HikerPhotosCreateView(ProfileAccessMixin, HikerCreateView):
+    # todo: add method to select hike from diary_entry. client side??
     model = HikerPhoto
     form_class = HikerPhotoForm
-    template_name = 'hikers/hiker_photo_forms.html'
+    template_name = 'forms/photo_forms.html'
 
     def get_form(self, form_class=None):
         form = super(HikerPhotosCreateView, self).get_form(form_class)
@@ -105,6 +114,27 @@ class HikerPhotosCreateView(ProfileAccessMixin, HikerCreateView):
         form.fields['diary_entry'].queryset = HikerDiaryEntry.objects.filter(
             hiker=hiker)
         return form
+
+
+class HikerPhotosUpdateView(ProfileAccessMixin, HikerUpdateView):
+    model = HikerPhoto
+    form_class = HikerPhotoForm
+    template_name = 'forms/photo_forms.html'
+    slug_url_kwarg = 'photo_slug'
+
+    def get_form(self, form_class=None):
+        form = super(HikerPhotosUpdateView, self).get_form(form_class)
+        hiker = get_hiker(self.request.user)
+        form.fields['diary_entry'].queryset = HikerDiaryEntry.objects.filter(
+            hiker=hiker)
+        return form
+
+
+class HikerPhotoDeleteView(ProfileAccessMixin, HikerDeleteView):
+    model = HikerPhoto
+    template_name = 'hikers/delete.html'
+    slug_url_kwarg = 'photo_slug'
+    success_url_name = 'hikers:photos'
 
 
 class HikerHikesView(ProfileAccessMixin, ListView):

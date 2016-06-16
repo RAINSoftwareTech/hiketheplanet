@@ -16,11 +16,21 @@
                 {% for photo in photos %}
                     <div class="photo col-md-3">
                         <h5 class="photo-title">{{ photo }}</h5>
+                        {% if diary.hike %}
+                            <p><a href="{{ photo.hike.get_absolute_url }}">{{ photo.hike }}</a><</p>
+                        {% endif %}
+                        <span>
+                            <a href="{% url 'hikers:photos_edit' user_slug=photo.hiker.slug photo_slug=photo.slug %}" >Edit</a>
+                            /
+                            <a href="{{ photo.get_delete_url }}">Delete</a>
+                        </span>
                         {% if photo.photo %}
                             <p class="photo-image"><img src="{{ photo.photo.url }}" class="hiker-photo"></p>
                         {% else %}
                             <p class="photo-missing">Photo missing or not added.
-                                Edit title or Delete Title</p>
+                                <a href="{% url 'hikers:photos_edit'  user_slug=photo.hiker.slug photo_slug=photo.slug %}" >Edit</a> title
+                                or
+                                <a href="{{ photo.get_delete_url }}">Delete</a> title</p>
                         {% endif %}
                         {% if photo.hike %}
                             <a href="{{ photo.hike.get_absolute_url }}">{{ photo.hike }}</a>

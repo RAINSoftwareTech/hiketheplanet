@@ -30,4 +30,9 @@
                 {% endif %}
         </div>
     </div>
+<div class="section">
+    {% if perms.hikes.add_hike %}
+        <a href="{% url 'hikes:trailhead_add' region_slug=region.slug %}" class="btn btn-default">Add a trailhead</a>
+    {% endif %}
+</div>
 {% endblock content %}

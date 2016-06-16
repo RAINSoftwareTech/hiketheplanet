@@ -63,6 +63,10 @@ class HikerStatsForm(forms.ModelForm):
         model = Hiker
         fields = ('health_level', 'avg_walking_pace')
 
+    def __init__(self, *args, **kwargs):
+        super(HikerStatsForm, self).__init__(*args, **kwargs)
+        self.fields['avg_walking_pace'].localize = True
+
 
 class HikerAddressForm(forms.ModelForm):
 

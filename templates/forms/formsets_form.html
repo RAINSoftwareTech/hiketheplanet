@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <form method="post" role="form" action="" class="form-group">
+    <div class="section">
+        {{ form.as_p }}
+    </div>
+
+    {% for formset in formsets %}
+        <div class="section">
+            {{ formset.management_form }}
+            {{ formset.non_form_errors }}
+            {% for form in formset %}
+                {{ form.as_p }}
+            {% endfor %}
+        </div>
+    {% endfor %}
+    {% csrf_token %}
+        <div class="form-inline">
+            <div class="form-group">
+                <input name="submit" type="submit" value="Submit" id="submit_button" class="btn btn-primary" />
+                <input type='button' onclick="history.go(-1);" class='btn btn-warning' value='Cancel'/>
+                {% if object.get_delete_url %}
+                    <div class="btn-group deletebutton">
+                        <a href="{{ object.get_delete_url }}" class="btn btn-danger" role="button" >Delete
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </form>
+{% endblock %}
