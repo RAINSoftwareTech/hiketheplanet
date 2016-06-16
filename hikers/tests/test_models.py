@@ -18,9 +18,6 @@ class HikerModelsTests(TestCase):
         self.test_hike = HikeFactory()
         self.test_hiker = HikerFactory()
 
-    def tearDown(self):  # noqa
-        self.test_hike.delete()
-
     def test_hiker_unicode(self):
         self.assertIsInstance(self.test_hiker, Hiker)
         self.assertEquals(self.test_hiker.hiker.username,
@@ -113,3 +110,15 @@ class HikerModelsTests(TestCase):
         self.assertIn(self.test_hiker.slug, future_hike.get_absolute_url())
         self.assertIn(self.test_hiker.slug, myhike.get_absolute_url())
         self.assertIn(self.test_hiker.slug, self.test_hiker.get_absolute_url())
+
+    def test_delete_urls(self):
+        diary = HikerDiaryEntryFactory(hiker=self.test_hiker)
+        photo = HikerPhotoFactory(hiker=self.test_hiker)
+        self.assertIn(self.test_hiker.slug, diary.get_delete_url())
+        self.assertIn(self.test_hiker.slug, photo.get_delete_url())
+        self.assertIn(diary.slug, diary.get_delete_url())
+        self.assertIn(photo.slug, photo.get_delete_url())
+        new_diary = HikerDiaryEntry()
+        new_photo = HikerPhoto()
+        self.assertIsNone(new_diary.get_delete_url())
+        self.assertIsNone(new_photo.get_delete_url())

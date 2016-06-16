@@ -4,7 +4,9 @@ from django.conf.urls import url
 from hikers.views import (HikerProfileView, HikerBasicInfoUpdateView,
                           HikerStatsUpdateView, HikerAddressUpdateView,
                           HikerDiaryEntriesView, HikerDairyEntryCreateView,
+                          HikerDairyEntryUpdateView, HikerDairyEntryDeleteView,
                           HikerPhotosView, HikerPhotosCreateView,
+                          HikerPhotosUpdateView, HikerPhotoDeleteView,
                           HikerHikesView, InactiveRedirect,
                           ProfileRedirect, ProfileIndexRedirect,
                           PermissionDeniedRedirect)
@@ -21,6 +23,16 @@ urlpatterns = [
         name='photos_add'
         ),
     url(
+        r'^(?P<user_slug>[-\w\d]+)/photos/(?P<photo_slug>[-\w\d]+)/edit/$',
+        HikerPhotosUpdateView.as_view(),
+        name='photos_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/photos/(?P<photo_slug>[-\w\d]+)/delete/$',
+        HikerPhotoDeleteView.as_view(),
+        name='photos_delete'
+        ),
+    url(
         r'^(?P<user_slug>[-\w\d]+)/photos/?$',
         HikerPhotosView.as_view(),
         name='photos'
@@ -29,6 +41,16 @@ urlpatterns = [
         r'^(?P<user_slug>[-\w\d]+)/diaries/add/$',
         HikerDairyEntryCreateView.as_view(),
         name='diaries_add'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/diaries/(?P<diary_slug>[-\w\d]+)/edit/$',
+        HikerDairyEntryUpdateView.as_view(),
+        name='diaries_edit'
+        ),
+    url(
+        r'^(?P<user_slug>[-\w\d]+)/diaries/(?P<diary_slug>[-\w\d]+)/delete/$',
+        HikerDairyEntryDeleteView.as_view(),
+        name='diaries_delete'
         ),
     url(
         r'^(?P<user_slug>[-\w\d]+)/diaries/?$',

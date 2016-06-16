@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse_lazy
 
 from hikers.models import Hiker
 
@@ -40,3 +42,27 @@ class HikerUpdateView(UpdateView):
         """
         hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
         return self.model.objects.filter(hiker=hiker)
+
+
+class HikerDeleteView(DeleteView):
+    success_url_name = None
+
+    def get_queryset(self):
+        """Filter queryset to only return objects for the user profile defined
+        by url kwargs. ProfileAccessMixin handles bad user_slug.
+        :return: queryset of model objects associated with current hiker.
+        """
+        hiker = Hiker.objects.get(slug=self.kwargs['user_slug'])
+        return self.model.objects.filter(hiker=hiker)
+
+    def get_success_url(self):
+        """
+        Returns the supplied success URL.
+        """
+        if self.success_url_name:
+            # Forcing possible reverse_lazy evaluation
+            return reverse_lazy(self.success_url_name,
+                                kwargs={'user_slug': self.kwargs['user_slug']})
+        else:
+            raise ImproperlyConfigured(
+                "No URL to redirect to. Provide a success_url_name.")

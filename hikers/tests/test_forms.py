@@ -5,7 +5,7 @@ from django.test import TestCase, RequestFactory
 from factory import Faker
 
 from hikers.forms import (HikerRegistrationForm, HikerBasicInfoForm,
-                          HikerPhotoForm)
+                          HikerPhotoForm, HikerStatsForm)
 from hikers.models import Hiker
 from hikers.tests.factories import UserFactory, HikerFactory
 
@@ -57,3 +57,7 @@ class HikersFormsTests(TestCase):
     def test_hiker_photo_init(self):
         photo_form = HikerPhotoForm()
         self.assertTrue(photo_form.fields['photo'].required)
+
+    def test_hiker_stats_init(self):
+        stats_form = HikerStatsForm()
+        self.assertTrue(stats_form.fields['avg_walking_pace'].localize)

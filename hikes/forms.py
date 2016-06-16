@@ -4,20 +4,25 @@ from hikes.models import Hike, Trailhead, Region
 
 class HikeForm(forms.ModelForm):
 
+    region_name = forms.CharField(max_length=50, required=False)
+
     class Meta:
         model = Hike
-        fields = ('name', 'hike_type', 'difficulty_level',
-                  'difficulty_level_explanation', 'distance', 'elevation',
-                  'high_point', 'description', 'trail_map')
+        fields = ('region_name', 'trailhead', 'name', 'hike_type',
+                  'difficulty_level', 'difficulty_level_explanation',
+                  'distance', 'elevation', 'high_point', 'description',
+                  'trail_map')
 
     def __init__(self, *args, **kwargs):
         super(HikeForm, self).__init__(*args, **kwargs)
         self.fields['name'].label = 'Hike Name'
+        self.fields['region_name'].widget = forms.HiddenInput()
 
 
 class TrailheadForm(forms.ModelForm):
 
-    new_region = forms.CharField(max_length=50, required=False)
+    new_region = forms.CharField(max_length=50, required=False,
+                                 label='Region Name')
 
     class Meta:
         model = Trailhead
@@ -25,19 +30,13 @@ class TrailheadForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TrailheadForm, self).__init__(*args, **kwargs)
-        self.fields['region'].required = False
-        self.fields['region'].label = 'Select Region'
-        self.fields['new_region'].label = 'or Enter New Region Name'
+        self.fields['region'].label = 'Region Name'
         self.fields['name'].label = 'Trailhead Name'
 
     def clean(self):
         region = self.cleaned_data.get('region')
         new_region = self.cleaned_data.get('new_region')
-        if not region and not new_region:
-            # neither was specified so raise an error to user
-            raise forms.ValidationError('Must specify either '
-                                        'region or New region!')
-        elif not region:
+        if not region:
             region, created = Region.objects.get_or_create(name=new_region)
             self.cleaned_data['region'] = region
 
@@ -46,4 +45,5 @@ class TrailheadForm(forms.ModelForm):
 HikeFormset = forms.inlineformset_factory(
     Trailhead, Hike,
     form=HikeForm,
+    exclude=('trailhead',),
     extra=1, can_delete=False)

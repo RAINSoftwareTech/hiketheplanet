@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
 from django.test import TestCase, RequestFactory
 from mock import MagicMock
@@ -8,7 +9,7 @@ from hikers.models import Hiker, HikerDiaryEntry
 from hikers.tests.factories import (UserFactory, HikerFactory,
                                     HikerDiaryEntryFactory)
 from hikers.utils import (deleted_user, deleted_hiker_fallback, get_hiker,
-                          HikerCreateView, HikerUpdateView)
+                          HikerCreateView, HikerUpdateView, HikerDeleteView)
 
 from core.utils import setup_view
 
@@ -55,3 +56,34 @@ class HikersUtilsTests(TestCase):
         qs = view.get_queryset()
         self.assertIn(diary, qs)
         self.assertNotIn(diary2, qs)
+
+    def test_hiker_delete_view_queryset(self):
+        hiker = HikerFactory()
+        diary = HikerDiaryEntryFactory(hiker=hiker)
+        diary2 = HikerDiaryEntryFactory()
+        request = RequestFactory().get('/fake-path')
+        view = HikerDeleteView(template_name='test_views.html',
+                               model=HikerDiaryEntry)
+        view = setup_view(view, request, user_slug=hiker.slug)
+        request.user = UserFactory()
+        request.user.hiker = HikerFactory()
+        qs = view.get_queryset()
+        self.assertIn(diary, qs)
+        self.assertNotIn(diary2, qs)
+
+    def test_hiker_delete_view_success_url(self):
+        hiker = HikerFactory()
+        diary = HikerDiaryEntryFactory(hiker=hiker)
+        request = RequestFactory().get('/fake-path')
+        view = HikerDeleteView(template_name='test_views.html',
+                               model=HikerDiaryEntry)
+        view = setup_view(view, request, user_slug=hiker.slug, slug=diary.slug)
+        request.user = UserFactory()
+        request.user.hiker = HikerFactory()
+        with self.assertRaises(ImproperlyConfigured):
+            view.get_success_url()
+        view = HikerDeleteView(template_name='test_views.html',
+                               model=HikerDiaryEntry,
+                               success_url_name='hikers:profile')
+        view = setup_view(view, request, user_slug=hiker.slug, slug=diary.slug)
+        self.assertIn(hiker.slug, view.get_success_url())
