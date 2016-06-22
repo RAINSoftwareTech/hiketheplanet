@@ -4,7 +4,7 @@ from factory.django import DjangoModelFactory
 from factory import Faker, SubFactory
 from random import randint, uniform, choice
 
-from hikes.models import Region, Trailhead, Hike
+from hikes.models import CountryRegion, Region, Trailhead, Hike
 
 
 dif_choices = ['0easy', '1moderate', '2difficult']
@@ -21,6 +21,15 @@ def rand_longitude():
     return uniform(117.0, 124.0)
 
 
+class CountryRegionFactory(DjangoModelFactory):
+
+    class Meta:
+        model = CountryRegion
+
+    region_name = Faker('word')
+    country_abbrev = 'us'
+
+
 class RegionFactory(DjangoModelFactory):
 
     class Meta:
@@ -28,6 +37,7 @@ class RegionFactory(DjangoModelFactory):
 
     name = Faker('word')
     num_trailheads = randint(0, 600)
+    country_region = SubFactory(CountryRegionFactory)
 
 
 class TrailheadFactory(DjangoModelFactory):

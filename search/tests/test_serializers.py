@@ -52,7 +52,8 @@ class HikesSerializersTests(TestCase):
         mock_url.return_value = reverse_lazy(
             'hikes:trailhead_detail',
             kwargs={'trailhead_slug': self.trailhead.slug,
-                    'region_slug': self.region.slug})
+                    'region_slug': self.region.slug,
+                    'co_region_slug': self.region.country_region.slug})
         trailheads = Trailhead.objects.all()
         serialized = json.loads(trailheads_serializer(trailheads))
         self.assertEquals(len(serialized), trailheads.count())

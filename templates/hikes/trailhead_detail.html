@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load hike_tags %}
 
 
 {% block content %}
@@ -20,7 +21,8 @@
     </div>
 <div class="section">
     {% if perms.hikes.add_hike %}
-        <a href="{% url 'hikes:hike_add' region_slug=trailhead.region.slug trailhead_slug=trailhead.slug %}" class="btn btn-default">Add a hike</a>
+        <a href="{% kwargs_url 'hikes:hike_add'  view.kwargs %}" class="btn btn-default">
+            Add a hike</a>
     {% endif %}
 </div>
 {% endblock content %}

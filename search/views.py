@@ -2,7 +2,8 @@
 
 from django.views.generic import ListView
 
-from hikes.models import Hike, Trailhead, Region
+from hikes.models import Hike, Trailhead
+from hikes.utils import (get_trailhead_queryset, get_hike_queryset)
 from search.serializers import trailheads_serializer, hikes_serializer
 from search.utils import trailheads_as_the_crow_flies
 
@@ -15,13 +16,7 @@ class TrailheadMapListView(ListView):
     context_object_name = 'trailheads'
 
     def get_queryset(self):
-        try:
-            region = Region.objects.get(name=self.kwargs['region_name'])
-        except Region.DoesNotExist:
-            raise ValueError('{} does not represent a saved Region. '
-                             'Please check your url or add the '
-                             'Region.'.format(self.kwargs['region_name']))
-        trailheads = Trailhead.objects.filter(region=region, num_hikes__gt=0)
+        trailheads = get_trailhead_queryset(self.kwargs)
         return trailheads_serializer(trailheads)
 
 
@@ -30,9 +25,9 @@ class SearchByHikeName(ListView):
     template_name = 'search/search_list.html'
 
     def get_queryset(self):
+        hikes = get_hike_queryset(self.kwargs)
         search_text = self.request.GET.get('search_text', '')
-        hikes = Hike.objects.filter(name__icontains=search_text
-                                    ).order_by('name')
+        hikes = hikes.filter(name__icontains=search_text).order_by('name')
         return hikes_serializer(hikes)
 
 
@@ -43,7 +38,8 @@ class SearchByDistance(ListView):
     def get_queryset(self):
         search_text = self.request.GET.get('search_text', '9_97219')
         max_distance, starting_zip = search_text.split('_')
-        crow_flies = trailheads_as_the_crow_flies(max_distance, starting_zip)
+        crow_flies = trailheads_as_the_crow_flies(
+            max_distance, starting_zip, self.kwargs)
         hike_list = []
         for trailhead in crow_flies:
             hike_list += trailhead.hikes.all()

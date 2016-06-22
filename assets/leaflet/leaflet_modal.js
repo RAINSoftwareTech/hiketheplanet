@@ -41,13 +41,11 @@
         return null;
     }
 
-    function askForPlots(region, searchUrl) {
+    function askForPlots(searchUrl) {
         // request the marker info with AJAX for the current bounds
         var bounds = map.getBounds();
         var minll = bounds.getSouthWest();
         var maxll = bounds.getNorthEast();
-//    var region = 'Southwest Washington';
-        region = encodeURI(region);
         ajaxRequest.onreadystatechange = stateChanged;
         ajaxRequest.open('GET', searchUrl, true);
         ajaxRequest.send(null);

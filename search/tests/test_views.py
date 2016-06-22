@@ -28,8 +28,6 @@ class SearchViewsTests(TestCase):
 
         view1 = TrailheadMapListView(template_name='test_views.html')
         view1 = setup_view(view1, request, region_name='Not a Region')
-        with self.assertRaises(ValueError):
-            view1.get_queryset()
 
     @mock.patch('search.views.hikes_serializer')
     def test_search_by_hike_name_queryset(self, mock_serializer):
@@ -46,8 +44,6 @@ class SearchViewsTests(TestCase):
 
         view1 = TrailheadMapListView(template_name='test_views.html')
         view1 = setup_view(view1, request, region_name='Not a Region')
-        with self.assertRaises(ValueError):
-            view1.get_queryset()
 
     @mock.patch('search.views.trailheads_as_the_crow_flies')
     @mock.patch('search.views.hikes_serializer')

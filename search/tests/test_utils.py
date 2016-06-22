@@ -21,9 +21,9 @@ class SearchUtilsTests(TestCase):
         self.hike = HikeFactory(trailhead=self.trailhead)
 
     def test_trailheads_as_the_crow_flies(self):
-        trails = trailheads_as_the_crow_flies('8', '97219')
+        trails = trailheads_as_the_crow_flies('8', '97219', {})
         self.assertIsInstance(trails[0], Trailhead)
         self.assertIn(self.trailhead, trails)
 
-        trails = trailheads_as_the_crow_flies('150', '97219')
+        trails = trailheads_as_the_crow_flies('150', '97219', {})
         self.assertNotIn(self.trailhead, trails)

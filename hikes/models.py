@@ -4,9 +4,37 @@ from django.contrib.gis.db import models as geomodels
 from django.contrib.gis.geos import Point
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from core.models import SlugifiedNameBase, GeoSlugifiedNameBase
+
+
+class CountryRegion(geomodels.Model):
+    """Class for holding greater, country wide regional specs. ie: Pacific
+    Northwest-US.
+    """
+    country_abbrev = models.CharField(max_length=2)
+    region_name = models.CharField(max_length=30)
+    description = models.TextField()
+    geom = geomodels.MultiPolygonField(null=True, blank=True)
+    slug = models.SlugField()
+
+    class Meta:
+        ordering = ['country_abbrev', 'region_name']
+        unique_together = ('country_abbrev', 'region_name')
+
+    def __unicode__(self):
+        return '{} - {}'.format(self.region_name, self.country_abbrev)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify('{}-{}'.format(self.region_name,
+                                           self.country_abbrev))
+        super(CountryRegion, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('hikes:broad_region_home',
+                       kwargs={'co_region_slug': self.slug})
 
 
 class Region(SlugifiedNameBase):
@@ -14,16 +42,20 @@ class Region(SlugifiedNameBase):
     """
     name = models.CharField(max_length=50, unique=True)
     num_trailheads = models.IntegerField(default=1)
+    country_region = models.ForeignKey(CountryRegion, on_delete=models.CASCADE,
+                                       related_name='subregions')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['country_region', 'name']
+        unique_together = ('country_region', 'name')
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('hikes:region_detail',
-                       kwargs={'region_slug': self.slug})
+                       kwargs={'co_region_slug': self.country_region.slug,
+                               'region_slug': self.slug})
 
 
 class Trailhead(GeoSlugifiedNameBase):
@@ -48,7 +80,9 @@ class Trailhead(GeoSlugifiedNameBase):
 
     def get_absolute_url(self):
         return reverse('hikes:trailhead_detail',
-                       kwargs={'region_slug': self.region.slug,
+                       kwargs={'co_region_slug':
+                               self.region.country_region.slug,
+                               'region_slug': self.region.slug,
                                'trailhead_slug': self.slug})
 
     def save(self, *args, **kwargs):
@@ -106,7 +140,9 @@ class Hike(SlugifiedNameBase):
 
     def get_absolute_url(self):
         return reverse('hikes:hike_detail',
-                       kwargs={'region_slug': self.trailhead.region.slug,
+                       kwargs={'co_region_slug':
+                               self.trailhead.region.country_region.slug,
+                               'region_slug': self.trailhead.region.slug,
                                'trailhead_slug': self.trailhead.slug,
                                'hike_slug': self.slug})
 
