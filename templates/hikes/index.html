@@ -1,5 +1,6 @@
 {% extends 'hikes/browse_map_modal.html' %}
 {% load staticfiles %}
+{% load hike_tags %}
 
 {% block subheader %}
 
@@ -22,7 +23,7 @@
         <div id="search_by" style="display: block">
             <div class="search_by_hike">
                 <h4>Search by Hike Name</h4>
-                <input type="text" id="hike_search" data-search-url="{% url 'search:by_name'%}" name="search" /><a href="#" class="hike_search" role="button">
+                <input type="text" id="hike_search" data-search-url="{% kwargs_url 'search:by_name_broad_region' view.kwargs %}" name="search" /><a href="#" class="hike_search" role="button">
                 <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></a>
 
                 <ul id="search-results">
@@ -32,7 +33,7 @@
             <div class="search_by_distance">
                 <h4>Search by Driving Distance</h4>
                 <span class="line_break">
-                <input type="text" id="miles_search" data-search-url="{% url 'search:by_distance'%}" size="3" maxlength="3" value="9"  />
+                <input type="text" id="miles_search" data-search-url="{% kwargs_url 'search:by_distance_broad_region' view.kwargs %}" size="3" maxlength="3" value="9"  />
                     <span class="input_id">driving miles from</span>
                 </span><span class="line_break">
                 <input type="text" id="zip_search" size="5" maxlength="5" value="97219"  /> <span class="input_id">zip code</span>

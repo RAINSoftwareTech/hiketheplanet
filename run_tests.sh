@@ -1,47 +1,37 @@
 #!/bin/bash
+
+hiking_apps=("equipment" "hazards" "hikers" "hikes" "reviews" "search" "sights" "core" "middleware" "mixins")
+
 function pause(){
    read -p "Press Enter to continue testing or Ctrl+c to quit"
 }
 
-find . -type f -name '*.pyc' -delete
 
-coverage run --source=equipment --omit="*/migrations*" manage.py test equipment.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
+function coverage_test(){
+    echo "coverage run --source=$1 --omit="*/migrations*" manage.py test $1.tests --Hiking.settings.tests"
+    coverage run --source=$1 --omit="*/migrations*" manage.py test $1.tests --settings=Hiking.settings.tests
+    coverage report -m
+}
 
-coverage run --source=hazards --omit="*/migrations*" manage.py test hazards.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
+function loop_tests(){
+    echo "Press Enter to continue to next test, Ctrl+c to quit or 'r' to repeat last test >> "
+    read character
+    while [[ $character == "r" ]]; do
+        coverage_test $1
+        loop_tests $1
+    done
+}
 
-coverage run --source=hikers --omit="*/migrations*" manage.py test hikers.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
+function run_tests(){
+    find . -type f -name '*.pyc' -delete
+    for i in "${hiking_apps[@]}"
+        do
+            coverage_test $i
+            loop_tests $i
+        done
+    flake8 --exclude='*zjunk/*' ../hiketheplanet/
+}
 
-coverage run --source=hikes --omit="*/migrations*" manage.py test hikes.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
 
-coverage run --source=reviews --omit="*/migrations*" manage.py test reviews.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
+run_tests
 
-coverage run --source=search --omit="*/migrations*" manage.py test search.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
-
-coverage run --source=sights --omit="*/migrations*" manage.py test sights.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
-
-coverage run --source=core manage.py test core.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
-
-coverage run --source=middleware manage.py test middleware.tests --settings=Hiking.settings.tests
-coverage report -m
-pause
-
-coverage run --source=mixins manage.py test mixins.tests --settings=Hiking.settings.tests
-coverage report -m
-
-flake8 --exclude='*zjunk/*' ../hiketheplanet/

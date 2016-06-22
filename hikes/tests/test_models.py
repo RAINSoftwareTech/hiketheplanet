@@ -3,24 +3,35 @@
 from django.test import TestCase
 from django.utils.text import slugify
 
-from hikes.models import Region, Trailhead, Hike
-from hikes.tests.factories import RegionFactory, TrailheadFactory, HikeFactory
+from hikes.models import CountryRegion, Region, Trailhead, Hike
+from hikes.tests.factories import (CountryRegionFactory, RegionFactory,
+                                   TrailheadFactory, HikeFactory)
 
 
 class HikesModelsTests(TestCase):
 
-    def test_region_unicode(self):
+    def setUp(self):  # noqa
+        self.country_region = CountryRegionFactory()
         self.region = RegionFactory()
+        self.trailhead = TrailheadFactory()
+        self.hike = HikeFactory()
+
+    def test_country_region_unicode(self):
+        self.assertIsInstance(self.country_region, CountryRegion)
+        self.assertIn(self.country_region.country_abbrev,
+                      self.country_region.__unicode__())
+        self.assertIn(self.country_region.region_name,
+                      self.country_region.__unicode__())
+
+    def test_region_unicode(self):
         self.assertIsInstance(self.region, Region)
         self.assertEquals(self.region.name, self.region.__unicode__())
 
     def test_trailhead_unicode(self):
-        self.trailhead = TrailheadFactory()
         self.assertIsInstance(self.trailhead, Trailhead)
         self.assertEquals(self.trailhead.name, self.trailhead.__unicode__())
 
     def test_hikes_unicode(self):
-        self.hike = HikeFactory()
         self.assertIsInstance(self.hike, Hike)
         self.assertEquals(self.hike.name, self.hike.__unicode__())
 
@@ -28,6 +39,15 @@ class HikesModelsTests(TestCase):
         test_name = 'My Slug Name 2016'
         slug_name = slugify(test_name)
         test_slug = RegionFactory(name=test_name)
+        test_slug.save()
+        self.assertEquals(test_slug.slug, slug_name)
+
+    def test_country_region_save(self):
+        test_name = 'My Region Name 2016'
+        test_co = 'us'
+        slug_name = slugify('{}-{}'.format(test_name, test_co))
+        test_slug = CountryRegionFactory(region_name=test_name,
+                                         country_abbrev=test_co)
         test_slug.save()
         self.assertEquals(test_slug.slug, slug_name)
 
@@ -44,9 +64,11 @@ class HikesModelsTests(TestCase):
         self.assertEquals(test_trailhead.num_hikes, hike_count)
 
     def test_absolute_urls(self):
-        region = RegionFactory()
+        co_region = CountryRegionFactory()
+        region = RegionFactory(country_region=co_region)
         trailhead = TrailheadFactory(region=region)
         hike = HikeFactory(trailhead=trailhead)
+        self.assertIn(co_region.slug, co_region.get_absolute_url())
         self.assertIn(region.slug, region.get_absolute_url())
         self.assertIn(region.slug, trailhead.get_absolute_url())
         self.assertIn(trailhead.slug, trailhead.get_absolute_url())

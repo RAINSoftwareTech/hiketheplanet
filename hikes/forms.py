@@ -1,5 +1,5 @@
 from django import forms
-from hikes.models import Hike, Trailhead, Region
+from hikes.models import Hike, Trailhead, Region, CountryRegion
 
 
 class HikeForm(forms.ModelForm):
@@ -23,6 +23,8 @@ class TrailheadForm(forms.ModelForm):
 
     new_region = forms.CharField(max_length=50, required=False,
                                  label='Region Name')
+    co_region = forms.CharField(widget=forms.HiddenInput(), max_length=50,
+                                required=False)
 
     class Meta:
         model = Trailhead
@@ -37,7 +39,11 @@ class TrailheadForm(forms.ModelForm):
         region = self.cleaned_data.get('region')
         new_region = self.cleaned_data.get('new_region')
         if not region:
-            region, created = Region.objects.get_or_create(name=new_region)
+            co_region = CountryRegion.objects.get(
+                slug=self.cleaned_data.get('co_region'))
+            region, created = Region.objects.get_or_create(
+                name=new_region,
+                country_region=co_region)
             self.cleaned_data['region'] = region
 
         return super(TrailheadForm, self).clean()

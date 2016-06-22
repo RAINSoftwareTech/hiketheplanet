@@ -1,18 +1,44 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.forms import HiddenInput, TextInput
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import (CreateView, DetailView, ListView, UpdateView,
+                                  RedirectView)
 
 from core.views import FormsetCreateView, FormsetUpdateView
 
-from hikes.models import Region, Trailhead, Hike
+from hikes.models import CountryRegion, Region, Trailhead, Hike
 from hikes.forms import TrailheadForm, HikeForm, HikeFormset
-from hikes.utils import get_hike_queryset, get_trailhead_queryset
+from hikes.utils import (get_hike_queryset, get_trailhead_queryset,
+                         get_region_queryset, get_region_object,
+                         get_trailhead_object)
 
 from mixins.permission_mixins import GroupRequiredMixin
 
 CONTRIBUTOR_GROUP = settings.CONTRIBUTOR_GROUP_NAME
+
+
+class HikeHomeRedirectView(RedirectView):
+    """Temporary view to redirect all index calls to PNW region view until
+    higher level views and templates can be built.
+    """
+    def get_redirect_url(self, *args, **kwargs):
+        pnw = CountryRegion.objects.get(
+            country_abbrev='us',
+            region_name__icontains='pacific northwest')
+        return reverse_lazy('hikes:broad_region_home',
+                            kwargs={'co_region_slug': pnw.slug})
+
+
+class CountryRegionListView(ListView):
+    """View for displaying all larger area regions. Since country region
+    objects have geo polygon feature, front end should be clickable map - see
+    Leaflet."""
+    model = CountryRegion
+    template_name = 'hikes/index.html'
+    queryset = CountryRegion.objects.all().prefetch_related('subregions')
+    context_object_name = 'co_regions'
 
 
 class RegionListView(ListView):
@@ -21,14 +47,19 @@ class RegionListView(ListView):
     context_object_name = 'region_list'
     template_name = 'hikes/index.html'
 
+    def get_queryset(self):
+        return get_region_queryset(self.kwargs)
+
 
 class RegionDetailView(DetailView):
     """View for displaying a Region with its list of Trailheads."""
     model = Region
     template_name = 'hikes/region_detail.html'
     slug_url_kwarg = 'region_slug'
-    queryset = Region.objects.prefetch_related('trailheads')
     context_object_name = 'region'
+
+    def get_queryset(self):
+        return get_region_queryset(self.kwargs)
 
 
 class TrailheadDetailView(DetailView):
@@ -39,7 +70,7 @@ class TrailheadDetailView(DetailView):
     context_object_name = 'trailhead'
 
     def get_queryset(self):
-        return get_trailhead_queryset(self)
+        return get_trailhead_queryset(self.kwargs)
 
 
 class TrailheadCreateView(GroupRequiredMixin, FormsetCreateView):
@@ -51,9 +82,8 @@ class TrailheadCreateView(GroupRequiredMixin, FormsetCreateView):
 
     def get_form(self, form_class=None):
         form = super(TrailheadCreateView, self).get_form(form_class)
-        region_slug = self.kwargs.get('region_slug')
-        if region_slug:
-            region = Region.objects.get(slug=region_slug)
+        if self.kwargs.get('region_slug'):
+            region = get_region_object(self.kwargs)
             form.initial['region'] = region
             form.fields['region'].widget.attrs['disabled'] = 'disabled'
             form.fields['new_region'].widget = HiddenInput()
@@ -61,12 +91,13 @@ class TrailheadCreateView(GroupRequiredMixin, FormsetCreateView):
             form.fields['region'].required = False
             form.fields['new_region'].required = True
             form.fields['region'].widget = HiddenInput()
+            form.initial['co_region'] = self.kwargs.get('co_region_slug')
         return form
 
 
 class TrailheadUpdateView(GroupRequiredMixin, FormsetUpdateView):
-    # ToDo: Add views and links to preselect hike/trailhead/region for form
-    # by kwarg slugs. Add delete views. Add staff_required mixin.
+    # ToDo: Add get_form override to narrow region field queryset to
+    # country region from url kwarg.
     model = Trailhead
     group_required = CONTRIBUTOR_GROUP
     form_class = TrailheadForm
@@ -75,7 +106,7 @@ class TrailheadUpdateView(GroupRequiredMixin, FormsetUpdateView):
     formset_classes = [HikeFormset]
 
     def get_queryset(self):
-        return get_trailhead_queryset(self)
+        return get_trailhead_queryset(self.kwargs)
 
 
 class HikeDetailView(DetailView):
@@ -87,7 +118,7 @@ class HikeDetailView(DetailView):
     context_object_name = 'hike'
 
     def get_queryset(self):
-        return get_hike_queryset(self)
+        return get_hike_queryset(self.kwargs)
 
 
 class HikeCreateView(GroupRequiredMixin, CreateView):
@@ -102,13 +133,9 @@ class HikeCreateView(GroupRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super(HikeCreateView, self).get_form(form_class)
-        region_slug = self.kwargs.get('region_slug')
-        trailhead_slug = self.kwargs.get('trailhead_slug')
-        if region_slug and trailhead_slug:
-            region = Region.objects.get(slug=region_slug)
-            trailhead = Trailhead.objects.get(slug=trailhead_slug,
-                                              region=region)
-            form.initial['region_name'] = region.name
+        if self.kwargs.get('trailhead_slug'):
+            trailhead = get_trailhead_object(self.kwargs)
+            form.initial['region_name'] = trailhead.region.name
             form.fields['region_name'].widget = TextInput()
             form.fields['region_name'].widget.attrs['disabled'] = 'disabled'
             form.initial['trailhead'] = trailhead
@@ -119,6 +146,8 @@ class HikeCreateView(GroupRequiredMixin, CreateView):
 class HikeUpdateView(GroupRequiredMixin, UpdateView):
     """View for displaying all details for each hike.
     """
+    # ToDo: Add get_form override to narrow trailhead field queryset to
+    # country region (sorted by region or alpha?) from url kwarg.
     model = Hike
     group_required = CONTRIBUTOR_GROUP
     form_class = HikeForm
@@ -127,4 +156,4 @@ class HikeUpdateView(GroupRequiredMixin, UpdateView):
     context_object_name = 'hike'
 
     def get_queryset(self):
-        return get_hike_queryset(self)
+        return get_hike_queryset(self.kwargs)
