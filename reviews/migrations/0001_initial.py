@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('hikers', '0001_initial'),
-        ('hikes', '0001_initial'),
+        ('hikes', '0001_squashed_0009_auto_20160618_1712'),
+        ('hikers', '0001_squashed_0005_auto_20160613_2057'),
     ]
 
     operations = [

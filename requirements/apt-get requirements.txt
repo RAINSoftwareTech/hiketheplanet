@@ -1,0 +1,22 @@
+sudo apt-get install python-setuptools python-dev build-essential git-core -y
+sudo apt-get install libjpeg-dev
+sudo easy_install pip
+sudo pip install virtualenv
+sudo apt-get install virtualenvwrapper
+
+
+apt-get install memcached
+apt-get install libevent-dev
+
+
+# Postgresql Db set up
+sudo apt-get install postgresql postgresql-client postgresql-contrib postgresql-server-dev-9.3  pgadmin3
+
+
+
+
+sudo -u postgres createdb {db_name_from_settings}
+
+sudo -u postgres psql postgres
+	CREATE USER {user_from_settings} WITH PASSWORD '{password_from_settings}';
+	GRANT ALL PRIVILEGES ON DATABASE {project_db_name} to {user_from_settings};

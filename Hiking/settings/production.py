@@ -25,7 +25,7 @@ def get_env_setting(setting):
 
 DATABASES = {
     'default': {
-        'ENGINE': 'tenant_schemas.postgresql_backend',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'hiketheplanet',
         'USER': 'fableturas',
         'PASSWORD': '********',
@@ -38,7 +38,20 @@ DATABASES = {
 
 # -------------- CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {}
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }}
+
+MIDDLEWARE_CLASSES.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
+MIDDLEWARE_CLASSES.extend(
+    ('django.middleware.cache.FetchFromCacheMiddleware',)
+)
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 2
+CACHE_MIDDLEWARE_KEY_PREFIX = 'hiketheplanet'
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 # -------------- END CACHE CONFIGURATION
 
 
@@ -51,8 +64,10 @@ SECRET_KEY = get_env_setting('HIKING_SECRET_KEY')
 # -------------- MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Fable', 'fable@raintechpdx.com'),
+    ('Fable', 'raintechpdx@gmail.com'),
 )
+
+SEND_BROKEN_LINK_EMAILS = True
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
@@ -63,3 +78,8 @@ ALLOWED_HOSTS = [
 ]
 
 MAX_UPLOAD_SIZE_IN_MB = 4
+
+# -------------- SECURITY SETTINGS
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+CSRF_COOKIE_HTTPONLY = True
