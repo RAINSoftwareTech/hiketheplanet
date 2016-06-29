@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('hike', models.ForeignKey
-                (on_delete=django.db.models.deletion.CASCADE,
-                 related_name='future_hikes', to='hikes.Hike')),
+                    (on_delete=django.db.models.deletion.CASCADE,
+                     related_name='future_hikes', to='hikes.Hike')),
             ],
             options={
                 'ordering': ['-created'],
