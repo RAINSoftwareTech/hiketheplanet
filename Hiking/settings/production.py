@@ -27,7 +27,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'hiketheplanet',
-        'USER': 'fableturas',
+        'USER': 'hiketheplanet',
         'PASSWORD': '********',
         'HOST': '127.0.0.1',
     }
@@ -74,7 +74,9 @@ MANAGERS = ADMINS
 # -------------- END MANAGER CONFIGURATION
 
 ALLOWED_HOSTS = [
-    '.hiketheplanet.??'
+    '127.0.0.1',
+    'localhost',
+    '.hiketheplanet.info'
 ]
 
 MAX_UPLOAD_SIZE_IN_MB = 4

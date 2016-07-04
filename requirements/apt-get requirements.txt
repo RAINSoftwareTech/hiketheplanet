@@ -1,10 +1,13 @@
-suudo apt-get update
+sudo apt-get update
 
-sudo apt-get install -y python-setuptools python-dev build-essential git-core -y
+sudo apt-get install -y python-setuptools python-dev build-essential git-core
 sudo apt-get install -y libjpeg-dev
 sudo easy_install pip
 sudo pip install virtualenv
 sudo apt-get install -y virtualenvwrapper
+
+sudo pip install markupsafe
+sudo pip install ansible
 
 
 apt-get install memcached
