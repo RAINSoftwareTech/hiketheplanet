@@ -1,6 +1,7 @@
 Django==1.9.5
 django-allauth==0.25.2
 django-localflavor==1.2
+djangorestframework==3.3.3
 django-timezones==0.2
 enum34==1.1.6
 geopy==1.11.0
