@@ -129,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(SITE_ROOT, 'assets'),)
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'static'))
 
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 MEDIA_URL = '/media/'
@@ -142,3 +143,18 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_SIGNUP_FORM_CLASS = 'hikers.forms.HikerRegistrationForm'
 
 CONTRIBUTOR_GROUP_NAME = 'Contributors'
+
+# ---------- EMAIL CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# THESE SETTINGS NEED TO BE CHECKED BEFORE FIRST DEPLOY
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'raintechpdx@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 587)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = EMAIL_HOST_USER
+# ---------- END EMAIL CONFIGURATION
