@@ -27,8 +27,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'hiketheplanet',
-        'USER': 'hiketheplanet',
-        'PASSWORD': '********',
+        'USER': get_env_setting('DATABASE_USER'),
+        'PASSWORD': get_env_setting('DATABASE_PASSWORD'),
         'HOST': '127.0.0.1',
     }
 }
