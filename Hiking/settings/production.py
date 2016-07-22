@@ -58,14 +58,9 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 # -------------- SECRET CONFIGURATION
 # SET SECRET KEY & SETTINGS IN ENV ON SERVER ON FIRST DEPLOY
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = get_env_setting('HIKING_SECRET_KEY')
+SECRET_KEY = get_env_setting('DJANGO_SECRET_KEY')
 # -------------- END SECRET CONFIGURATION
 
-# -------------- MANAGER CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    ('Fable', 'raintechpdx@gmail.com'),
-)
 
 SEND_BROKEN_LINK_EMAILS = True
 
@@ -74,8 +69,6 @@ MANAGERS = ADMINS
 # -------------- END MANAGER CONFIGURATION
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
     '.hiketheplanet.info'
 ]
 
