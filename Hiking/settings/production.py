@@ -64,8 +64,12 @@ SECRET_KEY = get_env_setting('DJANGO_SECRET_KEY')
 
 
 SEND_BROKEN_LINK_EMAILS = True
+# -------------- MANAGER CONFIGURATION
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
+ADMINS = (
+    os.environ.get('ADMINS'),
+)
 MANAGERS = ADMINS
 # -------------- END MANAGER CONFIGURATION
 
@@ -79,3 +83,17 @@ MAX_UPLOAD_SIZE_IN_MB = 4
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 CSRF_COOKIE_HTTPONLY = True
+# ---------- EMAIL CONFIGURATION
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# THESE SETTINGS NEED TO BE CHECKED BEFORE FIRST DEPLOY
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = EMAIL_HOST_USER
+# ---------- END EMAIL CONFIGURATION
