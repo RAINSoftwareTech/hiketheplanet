@@ -1,8 +1,7 @@
 {% load static %}
 {% load hike_tags %}
-
+<div class="col-xs-12">
 <h4>Browse Hikes by Region</h4>
-<div class="row">
     {% if region_list %}
         {% for region in region_list %}
              <div class="col-md-4 browse-link">
@@ -19,6 +18,7 @@
     {% else %}
         <strong>There are no regions present.</strong>
     {% endif %}
+
 </div>
 <div class="section">
     {% if perms.hikes.add_hike %}
