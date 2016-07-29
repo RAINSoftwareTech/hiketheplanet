@@ -42,10 +42,8 @@ HEADER
 .page-header {
     background-color: #0D6317;
     margin: 0;
-    padding: 0;
     border: 0;
     width: 100%;
-    height: 100px;
     overflow: hidden;
 
 }
@@ -137,9 +135,6 @@ MAIN CONTENT
     min-height: 100%;
     padding-bottom: 70px;
 }
-.content {
-    padding: 0 0 20px 40px;
-}
 
 .section {
     padding-top: 20px;
@@ -173,19 +168,6 @@ SEARCHES
     list-style-type: none;
     padding: 10px 0;
     margin: 0;
-}
-
-.search_by_hike {
-    width: 50%;
-    /*padding-left: 40px;*/
-    /*padding-top: 20px;*/
-    float: left;
-}
-
-.search_by_distance {
-    width: 50%;
-    padding-left: 40px;
-    float: right;
 }
 
 a.hike_search {
@@ -243,10 +225,6 @@ BROWSE
 #browse_region {
     font-size: 14px;
     color: #0D6317;
-    overflow: hidden;
-    /*padding-left: 40px;*/
-    /*padding-top: 20px;*/
-    float: left;
 }
 
 .browse-link a {
@@ -277,7 +255,7 @@ FOOTER
 ******************/
 
 #footer {
-    height: 60px;
+    min-height: 60px;
     margin-top: -60px;
     padding-bottom: 5px;
 }
@@ -312,34 +290,6 @@ FOOTER
 /******************
 OTHER
 ******************/
-
-/*.top-menu, .top-menu:hover, .top-menu:visited {*/
-    /*color: #ffffff;*/
-    /*float: right;*/
-    /*font-size: 26pt;*/
-    /*margin-right: 20px;*/
-/*}*/
-
-/*.date {*/
-    /*float: right;*/
-    /*color: #828282;*/
-/*}*/
-
-/*.save {*/
-    /*float: right;*/
-/*}*/
-
-/*.hike-form textarea, .hike-form input {*/
-    /*width: 100%;*/
-/*}*/
-
-/*.hike {*/
-    /*margin-bottom: 70px;*/
-/*}*/
-
-/*.hike h1 a, .hike h1 a:visited {*/
-    /*color: #000000;*/
-/*}*/
 
 .list-link {
     font-size: 12px;
@@ -405,13 +355,6 @@ MEDIA QUERIES
         padding-left: 30px;
     }
 
-    .search_by_hike {
-        padding-left: 30px;
-    }
-
-    #browse_region {
-        padding-left: 30px;
-    }
 }
 
 /*Forth Break*/
@@ -431,10 +374,6 @@ MEDIA QUERIES
         width: 400px;
     }
 
-    .search_by_distance {
-        padding: 10px;
-        margin-right: 40px;
-    }
 
     hr {
         margin-left: 20px;
@@ -445,14 +384,6 @@ MEDIA QUERIES
     }
 
     .intro p {
-        padding-left: 20px;
-    }
-
-    .search_by_hike {
-        padding: 10px 0 0 20px;
-    }
-
-    #browse_region {
         padding-left: 20px;
     }
 
@@ -482,18 +413,6 @@ MEDIA QUERIES
         display: none;
     }
 
-    .user-header {
-        margin-right: 5px;
-    }
-
-    .search_by_hike {
-        width: 100%;
-    }
-
-    .search_by_distance {
-        width: 100%;
-        padding-left: 20px;
-    }
 }
 
 

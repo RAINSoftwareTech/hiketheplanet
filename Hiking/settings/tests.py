@@ -13,9 +13,6 @@ DATABASES = {
     }
 }
 
-ADMINS = (
-    ('Fable', 'fable@raintechpdx.com'),
-)
 INSTALLED_APPS += (
     'core',
 )

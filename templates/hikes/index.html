@@ -20,8 +20,8 @@
 {% block content %}
 
     <div class="section">
-        <div id="search_by" style="display: block">
-            <div class="search_by_hike">
+        <div id="search_by" style="display: block" class="row">
+            <div class="search_by_hike col-sm-6">
                 <h4>Search by Hike Name</h4>
                 <input type="text" id="hike_search" data-search-url="{% kwargs_url 'search:by_name_broad_region' view.kwargs %}" name="search" /><a href="#" class="hike_search" role="button">
                 <img src="{% static "images/search-icon-30px.png" %}" alt="search icon" class="search_icon" height="24" width="24"></a>
@@ -30,7 +30,7 @@
                 </ul>
             </div>
 
-            <div class="search_by_distance">
+            <div class="search_by_distance col-sm-6">
                 <h4>Search by Driving Distance</h4>
                 <span class="line_break">
                 <input type="text" id="miles_search" data-search-url="{% kwargs_url 'search:by_distance_broad_region' view.kwargs %}" size="3" maxlength="3" value="9"  />
@@ -52,7 +52,7 @@
     <hr>
 
     <div class="section">
-        <div id="browse_region">
+        <div id="browse_region" class="row">
             {% include 'hikes/region_list.html' %}
         </div>
     </div>

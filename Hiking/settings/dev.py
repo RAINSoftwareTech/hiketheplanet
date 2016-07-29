@@ -36,14 +36,8 @@ CACHES = {
     }
 }
 # ------------- END CACHE CONFIGURATION
-# -------------- MANAGER CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    ('Fable', 'fable@raintechpdx.com'),
-)
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-MANAGERS = ADMINS
-# -------------- END MANAGER CONFIGURATION
 
 MAX_UPLOAD_SIZE_IN_MB = 5
+
+ADMINS = ('Fable', 'raintechpdx@gmail.com')
