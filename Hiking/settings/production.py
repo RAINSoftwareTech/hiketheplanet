@@ -17,7 +17,8 @@ def get_env_setting(setting):
     except KeyError:
         error_msg = "Set the {} env variable".format(setting)
     raise ImproperlyConfigured(error_msg)
-
+# -------------- Explicitly set debug state
+DEBUG = False
 
 # -------------- DATABASE CONFIGURATION
 # CHECK HOST CONFIG BEFORE DEPLOY
@@ -69,8 +70,8 @@ MANAGERS = ADMINS
 # -------------- END MANAGER CONFIGURATION
 
 ALLOWED_HOSTS = [
-    '.hiketheplanet.info'
-]
+    'www.hiketheplanet.info',
+    'hiketheplanet.info']
 
 MAX_UPLOAD_SIZE_IN_MB = 4
 
