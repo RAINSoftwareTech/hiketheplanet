@@ -19,12 +19,9 @@ def get_country_region_object(kwargs):
 def get_region_queryset(kwargs):
     filter_params = get_filter_params_from_kwargs(kwargs, 'region')
     if filter_params:
-        return Region.objects.filter(
-            **filter_params).select_related(
-            'country_region').prefetch_related('trailheads')
+        return Region.objects.filter(**filter_params)
     else:
-        return Region.objects.all().select_related(
-            'country_region').prefetch_related('trailheads')
+        return Region.objects.all()
 
 
 def get_region_object(kwargs):
