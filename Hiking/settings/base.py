@@ -143,5 +143,3 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_SIGNUP_FORM_CLASS = 'hikers.forms.HikerRegistrationForm'
 
 CONTRIBUTOR_GROUP_NAME = 'Contributors'
-
-

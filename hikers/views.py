@@ -169,7 +169,9 @@ class InactiveRedirect(TemplateView):
     """View to offer redirection options for inactive users attempting to
     access views that require active, authenticated accounts.
     """
-    system_admin_email = settings.ADMINS[0][1]
+
+    system_admin_email = getattr(settings, 'ADMINS', None)
+    system_admin_email = system_admin_email[0][1] if system_admin_email else ''
     template_name = 'hikers/inactive_redirect.html'
 
 

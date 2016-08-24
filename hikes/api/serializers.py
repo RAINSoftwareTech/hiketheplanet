@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from rest_framework.serializers import (HyperlinkedModelSerializer,
-                                        HyperlinkedRelatedField,
-                                        ModelSerializer,
-                                        PrimaryKeyRelatedField,
+from rest_framework.serializers import (ModelSerializer,
                                         SlugRelatedField)
 
 from hikes.models import CountryRegion, Region, Trailhead, Hike
