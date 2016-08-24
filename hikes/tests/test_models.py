@@ -18,9 +18,9 @@ class HikesModelsTests(TestCase):
 
     def test_country_region_unicode(self):
         self.assertIsInstance(self.country_region, CountryRegion)
-        self.assertIn(self.country_region.country_abbrev,
+        self.assertIn(self.country_region.country_abbrev.upper(),
                       self.country_region.__unicode__())
-        self.assertIn(self.country_region.region_name,
+        self.assertIn(self.country_region.region_name.title(),
                       self.country_region.__unicode__())
 
     def test_region_unicode(self):

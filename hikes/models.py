@@ -18,14 +18,15 @@ class CountryRegion(geomodels.Model):
     region_name = models.CharField(max_length=30)
     description = models.TextField()
     geom = geomodels.MultiPolygonField(null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     class Meta:
         ordering = ['country_abbrev', 'region_name']
         unique_together = ('country_abbrev', 'region_name')
 
     def __unicode__(self):
-        return '{} - {}'.format(self.region_name, self.country_abbrev)
+        return '{} - {}'.format(self.region_name.title(),
+                                self.country_abbrev.upper())
 
     def save(self, *args, **kwargs):
         self.slug = slugify('{}-{}'.format(self.region_name,
