@@ -54,7 +54,39 @@
       "as-needed"
     ],
     "object-literal-sort-keys": false,
-    "ordered-imports": false,
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true,
+        "groups": [
+          {
+            "name": "angular",
+            "match": "^@angular/material",
+            "order": 2
+          },
+          {
+            "name": "angular",
+            "match": "^@angular",
+            "order": 1
+          },
+          {
+            "name": "internal modules",
+            "match": "^lib|^vendors",
+            "order": 4
+          },
+          {
+            "name": "relative directory",
+            "match": "^[.].*",
+            "order": 5
+          },
+          {
+            "name": "node_modules",
+            "match": ".*",
+            "order": 3
+          }
+        ]
+      }
+    ],
     "quotemark": [
       true,
       "single"

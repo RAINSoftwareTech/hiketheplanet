@@ -1,9 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
+import { HikeComponent, TrailheadComponent } from 'lib-hikes';
 import { PageNotFoundComponent } from 'lib-tools';
 
+import { MappedTrailheadsComponent } from './mapped-trailheads/mapped-trailheads.component';
+
 const routes: Routes = [
+  {path: 'trailheads/:trailhead', component: TrailheadComponent},
+  {path: 'hikes/:hike', component: HikeComponent},
+  {path: '', component: MappedTrailheadsComponent},
   {path: '**', component: PageNotFoundComponent}
 ];
 

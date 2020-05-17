@@ -58,6 +58,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/htp-gui/src/environments/environment.ts",
+                  "with": "projects/htp-gui/src/environments/environment.dev.ts"
+                }
+              ]
             }
           }
         },
@@ -87,7 +95,12 @@
             "karmaConfig": "projects/htp-gui/karma.conf.js",
             "assets": [
               "projects/htp-gui/src/favicon.ico",
-              "projects/htp-gui/src/assets"
+              "projects/htp-gui/src/assets",
+              {
+                "glob": "**/*",
+                "input": "projects/shared-assets/",
+                "output": "assets"
+              }
             ],
             "styles": [
               "projects/htp-gui/src/styles.css"
@@ -359,6 +372,41 @@
             "tsConfig": [
               "projects/lib-hikes/tsconfig.lib.json",
               "projects/lib-hikes/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "lib-search": {
+      "projectType": "library",
+      "root": "projects/lib-search",
+      "sourceRoot": "projects/lib-search/src",
+      "prefix": "search",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/lib-search/tsconfig.lib.json",
+            "project": "projects/lib-search/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/lib-search/src/test.ts",
+            "tsConfig": "projects/lib-search/tsconfig.spec.json",
+            "karmaConfig": "projects/lib-search/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/lib-search/tsconfig.lib.json",
+              "projects/lib-search/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

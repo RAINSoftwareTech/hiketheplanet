@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LibMapService } from './lib-map.service';
+import { MapService } from './map.service';
 
-describe('LibMapService', () => {
+describe('MapService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LibMapService = TestBed.get(LibMapService);
+    const service: MapService = TestBed.get(MapService);
     expect(service).toBeTruthy();
   });
 });

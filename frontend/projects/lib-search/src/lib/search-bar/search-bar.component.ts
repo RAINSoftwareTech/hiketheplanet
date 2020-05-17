@@ -7,15 +7,11 @@ All rights reserved
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-vendors',
-  template: `
-    <p>
-      vendors works!
-    </p>
-  `,
-  styles: []
+  selector: 'search-search-bar',
+  templateUrl: './search-bar.component.html',
+  styleUrls: ['./search-bar.component.css']
 })
-export class VendorsComponent implements OnInit {
+export class SearchBarComponent implements OnInit {
 
   constructor() { }
 

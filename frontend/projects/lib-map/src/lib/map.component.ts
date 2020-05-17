@@ -7,7 +7,7 @@ All rights reserved
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-lib-map',
+  selector: 'map-component',
   template: `
     <p>
       lib-map works!
@@ -15,7 +15,7 @@ import { Component, OnInit } from '@angular/core';
   `,
   styles: []
 })
-export class LibMapComponent implements OnInit {
+export class MapComponent implements OnInit {
 
   constructor() { }
 

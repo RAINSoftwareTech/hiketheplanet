@@ -5,6 +5,7 @@ All rights reserved
 
  */
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +14,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'htp-gui';
+  isMap: boolean;
+
+  constructor(private router: Router) {
+      this.isMap = router.isActive('', true);
+  }
 }

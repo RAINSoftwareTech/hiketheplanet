@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
-import { LibMapComponent } from './lib-map.component';
+
+import { MapComponent } from './map.component';
 
 
 
 @NgModule({
-  declarations: [LibMapComponent],
+  declarations: [MapComponent],
   imports: [
   ],
-  exports: [LibMapComponent]
+  exports: [MapComponent]
 })
 export class LibMapModule { }

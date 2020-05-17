@@ -1,0 +1,28 @@
+.page-header {
+  background-color: var(--primary-medium);
+  margin: 0;
+  border: 0;
+  width: 100%;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+  color: var(--light-text);
+  text-decoration: none;
+  font-family: 'Architects Daughter', cursive;
+}
+.page-header h1 a:hover, .page-header h1 a:focus {
+  color: var(--primary-lightest);
+}
+
+.page-header h1 {
+  font-size: 24pt;
+}
+
+button.login-link {
+  color: var(--dark-text);
+  padding: 10px;
+  background-color: var(--primary-lightest);
+}
+
