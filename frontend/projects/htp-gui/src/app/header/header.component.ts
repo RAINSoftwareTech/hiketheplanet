@@ -1,5 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header',

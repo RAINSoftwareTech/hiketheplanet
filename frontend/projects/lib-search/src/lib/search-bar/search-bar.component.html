@@ -1,1 +1,35 @@
-<p>search-bar works!</p>
+<div>
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" fxLayout="row">
+    <div fxLayout="column">
+      <div class="search-input-wrapper">
+        <label for="searchBar" class="visually-hidden">{{ placeholderText }}</label>
+        <input class="search-input" id="searchBar" type="search"  formControlName="searchControl"
+               placeholder="{{  placeholderText }}" autocomplete="off" role="combobox"
+               aria-autocomplete="list" aria-expanded="false" aria-haspopup="true"
+               [matAutocomplete]="auto">
+        <div class="search-button">
+          <button mat-icon-button (click)="onSearch()" aria-label="Search Hikes"><mat-icon>search</mat-icon></button>
+        </div>
+      </div>
+      <mat-radio-group aria-label="Search type">
+        <mat-radio-button *ngFor="let field of searchTypes" [value]="field.name" [checked]="field.name ==='distance'">
+          {{ field.displayName }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div class="search-method-controls controls-wrapper">
+      <div *ngIf="searchForm.controls.searchType.value === 'distance'">
+        <mat-form-field appearance="fill">
+          <mat-select formControlName="distance" [aria-label]="'Distance within'">
+            <mat-option *ngFor="let field of distanceOptions" [value]="field.name">{{ field.displayName }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSearch()">
+      <mat-option *ngFor="let suggestion of (addrSuggestions$ | async)" [value]="suggestion">
+        {{ suggestion.description }}
+      </mat-option>
+    </mat-autocomplete>
+  </form>
+</div>

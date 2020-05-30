@@ -1,0 +1,62 @@
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.search-container {
+  position: relative;
+  width: 325px
+}
+.search-input-wrapper {
+  position: relative;
+}
+.search-input {
+  display: inline-block;
+  width: 250px;
+  min-height: 42px;
+  margin: 0;
+}
+input.search-input:placeholder-shown {
+  text-overflow: ellipsis;
+}
+.search-button {
+  position: absolute;
+  display: inline-block;
+  z-index: 99;
+  bottom: 8px;
+  right: 2px;
+  margin: 0;
+}
+
+.search-button button {
+  background: white;
+  border: none;
+}
+
+.search-method-controls {
+  height: 15px;
+  width: 75px;
+  margin: 0;
+}
+
+.controls-wrapper mat-form-field {
+  width: 75px !important;
+  font-size: 12px;
+  background: var(--white);
+}
+
+
+.controls-wrapper .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+  transform: none;
+}
+
+mat-radio-button {
+  font-size: 12px;
+  padding: 0 5px;
+}
