@@ -1,6 +1,6 @@
 
 
-.page-footer {
+.footer-toolbar {
   background-color: var(--primary-medium);
   margin: 0;
   padding: 0;
@@ -21,11 +21,11 @@
   line-height: normal;
 }
 
-.page-footer a, .page-footer a:visited, .page-footer a:active {
+.footer-toolbar a, .footer-toolbar a:visited, .footer-toolbar a:active {
   color: var(--light-text);
   text-decoration: underline;
 }
 
-.page-footer a:hover, .page-footer a:focus {
+.footer-toolbar a:hover, .footer-toolbar a:focus {
   color: var(--accent-hover);
 }

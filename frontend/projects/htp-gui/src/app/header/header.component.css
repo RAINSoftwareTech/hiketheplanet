@@ -1,26 +1,29 @@
-.page-header {
+.header-toolbar {
   background-color: var(--primary-medium);
   margin: 0;
   border: 0;
-  width: 100%;
   overflow: hidden;
   vertical-align: middle;
+  height: var(--header-height);
+  z-index: 2;
+  width: 100vw;
+  box-shadow: 0 1px 2px 0 var(--gray-light);
 }
 
-.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+.header-toolbar h1, .header-toolbar h1 a, .header-toolbar h1 a:visited, .header-toolbar h1 a:active {
   color: var(--light-text);
   text-decoration: none;
   font-family: 'Architects Daughter', cursive;
 }
-.page-header h1 a:hover, .page-header h1 a:focus {
+.header-toolbar h1 a:hover, .header-toolbar h1 a:focus {
   color: var(--primary-lightest);
 }
 
-.page-header h1 {
+.header-toolbar h1 {
   font-size: 24pt;
 }
 
-button.login-link {
+button.header-login-link {
   color: var(--dark-text);
   padding: 10px;
   background-color: var(--primary-lightest);

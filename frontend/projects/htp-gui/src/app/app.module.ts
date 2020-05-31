@@ -8,6 +8,7 @@ import { LibSearchModule } from 'lib-search';
 import { LibToolsModule } from 'lib-tools';
 import { VendorsModule } from 'vendors';
 
+import {environment} from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
@@ -34,7 +35,9 @@ import { MenuComponent } from './menu/menu.component';
     LibToolsModule,
     VendorsModule,
   ],
-  providers: [],
+  providers: [
+    {provide: 'environment', useValue: environment}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

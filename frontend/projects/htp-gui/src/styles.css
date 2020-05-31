@@ -5,3 +5,6 @@ body { margin: 0; font-family: "Architects Daughter", "Gudea", sans-serif; }
 h1, h2, h3 {
     font-family: 'Architects Daughter', cursive;
 }
+.display-none {
+  display: none;
+}

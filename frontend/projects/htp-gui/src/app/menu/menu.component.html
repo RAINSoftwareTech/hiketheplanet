@@ -1,10 +1,10 @@
 <mat-nav-list>
-  <div class="sliding-menu-header">
-    <h1 class="ea-purple-color">Main Menu
+  <div class="menu-header">
+    <h1 class="primary-color">Main Menu
     </h1>
   </div>
 
-  <div *ngIf="user$ | async as user" class="sliding-menu-body">
+  <div *ngIf="user$ | async as user" class="menu-body">
     <a mat-list-item routerLink="{{nav.route}}" *ngFor="let nav of userNavItems" role="menuitem"
        routerLinkActive="nav-item-active">{{nav.title}}</a>
     <ng-container *ngIf="user.is_editor">

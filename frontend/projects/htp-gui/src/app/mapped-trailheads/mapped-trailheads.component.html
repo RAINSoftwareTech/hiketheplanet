@@ -1,12 +1,12 @@
 <mat-progress-bar *ngIf="isLoading$ | async" mode="indeterminate"></mat-progress-bar>
 
 <!-- MOBILE-->
-<main *ngIf="isMobile; else desktop">
-  <div class="map-container" [class.display-none]="!showMap" [attr.aria-hidden]="!showMap">
+<main *ngIf="isMobile; else desktop" class="mapped-trailheads-container">
+  <div class="mapped-trailheads-map" [class.display-none]="!showMap" [attr.aria-hidden]="!showMap">
     <map-component></map-component>
   </div>
   <hikes-trailhead-list [class.display-none]="!showList" [attr.aria-hidden]="!showList" [mobileView]="true"></hikes-trailhead-list>
-  <div class="buttons-container" [class.buttons-container-map]="showMap">
+  <div class="mapped-trailheads-buttons-container">
     <button mat-icon-button *ngIf="!showMap"><mat-icon>map</mat-icon></button>
     <button mat-icon-button *ngIf="!showList"><mat-icon>list</mat-icon></button>
   </div>
@@ -14,13 +14,13 @@
 
 <!-- DESKTOP -->
 <ng-template #desktop>
-  <mat-sidenav-container>
+  <mat-sidenav-container class="mapped-trailheads-container">
     <mat-sidenav-content>
-      <main class="map-container">
+      <main class="mapped-trailheads-map">
         <map-component></map-component>
       </main>
     </mat-sidenav-content>
-    <mat-sidenav class="trailheads-sidebar" role="directory" mode="side"
+    <mat-sidenav class="mapped-trailheads-sidebar" role="directory" mode="side"
                  position="end" disableClose [(opened)]="panelOpen">
       <hikes-trailhead-list></hikes-trailhead-list>
     </mat-sidenav>

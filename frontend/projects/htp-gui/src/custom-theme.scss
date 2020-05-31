@@ -147,4 +147,18 @@ $htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn
   --gray-light-ultra: rgba(249, 249, 249, 1);
   --white: rgba(255, 255, 255, 1);
 
+  --header-height: 75px;
+  --footer-height: 64px;
+}
+
+//  ANGULAR MATERIAL COMPONENT AND CLASS OVERRIDES
+//  Every reasonable attempt should be made to style the overrides in the respective component CSS files,
+//  but if all else fails, styling the overrides here is preferable to using ViewEncapsulation.None (which should
+//  only be used as a weapon of absolute last resort). Be sure global overrides are as targeted as possible.
+
+.search-distance-control .mat-form-field-appearance-outline .mat-form-field-outline {
+  background: var(--white) !important;
+}
+.search-distance-control .mat-form-field-wrapper {
+  padding: 0 !important;
 }

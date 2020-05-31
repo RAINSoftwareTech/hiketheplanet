@@ -28,8 +28,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   distancePlaceholder = 'address, neighborhood, city, or ZIP code';
 
   searchTypes = [
+    {name: 'name', displayName: 'Hike name'},
     {name: 'distance', displayName: 'Distance'},
-    {name: 'name', displayName: 'Hike name'}
   ];
 
   distanceOptions = [

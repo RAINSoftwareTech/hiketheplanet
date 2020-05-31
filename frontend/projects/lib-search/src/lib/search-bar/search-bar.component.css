@@ -11,16 +11,20 @@
 
 .search-container {
   position: relative;
-  width: 325px
+  width: 100%;
+}
+.search-input-group {
+  width: 100%;
 }
 .search-input-wrapper {
   position: relative;
+  width: 100%;
 }
 .search-input {
   display: inline-block;
-  width: 250px;
   min-height: 42px;
   margin: 0;
+  width: 100%;
 }
 input.search-input:placeholder-shown {
   text-overflow: ellipsis;
@@ -45,14 +49,16 @@ input.search-input:placeholder-shown {
   margin: 0;
 }
 
-.controls-wrapper mat-form-field {
-  width: 75px !important;
+.search-distance-control mat-form-field {
+  width: 90px !important;
   font-size: 12px;
-  background: var(--white);
 }
 
+.search-distance-control .mat-form-field-appearance-outline .mat-form-field-outline {
+  background: var(--white) !important;
+}
 
-.controls-wrapper .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+.search-distance-control .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
   transform: none;
 }
 

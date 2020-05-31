@@ -1,8 +1,8 @@
-<div class="page-container">
+<div class="app-page-container">
   <app-header [sideNav]="sidenav"></app-header>
 
   <!-- MAIN BODY-->
-  <div class="map-container">
+  <div class="app-main-container">
     <mat-sidenav-container>
 
       <!-- SIDE MENU -->
@@ -11,7 +11,7 @@
       </mat-sidenav>
 
       <!-- MAIN CONTENT -->
-      <mat-sidenav-content role="main" [class.main-container-no-scroll]="isMap">
+      <mat-sidenav-content role="main" [class.app-main-no-scroll]="isMap">
         <router-outlet></router-outlet>
       </mat-sidenav-content>
 
