@@ -1,0 +1,36 @@
+<mat-toolbar class="header-toolbar"
+             role="heading"
+             fxLayout="row" fxLayoutAlign="space-between center"
+             fxLayoutGap="40px" fxLayoutGap.xs="5">
+  <!-- TITLE -->
+  <h1 class="header-title" fxFlex="0 6 225px" fxHide.xs="true">
+    <a routerLink="" aria-label="Go to home page">
+      Hike the Planet
+    </a>
+  </h1>
+
+  <!-- SEARCH BAR -->
+  <search-search-bar fxFlex="1 10 calc(100% - 225px - 110px - 80px)" fxLayoutAlign="center"></search-search-bar>
+
+  <!-- USER DATA/BUTTONS -->
+  <div class="header-user-container" fxFlex="110px">
+    <!-- USERNAME/MENU -->
+    <ng-container *ngIf="user$ | async as user; else loginRegister">
+      <div class="header-user">
+          Hello {{ user.name }}
+      </div>
+      <div class="header-menu-icon-wrapper">
+        <button mat-icon-button (click)="sideNav.toggle()">
+          <mat-icon *ngIf="!sideNav.opened">menu</mat-icon>
+          <mat-icon *ngIf="sideNav.opened">close</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+    <!-- USER LOGIN/REGISTER -->
+    <ng-template #loginRegister>
+      <button mat-button class="header-login-link">
+          Login/Register
+      </button>
+     </ng-template>
+  </div>
+</mat-toolbar>
