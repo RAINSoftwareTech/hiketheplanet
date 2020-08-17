@@ -1,23 +1,33 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
 from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
+
+# Imports from Third Party Modules
 from mock import MagicMock
 
-from hikers.models import Hiker, HikerDiaryEntry
-from hikers.tests.factories import (UserFactory, HikerFactory,
-                                    HikerDiaryEntryFactory)
-from hikers.utils import (deleted_user, deleted_hiker_fallback, get_hiker,
-                          HikerCreateView, HikerUpdateView, HikerDeleteView)
-
+# Local Imports
 from core.utils import setup_view
+
+# Local imports
+from ..models import Hiker, HikerDiaryEntry
+from ..utils import (
+    HikerCreateView,
+    HikerDeleteView,
+    HikerUpdateView,
+    deleted_hiker_fallback,
+    get_hiker,
+    unsubscribed_user,
+)
+from .factories import HikerDiaryEntryFactory, HikerFactory, UserFactory
 
 
 class HikersUtilsTests(TestCase):
 
     def test_deleted_hiker_fallback(self):
-        self.assertEquals(deleted_user,
+        self.assertEquals(unsubscribed_user,
                           deleted_hiker_fallback().hiker.username)
 
     def test_get_hiker(self):

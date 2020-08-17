@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 
-from mock import patch
-
+# Imports from Django
 from django.contrib.auth.models import AnonymousUser, Group
 from django.core.exceptions import PermissionDenied
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django.views.generic import DetailView, TemplateView
 
+# Imports from Third Party Modules
+from mock import patch
+
+# Local Imports
 from core.utils import setup_view
 from hikers.models import Hiker, HikerDiaryEntry
-from hikers.tests.factories import (HikerFactory, HikerDiaryEntryFactory,
-                                    UserFactory)
+from hikers.tests.factories import (
+    HikerDiaryEntryFactory,
+    HikerFactory,
+    UserFactory,
+)
 from hikes.models import Region
 from hikes.tests.factories import RegionFactory
-
-from mixins.permission_mixins import (HikerAccessMixin, ProfileAccessMixin,
-                                      GroupRequiredMixin,
-                                      ObjectOwnershipRequiredMixin)
+from mixins.permission_mixins import (
+    GroupRequiredMixin,
+    HikerAccessMixin,
+    ObjectOwnershipRequiredMixin,
+    ProfileAccessMixin,
+)
 
 
 class PermissionMixinsTests(TestCase):

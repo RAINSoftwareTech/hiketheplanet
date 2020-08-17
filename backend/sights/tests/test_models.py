@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import mock
-
+# Imports from Django
 from django.test import TestCase
 
+# Imports from Third Party Modules
+import mock
+
+# Local Imports
 from hikers.tests.factories import HikerFactory
 
-from sights.models import Sight
-from sights.tests.factories import SightFactory
+# Local imports
+from ..models import Sight
+from .factories import SightFactory
 
 
 class SightModelTests(TestCase):
@@ -16,9 +20,9 @@ class SightModelTests(TestCase):
         sight = SightFactory()
         self.assertIsInstance(sight, Sight)
         self.assertIn(sight.sight_type,
-                      sight.__unicode__())
+                      sight.__str__())
         self.assertIn(sight.hike.name,
-                      sight.__unicode__())
+                      sight.__str__())
 
     @mock.patch('sights.models.deleted_hiker_fallback')
     def test_hike_sight_save(self, mock_deleted_hiker_fallback):

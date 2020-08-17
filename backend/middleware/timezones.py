@@ -1,6 +1,8 @@
-import pytz
-
+# Imports from Django
 from django.utils import timezone
+
+# Imports from Third Party Modules
+import pytz
 
 default_tz_name = 'America/Los_Angeles'
 

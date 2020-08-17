@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import mock
-
+# Imports from Django
 from django.test import TestCase
 
+# Imports from Third Party Modules
+import mock
+
+# Local Imports
 from hikers.tests.factories import HikerFactory
 
-from equipment.models import Equipment
-from equipment.tests.factories import EquipmentFactory
+# Local imports
+from ..models import Equipment
+from .factories import EquipmentFactory
 
 
 class EquipmentModelTests(TestCase):
@@ -18,9 +22,9 @@ class EquipmentModelTests(TestCase):
     def test_equipment_unicode(self):
         self.assertIsInstance(self.equipment, Equipment)
         self.assertIn(self.equipment.recommended_gear,
-                      self.equipment.__unicode__())
+                      self.equipment.__str__())
         self.assertIn(self.equipment.gear_type,
-                      self.equipment.__unicode__())
+                      self.equipment.__str__())
 
     @mock.patch('equipment.models.deleted_hiker_fallback')
     def test_equipment_save(self, mock_deleted_hiker_fallback):

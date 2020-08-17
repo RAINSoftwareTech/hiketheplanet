@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import pytz
-
+# Imports from Django
 from django.contrib.auth.models import AnonymousUser
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
+# Imports from Third Party Modules
+import pytz
 from mock import patch
 
-from hikers.tests.factories import UserFactory, HikerFactory
-from middleware.timezones import TimezoneMiddleware, default_tz_name
+# Local Imports
+from hikers.tests.factories import HikerFactory, UserFactory
+
+# Local imports
+from ..timezones import TimezoneMiddleware, default_tz_name
 
 
 class TimezoneTests(TestCase):

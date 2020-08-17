@@ -1,26 +1,36 @@
 # -*- coding: utf-8 -*-
 
 
-from datetime import datetime
-
-from django.core.exceptions import ValidationError, ImproperlyConfigured
+# Imports from Django
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.db import models
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils.text import slugify
-from mock import MagicMock, patch
+
+# Imports from Third Party Modules
+from datetime import datetime
 from faker import Faker
+from mock import MagicMock, patch
 
-from core.tests.test_models import TestSlugifiedName
-from core.utils import (validate_file_upload_size, get_max_mb,
-                        randomize_filename, user_directory_path,
-                        profile_pics_upload_path, hiker_photos_upload_path,
-                        hike_directory_path, hike_photo_upload_path,
-                        trail_map_upload_path, get_file_attr,
-                        validate_file_has_extension, unique_slugify,
-                        unicode_by_title_hike_or_date, truncate_slug_text)
-
+# Local Imports
 from hikers.tests.factories import HikerFactory
+
+# Local imports
+from ..utils import (
+    get_file_attr,
+    get_max_mb,
+    hiker_photos_upload_path,
+    profile_pics_upload_path,
+    randomize_filename,
+    title_hike_or_date_str,
+    truncate_slug_text,
+    unique_slugify,
+    user_directory_path,
+    validate_file_has_extension,
+    validate_file_upload_size,
+)
+from .test_models import TestSlugifiedName
 
 
 class TestSlugifying(models.Model):
@@ -43,7 +53,7 @@ class CoreUtilsTests(TestCase):
         self.assertEquals(get_file_attr(mock_upload_obj), mock_upload_obj.file)
 
     @patch('core.utils.get_file_attr')
-    @patch('core.utils.get_max_mb')
+    @patch('core.utils.get_max_m')
     def test_validate_file_upload_size(self, mock_max_mb, mock_file_attr):
         mock_upload_obj = MagicMock()
         mock_file = MagicMock()
@@ -115,35 +125,6 @@ class CoreUtilsTests(TestCase):
         self.assertIn('hike_photos',
                       hiker_photos_upload_path('instance', 'filename'))
 
-    def test_hike_directory_path(self):
-        instance = TestSlugifiedName()
-        with self.assertRaises(ImproperlyConfigured):
-            hike_directory_path(instance)
-        instance = MagicMock()
-        instance.hike = MagicMock()
-        instance.hike.slug = 'hike-slug'
-        instance.hike.trailhead = MagicMock()
-        instance.hike.trailhead.slug = 'trailhead-slug'
-        instance.hike.trailhead.region = MagicMock()
-        instance.hike.trailhead.region.slug = 'region-slug'
-        self.assertIn('hikes', hike_directory_path(instance))
-
-    @patch('core.utils.hike_directory_path')
-    @patch('core.utils.randomize_filename')
-    def test_trail_map_upload_path(self, mock_file_name, mock_path):
-        mock_file_name.return_value = 'file-name'
-        mock_path.return_value = 'hike/path'
-        self.assertIn('trail_maps',
-                      trail_map_upload_path('instance', 'filename'))
-
-    @patch('core.utils.hike_directory_path')
-    @patch('core.utils.randomize_filename')
-    def test_hike_photo_upload_path(self, mock_file_name, mock_path):
-        mock_file_name.return_value = 'file-name'
-        mock_path.return_value = 'hike/path'
-        self.assertIn('photos',
-                      hike_photo_upload_path('instance', 'filename'))
-
     def test_unique_slugify(self):
         name = 'Non-unique name'
         slug1 = TestSlugifying.objects.create(name=name)
@@ -165,39 +146,39 @@ class CoreUtilsTests(TestCase):
         class TestBadUnicodeMethod(models.Model):
             foo = models.CharField(max_length=25)
 
-            def __unicode__(self):
-                return unicode_by_title_hike_or_date(self)
+            def __str__(self):
+                return title_hike_or_date_str(self)
 
         obj = TestBadUnicodeMethod(foo='bar')
         with self.assertRaises(ImproperlyConfigured):
-            obj.__unicode__()
+            obj.__str__()
 
         date_fmt = '%Y-%m-%d'
         uni_date = datetime.today().strftime(date_fmt)
         obj = MagicMock()
         obj.title = 'Title'
         obj.hike.name = 'Hike Name'
-        self.assertIn(obj.title, unicode_by_title_hike_or_date(obj))
-        self.assertIn(obj.hike.name, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.title, title_hike_or_date_str(obj))
+        self.assertIn(obj.hike.name, title_hike_or_date_str(obj))
 
         obj.hike = None
         obj.created = datetime.today()
-        self.assertIn(obj.title, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.title, title_hike_or_date_str(obj))
         self.assertIn(obj.created.strftime(date_fmt),
-                      unicode_by_title_hike_or_date(obj))
+                      title_hike_or_date_str(obj))
 
         obj.title = ''
         obj.hike = MagicMock()
         obj.hike.name = 'New Hike Name'
-        self.assertIn(obj.hike.name, unicode_by_title_hike_or_date(obj))
+        self.assertIn(obj.hike.name, title_hike_or_date_str(obj))
         self.assertIn(obj.created.strftime(date_fmt),
-                      unicode_by_title_hike_or_date(obj))
+                      title_hike_or_date_str(obj))
 
         obj.pk = ''
         obj.title = ''
         obj.hike = None
         obj.created = None
-        self.assertIn(uni_date, unicode_by_title_hike_or_date(obj))
+        self.assertIn(uni_date, title_hike_or_date_str(obj))
 
     def test_truncate_slug_text(self):
         fake = Faker()

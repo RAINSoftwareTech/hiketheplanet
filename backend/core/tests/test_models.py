@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
 from django.db import models
-from django.utils.text import slugify
 from django.test import TestCase
+from django.utils.text import slugify
 
-from core.models import AddressBase, SlugifiedNameBase, GeoSlugifiedNameBase
+# Local imports
+from ..models import AddressBase, GeoSlugifiedNameBase, SlugifiedNameBase
 
 
 class AddressModel(AddressBase):
@@ -50,7 +52,7 @@ class CoreModelTests(TestCase):
         self.assertEquals(self.address4.short_address, 'No Address')
 
     def test_short_address_unicode(self):
-        self.assertEquals(self.address.__unicode__(),
+        self.assertEquals(self.address.__str__(),
                           self.address.short_address)
 
     def test_slugify_bases(self):

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
 from django import forms
 from django.db import models
 
+# Imports from Third Party Modules
 from factory import Faker
 
 

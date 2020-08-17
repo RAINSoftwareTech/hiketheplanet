@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from factory.django import DjangoModelFactory
+# Imports from Third Party Modules
 from factory import Faker, SubFactory
-
+from factory.django import DjangoModelFactory
 from random import choice
 
+# Local Imports
 from hikes.tests.factories import HikeFactory
-from sights.models import Sight
+
+# Local imports
+from ..models import Sight
 
 sights = ['0view', '1wildlife', '2flora']
 time_of_day = ['0sunrise', '1morning', '2midday', '3evening',

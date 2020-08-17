@@ -1,20 +1,39 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.models import User
+# Imports from Django
+
+# Imports from Django
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from localflavor.us.models import PhoneNumberField
-from timezones.zones import PRETTY_TIMEZONE_CHOICES
+# Imports from Third Party Modules
+from pytz import common_timezones
 
-from core.models import TimeStampedModel, AddressBase
-from core.utils import (hiker_photos_upload_path, profile_pics_upload_path,
-                        validate_file_upload_size, validate_file_has_extension,
-                        unique_slugify, unicode_by_title_hike_or_date)
+# Local Imports
+from core.models import AddressBase, TimeStampedModel
+from core.utils import (
+    hiker_photos_upload_path,
+    profile_pics_upload_path,
+    title_hike_or_date_str,
+    unique_slugify,
+    validate_file_has_extension,
+    validate_file_upload_size,
+)
 from hikes.models import Hike
+
+TIMEZONES = tuple(zip(common_timezones, common_timezones))
+unsubscribed_user = 'unsubscribed@hiketheplanet'
+User = get_user_model()
+
+
+def SET_UNSUBSCRIBED(collector, field, sub_objs, using):
+    collector.add_field_update(
+        field, Hiker.objects.get(hiker__username=unsubscribed_user), sub_objs
+    )
 
 
 class Hiker(TimeStampedModel):
@@ -28,19 +47,23 @@ class Hiker(TimeStampedModel):
         ('4fit', _('Fit & Active')),
     )
 
-    hiker = models.OneToOneField(User, on_delete=models.CASCADE,
-                                 related_name='hiker')
-    profile_pic = models.ImageField(upload_to=profile_pics_upload_path,
-                                    blank=True,
-                                    validators=[validate_file_upload_size,
-                                                validate_file_has_extension])
-    health_level = models.CharField(max_length=100, default='2average',
-                                    choices=HEALTH_LEVELS)
+    hiker = models.OneToOneField(
+        User, on_delete=models.CASCADE,
+        related_name='hiker'
+    )
+    profile_pic = models.ImageField(
+        upload_to=profile_pics_upload_path, null=True,
+        validators=[validate_file_upload_size, validate_file_has_extension]
+    )
+    health_level = models.CharField(
+        max_length=100, default='2average', choices=HEALTH_LEVELS
+    )
     avg_walking_pace = models.FloatField(default=2.0)
     miles_walked = models.FloatField(default=0.0)
-    timezone = models.CharField(max_length=255,
-                                choices=PRETTY_TIMEZONE_CHOICES,
-                                blank=True, default=b'America/Los_Angeles')
+    timezone = models.CharField(
+        max_length=255, choices=TIMEZONES,
+        blank=True, default='America/Los_Angeles'
+    )
     slug = models.SlugField(unique=True)
 
     class Meta:
@@ -51,7 +74,7 @@ class Hiker(TimeStampedModel):
     #     # total miles hiked since date_joined.
     #     pass
 
-    def __unicode__(self):
+    def __str__(self):
         return self.hiker.username
 
     def get_absolute_url(self):
@@ -59,20 +82,17 @@ class Hiker(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.slug = slugify(self.__unicode__())
-        if not hasattr(self, 'address') and self.pk:
-            HikerAddress.objects.create(hiker=self)
+            self.slug = slugify(self.__str__())
         return super(Hiker, self).save(*args, **kwargs)
 
 
 class HikerAddress(AddressBase):
-    """Optional model to capture hiker address. Defaults to Portland, 97219
-    if hiker chooses not to provide address information.
+    """Optional model to capture hiker address.
     Force cell number if emergency/late alerts (future feature) are desired.
     """
     hiker = models.OneToOneField(Hiker, on_delete=models.CASCADE,
                                  related_name='address')
-    cell_number = PhoneNumberField(null=True, blank=True)
+    cell_number = models.CharField(null=True, max_length=20)
 
     def get_absolute_url(self):
         return reverse('hikers:profile',
@@ -83,13 +103,16 @@ class HikerDiaryEntry(TimeStampedModel):
     """Model for recording diary/blog entries for each hiker.
     Each entry is private unless otherwise checked. both will be deleted on
     account removal."""
-    # Todo: add validation on hike so that it is required if make_public
-    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
-                              related_name='diaries')
-    hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
-                             related_name='diaries_by_hike',
-                             blank=True, null=True)
-    title = models.CharField(max_length=200, blank=True, null=True)
+    hiker = models.ForeignKey(
+        Hiker, on_delete=models.CASCADE,
+        related_name='diaries'
+    )
+    # TODO: add validation on hike so that it is required if make_public
+    hike = models.ForeignKey(
+        Hike, on_delete=models.SET_NULL,
+        related_name='diaries_by_hike', null=True
+    )
+    title = models.CharField(max_length=200, blank=True, default='untitled')
     diary_entry = models.TextField()
 
     make_public = models.BooleanField(default=False)
@@ -98,24 +121,26 @@ class HikerDiaryEntry(TimeStampedModel):
     class Meta:
         ordering = ['-modified']
 
-    def __unicode__(self):
-        return unicode_by_title_hike_or_date(self)
+    def __str__(self):
+        return title_hike_or_date_str(self)
 
     def get_absolute_url(self):
-        # todo: do I want to add a detailview or change return to updateview?
-        return reverse('hikers:diaries',
-                       kwargs={'user_slug': self.hiker.slug})
+        return reverse(
+            'hikers:diaries',
+            kwargs={'user_slug': self.hiker.slug}
+        )
 
     def get_delete_url(self):
         if not self.pk:
             return None
-        return reverse('hikers:diaries_delete',
-                       kwargs={'user_slug': self.hiker.slug,
-                               'diary_slug': self.slug})
+        return reverse(
+            'hikers:diaries_delete',
+            kwargs={'user_slug': self.hiker.slug, 'diary_slug': self.slug}
+        )
 
     def save(self, *args, **kwargs):
         hiker_qs = HikerDiaryEntry.objects.filter(hiker=self.hiker)
-        self.slug = unique_slugify(hiker_qs, self.__unicode__())
+        self.slug = unique_slugify(hiker_qs, self.__str__())
         return super(HikerDiaryEntry, self).save(*args, **kwargs)
 
 
@@ -124,20 +149,26 @@ class HikerPhoto(TimeStampedModel):
     diary. Can be public or private; both will be deleted on account
     removal.
     """
-    # Todo: add validation on hike so that it is required if make_public
-    diary_entry = models.ForeignKey(HikerDiaryEntry,
-                                    related_name='diary_photos',
-                                    null=True, blank=True)
-    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
-                              related_name='hiker_photos')
-    hike = models.ForeignKey(Hike, on_delete=models.SET_NULL,
-                             related_name='hiker_photos_by_hike',
-                             blank=True, null=True)
+    # TODO: add validation on hike so that it is required if make_public
+    diary_entry = models.ForeignKey(
+        HikerDiaryEntry,
+        related_name='diary_photos',
+        null=True, on_delete=models.CASCADE
+    )
+    hiker = models.ForeignKey(
+        Hiker, on_delete=models.CASCADE,
+        related_name='hiker_photos'
+    )
+    hike = models.ForeignKey(
+        Hike, on_delete=models.SET_NULL,
+        related_name='hiker_photos_by_hike', null=True
+    )
 
-    photo = models.ImageField(upload_to=hiker_photos_upload_path, blank=True,
-                              validators=[validate_file_upload_size,
-                                          validate_file_has_extension])
-    title = models.CharField(max_length=100, blank=True, null=True)
+    photo = models.ImageField(
+        upload_to=hiker_photos_upload_path,
+        validators=[validate_file_upload_size, validate_file_has_extension]
+    )
+    title = models.CharField(max_length=100, blank=True, default='untitled')
 
     make_public = models.BooleanField(default=False)
     slug = models.SlugField()
@@ -145,24 +176,27 @@ class HikerPhoto(TimeStampedModel):
     class Meta:
         ordering = ['-modified']
 
-    def __unicode__(self):
-        return unicode_by_title_hike_or_date(self)
+    def __str__(self):
+        return title_hike_or_date_str(self)
 
     def get_absolute_url(self):
-        # todo: do I want to add a detailview or change return to updateview?
-        return reverse('hikers:photos',
-                       kwargs={'user_slug': self.hiker.slug})
+        # todo: can probably get rid of this once serializers are rebuilt
+        return reverse(
+            'hikers:photos',
+            kwargs={'user_slug': self.hiker.slug}
+        )
 
     def get_delete_url(self):
         if not self.pk:
             return None
-        return reverse('hikers:photos_delete',
-                       kwargs={'user_slug': self.hiker.slug,
-                               'photo_slug': self.slug})
+        return reverse(
+            'hikers:photos_delete',
+            kwargs={'user_slug': self.hiker.slug, 'photo_slug': self.slug}
+        )
 
     def save(self, *args, **kwargs):
         hiker_qs = HikerPhoto.objects.filter(hiker=self.hiker)
-        self.slug = unique_slugify(hiker_qs, self.__unicode__())
+        self.slug = unique_slugify(hiker_qs, self.__str__())
         super(HikerPhoto, self).save(*args, **kwargs)
 
 
@@ -170,22 +204,28 @@ class FutureHike(TimeStampedModel):
     """Model for the list of hikes hiker has not yet taken, but might like to.
     Entries to be created/deleted by MyHike save functions.
     """
-    hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
-                             related_name='future_hikes')
-    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
-                              related_name='future_hikes_by_hiker')
+    hike = models.ForeignKey(
+        Hike, on_delete=models.CASCADE,
+        related_name='future_hikes'
+    )
+    hiker = models.ForeignKey(
+        Hiker, on_delete=models.CASCADE,
+        related_name='future_hikes_by_hiker'
+    )
 
     class Meta:
         ordering = ['-created']
         unique_together = ("hike", "hiker")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.hike.name
 
     def get_absolute_url(self):
         # todo: do I wnt to add a separate listview for future hikes
-        return reverse('hikers:myhikes',
-                       kwargs={'user_slug': self.hiker.slug})
+        return reverse(
+            'hikers:myhikes',
+            kwargs={'user_slug': self.hiker.slug}
+        )
 
 
 class MyHike(models.Model):
@@ -201,24 +241,31 @@ class MyHike(models.Model):
         ('6hated', _('Hated It')),
     )
 
-    hike = models.ForeignKey(Hike, on_delete=models.CASCADE,
-                             related_name='my_hikes')
-    hiker = models.ForeignKey(Hiker, on_delete=models.CASCADE,
-                              related_name='my_hikes_by_hiker')
-    last_hiked = models.DateField(blank=True, null=True)
-    rating = models.CharField(max_length=20, choices=RATING_CHOICES,
-                              default='0never')
+    hike = models.ForeignKey(
+        Hike, on_delete=models.CASCADE,
+        related_name='my_hikes'
+    )
+    hiker = models.ForeignKey(
+        Hiker, on_delete=models.CASCADE,
+        related_name='my_hikes_by_hiker'
+    )
+    last_hiked = models.DateField(null=True)
+    rating = models.CharField(
+        max_length=20, choices=RATING_CHOICES, default='0never'
+    )
 
     class Meta:
         ordering = ['rating']
         unique_together = ("hike", "hiker")
 
-    def __unicode__(self):
-        return '{} - {}'.format(self.hike.name, self.rating)
+    def __str__(self):
+        return f'{self.hike.name} - {self.rating}'
 
     def get_absolute_url(self):
-        return reverse('hikers:myhikes',
-                       kwargs={'user_slug': self.hiker.slug})
+        return reverse(
+            'hikers:myhikes',
+            kwargs={'user_slug': self.hiker.slug}
+        )
 
     def update_future_hikes(self):
         """Function to add, update, or delete entries from FutureHikes
@@ -227,14 +274,15 @@ class MyHike(models.Model):
         """
         # Todo: Should future hikes be limited to only never hiked hikes??
         if self.rating == '0never':
-            FutureHike.objects.update_or_create(hike=self.hike,
-                                                hiker=self.hiker,
-                                                defaults={'hike': self.hike,
-                                                          'hiker': self.hiker})
+            FutureHike.objects.update_or_create(
+                hike=self.hike, hiker=self.hiker,
+                defaults={'hike': self.hike, 'hiker': self.hiker}
+            )
         elif FutureHike.objects.filter(hike=self.hike,
                                        hiker=self.hiker).exists():
-            FutureHike.objects.filter(hike=self.hike,
-                                      hiker=self.hiker).delete()
+            FutureHike.objects.filter(
+                hike=self.hike, hiker=self.hiker
+            ).delete()
 
     def last_hiked_validator(self):
         """Function to create a custom validator to enforce required on
@@ -242,12 +290,16 @@ class MyHike(models.Model):
         :return: Validation Error
         """
         if not self.rating == '0never' and not self.last_hiked:
-            raise ValidationError("Don't forget to add an estimated "
-                                  "date for when you last took this hike.")
+            raise ValidationError(
+                "Don't forget to add an estimated "
+                "date for when you last took this hike."
+            )
         elif self.rating == '0never' and self.last_hiked:
-            raise ValidationError("You should not have a date for the last"
-                                  " time you took this hike. Please remove the"
-                                  " date or change your rating.")
+            raise ValidationError(
+                "You should not have a date for the last"
+                " time you took this hike. Please remove the"
+                " date or change your rating."
+            )
 
     def save(self, *args, **kwargs):
         """Overrides default save function to force validation check on

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
 from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse_lazy
 from django.http import Http404
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 
-from hikers.utils import get_hiker
+# Local Imports
 from hikers.models import Hiker
+from hikers.utils import get_hiker
 
 
 class HikerAccessMixin(AccessMixin):

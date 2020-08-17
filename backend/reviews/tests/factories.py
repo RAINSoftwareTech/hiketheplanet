@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from factory.django import DjangoModelFactory
+# Imports from Third Party Modules
 from factory import Faker, SubFactory
+from factory.django import DjangoModelFactory
 
+# Local Imports
 from hikes.tests.factories import HikeFactory
-from reviews.models import HikeReview, HikePhoto
+
+# Local imports
+from ..models import HikePhoto, HikeReview
 
 
 class HikeReviewFactory(DjangoModelFactory):

@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import CreateView, UpdateView, DeleteView
+# Imports from Django
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, UpdateView
 
-from hikers.models import Hiker
-
-deleted_user = 'deleted_user@hiketheplanet'
-
-
-def deleted_hiker_fallback():
-    empty_user, created = User.objects.get_or_create(username=deleted_user)
-    empty_hiker, created = Hiker.objects.get_or_create(
-        hiker=empty_user)
-    return empty_hiker
+# Local imports
+from .models import Hiker
 
 
 def get_hiker(user):

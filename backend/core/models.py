@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
+from django.contrib.gis.db import models as geomodels
 from django.db import models
 from django.utils.text import slugify
-from localflavor.us.us_states import STATE_CHOICES
-from localflavor.us.models import USZipCodeField, USStateField
 
-from django.contrib.gis.db import models as geomodels
+# Imports from Third Party Modules
+from localflavor.us.models import USStateField, USZipCodeField
+from localflavor.us.us_states import STATE_CHOICES
 
 
 class TimeStampedModel(models.Model):
@@ -24,9 +26,9 @@ class AddressBase(models.Model):
     """US addresses base abstract model. """
     address_line1 = models.CharField(blank=True, max_length=50)
     address_line2 = models.CharField(blank=True, max_length=50)
-    zipcode = USZipCodeField(blank=True, default='97219')
-    city = models.CharField(blank=True, max_length=50, default='Portland')
-    state = USStateField(blank=True, choices=STATE_CHOICES, default='OR')
+    zipcode = USZipCodeField(blank=True, default='')
+    city = models.CharField(blank=True, max_length=50, default='')
+    state = USStateField(blank=True, choices=STATE_CHOICES, default='')
 
     class Meta:
         abstract = True
@@ -34,20 +36,19 @@ class AddressBase(models.Model):
     @property
     def short_address(self):
         """Return short version of address"""
-        if self.address_line1 and self.city:
-            address = "{}, {} {}".format(self.address_line1, self.city,
-                                         self.state)
-        elif self.city:
-            address = "{} {}".format(self.city, self.state)
-        elif self.address_line1:
-            address = self.address_line1
-        elif self.zipcode:
+        city_state = ', '.join([
+            elm for elm in (self.city, self.state) if elm]
+        )
+        address = ', '.join([
+            elm for elm in (self.address_line1, city_state) if elm
+        ])
+        if not address and self.zipcode:
             address = self.zipcode
-        else:
+        elif not address:
             address = 'No Address'
         return address
 
-    def __unicode__(self):
+    def __str__(self):
         return self.short_address
 
 

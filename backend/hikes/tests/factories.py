@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from factory.django import DjangoModelFactory
+# Imports from Third Party Modules
 from factory import Faker, SubFactory
-from random import randint, uniform, choice
+from factory.django import DjangoModelFactory
+from random import choice, randint, uniform
 
-from hikes.models import CountryRegion, Region, Trailhead, Hike
-
+# Local imports
+from ..models import Hike, Trailhead
 
 dif_choices = ['0easy', '1moderate', '2difficult']
 type_choices = ['loop', 'out_and_back', 'lollipop', 'point_to_point']
@@ -21,31 +22,11 @@ def rand_longitude():
     return uniform(117.0, 124.0)
 
 
-class CountryRegionFactory(DjangoModelFactory):
-
-    class Meta:
-        model = CountryRegion
-
-    region_name = Faker('word')
-    country_abbrev = 'us'
-
-
-class RegionFactory(DjangoModelFactory):
-
-    class Meta:
-        model = Region
-
-    name = Faker('word')
-    num_trailheads = randint(0, 600)
-    country_region = SubFactory(CountryRegionFactory)
-
-
 class TrailheadFactory(DjangoModelFactory):
 
     class Meta:
         model = Trailhead
 
-    region = SubFactory(RegionFactory)
     name = Faker('word')
     num_hikes = randint(0, 100)
     latitude = rand_latitude()

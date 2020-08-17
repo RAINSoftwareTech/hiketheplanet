@@ -1,3 +1,4 @@
+# Imports from Third Party Modules
 from bs4 import BeautifulSoup
 from urllib2 import urlopen
 
@@ -89,7 +90,7 @@ def write_to_file(filename, dict):
         try:
             print(key)
             f.write("\n{}\t{}".format(key, value))
-        except:
+        except BaseException:
             f.write("\nunicode error")
     f.close()
 

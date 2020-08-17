@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+# Imports from Django
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
+# Imports from Third Party Modules
+from datetime import datetime
+
+# Local Imports
 from hikes.tests.factories import HikeFactory
-from hikers.models import (Hiker, HikerDiaryEntry, HikerPhoto, FutureHike,
-                           MyHike)
-from hikers.tests.factories import (HikerFactory, HikerDiaryEntryFactory,
-                                    HikerPhotoFactory, FutureHikeFactory,
-                                    MyHikeFactory, HikerAddressFactory)
+
+# Local imports
+from ..models import FutureHike, Hiker, HikerDiaryEntry, HikerPhoto, MyHike
+from .factories import (
+    FutureHikeFactory,
+    HikerAddressFactory,
+    HikerDiaryEntryFactory,
+    HikerFactory,
+    HikerPhotoFactory,
+    MyHikeFactory,
+)
 
 
 class HikerModelsTests(TestCase):
@@ -21,57 +31,57 @@ class HikerModelsTests(TestCase):
     def test_hiker_unicode(self):
         self.assertIsInstance(self.test_hiker, Hiker)
         self.assertEquals(self.test_hiker.hiker.username,
-                          self.test_hiker.__unicode__())
+                          self.test_hiker.__str__())
 
     def test_diary_unicode(self):
         date_fmt = '%Y-%m-%d'
         diary0 = HikerDiaryEntryFactory(hike=self.test_hike)
         self.assertIsInstance(diary0, HikerDiaryEntry)
-        self.assertIn(diary0.title, diary0.__unicode__())
-        self.assertIn(diary0.hike.name, diary0.__unicode__())
+        self.assertIn(diary0.title, diary0.__str__())
+        self.assertIn(diary0.hike.name, diary0.__str__())
 
         diary1 = HikerDiaryEntryFactory()
-        self.assertIn(diary1.title, diary1.__unicode__())
-        self.assertIn(diary1.created.strftime(date_fmt), diary1.__unicode__())
+        self.assertIn(diary1.title, diary1.__str__())
+        self.assertIn(diary1.created.strftime(date_fmt), diary1.__str__())
 
         diary2 = HikerDiaryEntryFactory(title='', hike=self.test_hike)
-        self.assertIn(diary2.hike.name, diary2.__unicode__())
-        self.assertIn(diary2.created.strftime(date_fmt), diary2.__unicode__())
+        self.assertIn(diary2.hike.name, diary2.__str__())
+        self.assertIn(diary2.created.strftime(date_fmt), diary2.__str__())
 
         diary3 = HikerDiaryEntryFactory(title='')
         self.assertEquals(diary3.created.strftime(date_fmt),
-                          diary3.__unicode__())
+                          diary3.__str__())
 
     def test_photo_unicode(self):
         date_fmt = '%Y-%m-%d'
         photo0 = HikerPhotoFactory(hike=self.test_hike)
         self.assertIsInstance(photo0, HikerPhoto)
-        self.assertIn(photo0.title, photo0.__unicode__())
-        self.assertIn(photo0.hike.name, photo0.__unicode__())
+        self.assertIn(photo0.title, photo0.__str__())
+        self.assertIn(photo0.hike.name, photo0.__str__())
 
         photo1 = HikerPhotoFactory()
-        self.assertIn(photo1.title, photo1.__unicode__())
-        self.assertIn(photo1.created.strftime(date_fmt), photo1.__unicode__())
+        self.assertIn(photo1.title, photo1.__str__())
+        self.assertIn(photo1.created.strftime(date_fmt), photo1.__str__())
 
         photo2 = HikerPhotoFactory(title='', hike=self.test_hike)
-        self.assertIn(photo2.hike.name, photo2.__unicode__())
-        self.assertIn(photo2.created.strftime(date_fmt), photo2.__unicode__())
+        self.assertIn(photo2.hike.name, photo2.__str__())
+        self.assertIn(photo2.created.strftime(date_fmt), photo2.__str__())
 
         photo3 = HikerPhotoFactory(title='')
-        self.assertIn(photo3.created.strftime(date_fmt), photo3.__unicode__())
+        self.assertIn(photo3.created.strftime(date_fmt), photo3.__str__())
 
     def test_future_hike_unicode(self):
         future_hike = FutureHikeFactory(hike=self.test_hike,
                                         hiker=self.test_hiker)
         self.assertIsInstance(future_hike, FutureHike)
-        self.assertEquals(future_hike.hike.name, future_hike.__unicode__())
+        self.assertEquals(future_hike.hike.name, future_hike.__str__())
 
     def test_my_hike_unicode(self):
         my_hike = MyHikeFactory(hike=self.test_hike, hiker=self.test_hiker,
                                 rating='0never', last_hiked=None)
         self.assertIsInstance(my_hike, MyHike)
-        self.assertIn(my_hike.hike.name, my_hike.__unicode__())
-        self.assertIn(my_hike.rating, my_hike.__unicode__())
+        self.assertIn(my_hike.hike.name, my_hike.__str__())
+        self.assertIn(my_hike.rating, my_hike.__str__())
 
     def test_my_hike_update_future(self):
         FutureHike.objects.all().delete()

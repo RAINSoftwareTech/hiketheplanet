@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from django.test import TestCase, RequestFactory
-from mock import patch, MagicMock
+# Imports from Django
+from django.test import RequestFactory, TestCase
 
-from core.utils import setup_view
-from core.views import FormsetUpdateView
-from mixins.tests.testing_models import (TestParentModel,
-                                         TestChildFormset, TestParentForm)
+# Imports from Third Party Modules
+from mock import MagicMock, patch
+
+# Local Imports
+from mixins.tests.testing_models import (
+    TestChildFormset,
+    TestParentForm,
+    TestParentModel,
+)
+
+# Local imports
+from ..utils import setup_view
+from ..views import FormsetUpdateView
 
 
 class CoreViewsTests(TestCase):

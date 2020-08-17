@@ -1,15 +1,26 @@
 # -*- coding: utf-8 -*-
 
-import datetime
+# Imports from Django
 from django.contrib.auth import get_user_model
 
-from factory.django import DjangoModelFactory
+# Imports from Third Party Modules
+import datetime
 from factory import Faker, SubFactory
-from random import uniform, choice
+from factory.django import DjangoModelFactory
+from random import choice, uniform
 
-from hikers.models import (Hiker, HikerAddress, HikerDiaryEntry, HikerPhoto,
-                           FutureHike, MyHike)
+# Local Imports
 from hikes.tests.factories import HikeFactory
+
+# Local imports
+from ..models import (
+    FutureHike,
+    Hiker,
+    HikerAddress,
+    HikerDiaryEntry,
+    HikerPhoto,
+    MyHike,
+)
 
 User = get_user_model()
 

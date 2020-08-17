@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from factory.django import DjangoModelFactory
+# Imports from Third Party Modules
 from factory import Faker, SubFactory
+from factory.django import DjangoModelFactory
 from random import choice
 
+# Local Imports
 from hikes.tests.factories import HikeFactory
-from equipment.models import Equipment
+
+# Local imports
+from ..models import Equipment
 
 gear_types = ['clothes', 'footware', 'safety']
 gear = choice(gear_types)

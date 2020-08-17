@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import mock
-
+# Imports from Django
 from django.test import TestCase
 
+# Imports from Third Party Modules
+import mock
+
+# Local Imports
 from hikers.tests.factories import HikerFactory
 
-from reviews.models import HikePhoto, HikeReview
-from reviews.tests.factories import HikePhotoFactory, HikeReviewFactory
+# Local imports
+from ..models import HikePhoto, HikeReview
+from .factories import HikePhotoFactory, HikeReviewFactory
 
 
 class ReviewModelTests(TestCase):
@@ -17,9 +21,9 @@ class ReviewModelTests(TestCase):
         review = HikeReviewFactory()
         self.assertIsInstance(review, HikeReview)
         self.assertIn(review.created.strftime(date_fmt),
-                      review.__unicode__())
+                      review.__str__())
         self.assertIn(review.hike.name,
-                      review.__unicode__())
+                      review.__str__())
 
     @mock.patch('reviews.models.deleted_hiker_fallback')
     def test_hike_review_save(self, mock_deleted_hiker_fallback):
@@ -39,9 +43,9 @@ class ReviewModelTests(TestCase):
         photo = HikePhotoFactory()
         self.assertIsInstance(photo, HikePhoto)
         self.assertIn(photo.created.strftime(date_fmt),
-                      photo.__unicode__())
+                      photo.__str__())
         self.assertIn(photo.hike.name,
-                      photo.__unicode__())
+                      photo.__str__())
 
     @mock.patch('reviews.models.deleted_hiker_fallback')
     def test_hike_photo_save(self, mock_deleted_hiker_fallback):

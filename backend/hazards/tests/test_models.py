@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import mock
-
+# Imports from Django
 from django.test import TestCase
 from django.utils import timezone
 
+# Imports from Third Party Modules
+import mock
+
+# Local Imports
 from hikers.tests.factories import HikerFactory
 
-from hazards.models import Hazard
-from hazards.tests.factories import HazardFactory
+# Local imports
+from ..models import Hazard
+from .factories import HazardFactory
 
 
 class HazardsModelTests(TestCase):
@@ -18,9 +22,9 @@ class HazardsModelTests(TestCase):
         hazard = HazardFactory()
         self.assertIsInstance(hazard, Hazard)
         self.assertIn(hazard.created.strftime(date_fmt),
-                      hazard.__unicode__())
+                      hazard.__str__())
         self.assertIn(hazard.hazard_type,
-                      hazard.__unicode__())
+                      hazard.__str__())
 
     @mock.patch('hazards.models.deleted_hiker_fallback')
     def test_hazard_save(self, mock_deleted_hiker_fallback):

@@ -1,79 +1,82 @@
 # -*- coding: utf-8 -*-
 
+# Imports from Django
 from django.conf.urls import url
-from hikes.views import (RegionDetailView, RegionListView, TrailheadDetailView,
-                         HikeDetailView, TrailheadCreateView,
-                         TrailheadUpdateView, HikeCreateView,
-                         HikeUpdateView, HikeHomeRedirectView)
+
+# Local imports
+from .views import (
+    HikeDetailAPIView,
+    HikeListAPIView,
+    SearchByDistance,
+    SearchByHikeName,
+    TrailheadDetailAPIView,
+    TrailheadListAPIView,
+    TrailheadMapListView,
+)
+
+app_name = 'hikes'
 
 urlpatterns = [
     url(
-        r'^(?P<co_region_slug>[-\w\d]+)/regions/add/$',
-        TrailheadCreateView.as_view(),
-        name='region_add'
-        ),
-    url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
-        r'regions/(?P<region_slug>[-\w\d]+)/add/$',
-        TrailheadCreateView.as_view(),
-        name='trailhead_add'
-        ),
-    url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
-        r'regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/edit/$',
-        TrailheadUpdateView.as_view(),
-        name='trailhead_edit'
-        ),
-    url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
-        r'regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/add/$',
-        HikeCreateView.as_view(),
-        name='hike_add'
-        ),
-    url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
-        r'regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
-        r'hikes/(?P<hike_slug>[-\w\d]+)/edit$',
-        HikeUpdateView.as_view(),
-        name='hike_edit'
-        ),
-    url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
+        r'^country_regions/(?P<co_region_slug>[-\w\d]+)/'
         r'regions/(?P<region_slug>[-\w\d]+)/'
         r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
         r'hikes/(?P<hike_slug>[-\w\d]+)/$',
-        HikeDetailView.as_view(),
+        HikeDetailAPIView.as_view(),
         name='hike_detail'
-        ),
+    ),
     url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
+        r'^country_regions/(?P<co_region_slug>[-\w\d]+)/'
         r'regions/(?P<region_slug>[-\w\d]+)/'
-        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/',
-        TrailheadDetailView.as_view(),
+        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/'
+        r'hikes/$',
+        HikeListAPIView.as_view(),
+        name='hike_list'
+    ),
+    url(
+        r'^country_regions/(?P<co_region_slug>[-\w\d]+)/'
+        r'regions/(?P<region_slug>[-\w\d]+)/'
+        r'trailheads/(?P<trailhead_slug>[-\w\d]+)/$',
+        TrailheadDetailAPIView.as_view(),
         name='trailhead_detail'
-        ),
+    ),
     url(
-        r'^(?P<co_region_slug>[-\w\d]+)/'
-        r'regions/(?P<region_slug>[-\w\d]+)/',
-        RegionDetailView.as_view(),
-        name='region_detail'
-        ),
+        r'^country_regions/(?P<co_region_slug>[-\w\d]+)/'
+        r'regions/(?P<region_slug>[-\w\d]+)/'
+        r'trailheads/$',
+        TrailheadListAPIView.as_view(),
+        name='trailhead_list'
+    ),
     url(
-        r'^(?P<co_region_slug>[-\w\d]+)/regions/$',
-        RegionListView.as_view(template_name='hikes/regions_index.html'),
-        name='region_list'
-        ),
+        r'^distance/(?P<co_region_slug>[\w|\W]+)/(?P<region_slug>[\w|\W]+)/$',
+        SearchByDistance.as_view(),
+        name='by_distance_region'),
     url(
-        r'^(?P<co_region_slug>[-\w\d]+)/$',
-        RegionListView.as_view(),
-        name='broad_region_home'
-        ),
+        r'^distance/(?P<co_region_slug>[\w|\W]+)/$',
+        SearchByDistance.as_view(),
+        name='by_distance_broad_region'),
+    url(
+        r'^distance/$',
+        SearchByDistance.as_view(),
+        name='by_distance'),
+    url(
+        r'^maps/(?P<co_region_slug>[\w|\W]+)/(?P<region_slug>[\w|\W]+)/$',
+        TrailheadMapListView.as_view(),
+        name='by_map'
+    ),
+    url(
+        r'^(?P<co_region_slug>[\w|\W]+)/(?P<region_slug>[\w|\W]+)/$',
+        SearchByHikeName.as_view(),
+        name='by_name_region'
+    ),
+    url(
+        r'^(?P<co_region_slug>[\w|\W]+)/$',
+        SearchByHikeName.as_view(),
+        name='by_name_broad_region'
+    ),
     url(
         r'^$',
-        HikeHomeRedirectView.as_view(),
-        name='home'
-        ),
+        SearchByHikeName.as_view(),
+        name='by_name'
+    ),
 ]

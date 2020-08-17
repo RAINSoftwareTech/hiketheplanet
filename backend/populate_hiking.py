@@ -1,5 +1,8 @@
-import os
+# Imports from Django
 import django
+
+# Imports from Third Party Modules
+import os
 
 
 def populate():
@@ -3531,10 +3534,13 @@ def contrib_group(apps):
 
 if __name__ == '__main__':
     print('Starting Hike the World Population script...')
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Hiking.settings.dev')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
     django.setup()
-    from hikes.models import Region, Trailhead, Hike
+    # Imports from Django
     from django.apps import apps
+
+    # Local Imports
+    from hikes.models import Hike, Region, Trailhead
     populate()
     contrib_group(apps)
     print('Regions: {}'.format(Region.objects.all().count()))
