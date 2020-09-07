@@ -1,101 +1,45 @@
 # -*- coding: utf-8 -*-
 # Imports from Django
-from django.views.generic import ListView
 
 # Imports from Third Party Modules
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 # Local imports
-from .models import Hike, Trailhead
+from .models import Trailhead, Hike
 from .serializers import (
-    HikeDetailSerializer,
-    HikeSerializer,
-    TrailheadDetailSerializer,
-    TrailheadSerializer,
-    hikes_serializer,
-    trailheads_serializer,
+    TrailheadGeoSerializer,
+    HikeSerializer
 )
-from .utils import (
-    get_hike_queryset,
-    get_trailhead_queryset,
-    trailheads_as_the_crow_flies,
-)
+from .filtersets import TrailheadFilterSet
+from core.permissions import IsAuthorizedContributorOrReadOnly
+from .search import hike_name_autocomplete, google_autocomplete
+from core.utils import get_key_from_request
 
 
-class TrailheadListAPIView(ListCreateAPIView):
+class TrailheadsViewSet(ReadOnlyModelViewSet):
     queryset = Trailhead.objects.all()
-    serializer_class = TrailheadSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-    def get_queryset(self):
-        return get_trailhead_queryset(self.kwargs)
-
-
-class TrailheadDetailAPIView(RetrieveUpdateAPIView):
-    queryset = Trailhead.objects.all()
-    serializer_class = TrailheadDetailSerializer
     lookup_field = 'slug'
-    lookup_url_kwarg = 'trailhead_slug'
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+    serializer_class = TrailheadGeoSerializer
+    filterset_class = TrailheadFilterSet
 
-    def get_queryset(self):
-        return get_trailhead_queryset(self.kwargs)
+    @action(methods=['GET'], detail=False)
+    def name_autocomplete(self, request, *args, **kwargs):
+        search_text = get_key_from_request(request, 'search_text')
+        names = hike_name_autocomplete(search_text)
+        return Response(names, status=status.HTTP_200_OK)
+
+    @action(methods=['GET'], detail=False)
+    def location_autocomplete(self, request, *args, **kwargs):
+        search_query = self.request.query_params.dict() or self.request.data
+        suggestions = google_autocomplete(**search_query)
+        return Response(suggestions, status.HTTP_200_OK)
 
 
-class HikeListAPIView(ListCreateAPIView):
+class HikesViewSet(ModelViewSet):
     queryset = Hike.objects.all()
+    lookup_field = 'slug'
     serializer_class = HikeSerializer
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-    def get_queryset(self):
-        return get_hike_queryset(self.kwargs)
-
-
-class HikeDetailAPIView(RetrieveUpdateAPIView):
-    queryset = Hike.objects.all()
-    serializer_class = HikeDetailSerializer
-    lookup_field = 'slug'
-    lookup_url_kwarg = 'hike_slug'
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-    def get_queryset(self):
-        return get_hike_queryset(self.kwargs)
-
-
-class TrailheadMapListView(ListView):
-    """View to supply list of trailheads to maps modal ajax call.
-    """
-    model = Trailhead
-    template_name = 'search/search_list.html'
-    context_object_name = 'trailheads'
-
-    def get_queryset(self):
-        trailheads = get_trailhead_queryset(self.kwargs)
-        return trailheads_serializer(trailheads)
-
-
-class SearchByHikeName(ListView):
-    model = Hike
-    template_name = 'search/search_list.html'
-
-    def get_queryset(self):
-        hikes = get_hike_queryset(self.kwargs)
-        search_text = self.request.GET.get('search_text', '')
-        hikes = hikes.filter(name__icontains=search_text).order_by('name')
-        return hikes_serializer(hikes)
-
-
-class SearchByDistance(ListView):
-    model = Hike
-    template_name = 'search/search_list.html'
-
-    def get_queryset(self):
-        search_text = self.request.GET.get('search_text', '9_97219')
-        max_distance, starting_zip = search_text.split('_')
-        crow_flies = trailheads_as_the_crow_flies(
-            max_distance, starting_zip, self.kwargs)
-        hike_list = []
-        for trailhead in crow_flies:
-            hike_list += trailhead.hikes.all()
-        return hikes_serializer(hike_list)
+    permission_classes = (IsAuthorizedContributorOrReadOnly,)

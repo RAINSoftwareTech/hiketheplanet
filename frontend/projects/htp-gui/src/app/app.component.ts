@@ -16,7 +16,7 @@ export class AppComponent {
   title = 'htp-gui';
   isMap: boolean;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,) {
       this.isMap = router.isActive('', true);
   }
 }

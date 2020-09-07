@@ -4,26 +4,26 @@ All rights reserved
 ..codeauthor::Fable Turas <fable@rainsoftware.tech>
 
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { debounceTime, filter, switchMap } from 'rxjs/operators';
 import * as uuid from 'uuid';
 
-import { AutocompleteSuggestion, SearchService, SearchType } from '../search.service';
+import { TrailheadListService } from 'lib-hikes';
+
+import { AutocompleteService, AutocompleteSuggestion } from '../autocomplete.service';
 
 @Component({
   selector: 'search-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css']
 })
-export class SearchBarComponent implements OnInit, OnDestroy {
+export class SearchBarComponent implements OnInit {
   searchForm: FormGroup;
   sessionToken = uuid.v4();
-  addrSuggestions$: Observable<AutocompleteSuggestion[]>;
-  searchSubscription: Subscription;
+  autoSuggestions$: Observable<AutocompleteSuggestion[]>;
   placeholderText: string;
   distancePlaceholder = 'address, neighborhood, city, or ZIP code';
 
@@ -39,7 +39,9 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     {name: 50, displayName: '50 miles'},
   ];
 
-  constructor(private search: SearchService, private formBuilder: FormBuilder) { }
+  constructor(private autocomplete: AutocompleteService,
+              private formBuilder: FormBuilder,
+              private trailheads: TrailheadListService) { }
 
   ngOnInit() {
     this.placeholderText = this.distancePlaceholder;
@@ -49,10 +51,13 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       distance: [25],
     });
 
-    this.addrSuggestions$ = this.searchForm
+    this.autoSuggestions$ = this.searchForm
         .get('searchControl')
         .valueChanges
         .pipe(
+          filter(value => {
+            return typeof value === 'string' && value.length > 2;
+          }),
           debounceTime(300),
           switchMap(value => this.populateAutoComplete(value, this.sessionToken))
         );
@@ -72,13 +77,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   populateAutoComplete(search: string, sessionToken: string) {
     search = search ? search : '';
-    return this.search.getSuggestions(search, this.searchForm.get('searchType').value, sessionToken);
-  }
-
-  ngOnDestroy(): void {
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
-    }
+    return this.autocomplete.getSuggestions(search, this.searchForm.get('searchType').value, sessionToken);
   }
 
   displayFn(suggestion: AutocompleteSuggestion) {
@@ -86,7 +85,22 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
-    console.log('search')
+    const searchType = this.searchForm.get('searchType').value;
+    const searchCtrl = this.searchForm.get('searchControl').value;
+    const searchText = typeof searchCtrl === 'string' ? searchCtrl : searchCtrl.description;
+    const searchOptions: any = {
+      session_token: this.sessionToken,
+      placeid: typeof searchCtrl === 'string' ? null : searchCtrl.placeid ? searchCtrl.placeid : null,
+      source:typeof searchCtrl === 'string' ? 'user' : searchCtrl.source ? searchCtrl.source : null,
+    }
+    if (searchType === 'name') {
+      searchOptions.name = searchText;
+    } else {
+      searchOptions.location = searchText;
+      searchOptions.miles = this.searchForm.get('distance').value;
+    }
+    this.trailheads.search(searchOptions, searchType)
+    this.sessionToken = uuid.v4();
   }
 
 }

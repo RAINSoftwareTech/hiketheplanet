@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LibApiClientsService } from './lib-api-clients.service';
+import { HtpClient } from './htp.client';
 
-describe('LibApiClientsService', () => {
+describe('HtpClient', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LibApiClientsService = TestBed.get(LibApiClientsService);
+    const service: HtpClient = TestBed.get(HtpClient);
     expect(service).toBeTruthy();
   });
 });

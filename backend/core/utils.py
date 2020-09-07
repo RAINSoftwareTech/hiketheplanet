@@ -167,3 +167,19 @@ def truncate_slug_text(slug_text, parts_char='-'):
     # simple truncation of beginning up to remaining max characters
     new_slug_text.insert(0, slug_parts[0][:slug_max])
     return '-'.join(new_slug_text)
+
+
+def get_key_from_request(request, key, default=None):
+    """Get value for key from request query string or json."""
+    query = request.query_params.dict() if request else {}
+    data = request.data if request and request.data else {}
+    value = query.get(key, default)
+    value = (
+        value if value is not None and value != default
+        else data.get(key, default)
+    )
+    if value == 'undefined' or value is None:
+        value = default
+    if isinstance(value, str) and value.lower() in ['true', 'false']:
+        value = value.lower() == 'true'
+    return value

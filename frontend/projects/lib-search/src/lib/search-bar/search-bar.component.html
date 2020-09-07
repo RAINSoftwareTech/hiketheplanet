@@ -27,7 +27,7 @@
       </mat-radio-group>
     </div>
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSearch()">
-      <mat-option *ngFor="let suggestion of (addrSuggestions$ | async)" [value]="suggestion">
+      <mat-option *ngFor="let suggestion of (autoSuggestions$ | async)" [value]="suggestion">
         {{ suggestion.description }}
       </mat-option>
     </mat-autocomplete>

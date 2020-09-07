@@ -1,14 +1,15 @@
 # Imports from Django
 from django.conf import settings
-from django.conf.urls import include, url
-from django.conf.urls.static import static
+from django.urls import include, path
+from .views import EndpointsAPIView
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     # url(r'^hikers/', include('hikers.urls', namespace='hikers')),
-    url(r'', include('hikes.urls', namespace='hikes')),
+    path('endpoints/', EndpointsAPIView.as_view(), name='endpoints'),
+    path('', include('hikes.urls')),
 ]
 
-dev_patterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += dev_patterns
+    urlpatterns += [path('docs/', include_docs_urls('HTP API Docs'))]
