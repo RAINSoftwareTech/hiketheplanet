@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { LibStorageComponent } from './lib-storage.component';
 
 
 
 @NgModule({
-  declarations: [LibStorageComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [LibStorageComponent]
+  exports: []
 })
 export class LibStorageModule { }
