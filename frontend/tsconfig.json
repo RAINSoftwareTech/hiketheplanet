@@ -66,6 +66,10 @@
       ],
       "lib-search/*": [
         "dist/lib-search/*"
+      ],
+      "lib-storage": [
+        "dist/lib-storage/lib-storage",
+        "dist/lib-storage"
       ]
     }
   },

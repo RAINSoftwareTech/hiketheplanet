@@ -9,6 +9,8 @@ import { Inject, Injectable } from '@angular/core';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import { Subject } from 'rxjs';
 
+import { EmptyFeatureCollection } from 'lib-hikes';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +21,7 @@ export class MapService {
   styleLink = 'mapbox://styles/mapbox/outdoors-v11';
   lat = 45.5051064;
   lng = -122.6750261;
+  markerColor = '#216629';
 
   constructor(@Inject('environment') private env) {
     mapboxgl.accessToken = this.env.mapboxToken;
@@ -42,14 +45,12 @@ export class MapService {
         center: [this.lng, this.lat]
     });
     this.map.addControl(new mapboxgl.NavigationControl());
+    this.buildMap();
   }
 
   buildMap() {
     const map = this.map;
-    const initData = {
-      type: 'FeatureCollection',
-      features: []
-    };
+    const initData = EmptyFeatureCollection;
     map.on('load', () => {
       map.addSource('htp', {
         type: 'geojson',
@@ -57,9 +58,65 @@ export class MapService {
         cluster: true,
         clusterRadius: 20,
         clusterMaxZoom: 12,
-      //  TODO: add clusterProperties
+      //  TODO: add clusterProperties?
       });
-    //  TODO: add layers
+    this.addDataLayers();
+    })
+  }
+
+  addDataLayers() {
+    this.map.addLayer({
+      id: 'cluster',
+      type: 'circle',
+      source: 'htp',
+      filter: ['has', 'point_count'],
+      paint: {
+        'circle-color': this.markerColor,
+        'circle-radius': [
+          'step',
+          ['get', 'point_count'],
+          10,
+          100,
+          15,
+          750,
+          20
+        ],
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 1
+      }
+    });
+    this.map.addLayer({
+      id: 'cluster-count',
+      type: 'symbol',
+      source: 'htp',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': '{point_count_abbreviated}',
+        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+        'text-size': 12,
+        'text-allow-overlap': true,
+      },
+      paint: {
+        'text-color': '#fff'
+      }
+    });
+    this.map.addLayer({
+      id: 'single-point',
+      source: 'htp',
+      filter: ['!', ['has', 'point_count']],
+      type: 'circle',
+      paint: {
+        'circle-radius': {
+          base: 7,
+          stops: [
+            [2, 9],
+            [13, 7]
+          ]
+        },
+        'circle-color': this.markerColor,
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 1
+      }
     })
   }
 

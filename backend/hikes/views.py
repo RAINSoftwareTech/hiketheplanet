@@ -20,7 +20,7 @@ from core.utils import get_key_from_request
 
 
 class TrailheadsViewSet(ReadOnlyModelViewSet):
-    queryset = Trailhead.objects.all()
+    queryset = Trailhead.objects.filter(hikes__isnull=False)
     lookup_field = 'slug'
     serializer_class = TrailheadGeoSerializer
     filterset_class = TrailheadFilterSet

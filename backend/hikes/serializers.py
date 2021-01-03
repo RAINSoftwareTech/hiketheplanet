@@ -3,12 +3,15 @@
 import json
 from collections import OrderedDict
 from rest_framework import serializers
-from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeoFeatureModelListSerializer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 # Local imports
 from .models import Hike, Trailhead
 
 
-class BBoxGeoFeatureModelListSerializer(GeoFeatureModelListSerializer):
+class BBoxGeoFeatureModelListSerializer(serializers.ListSerializer):
+    @property
+    def data(self):
+        return super(serializers.ListSerializer, self).data
 
     def to_representation(self, data):
         """

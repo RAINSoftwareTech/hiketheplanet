@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { debounceTime, filter, switchMap } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 import { TrailheadListService } from 'lib-hikes';
 
@@ -22,7 +22,7 @@ import { AutocompleteService, AutocompleteSuggestion } from '../autocomplete.ser
 })
 export class SearchBarComponent implements OnInit {
   searchForm: FormGroup;
-  sessionToken = uuid.v4();
+  sessionToken = uuidv4();
   autoSuggestions$: Observable<AutocompleteSuggestion[]>;
   placeholderText: string;
   distancePlaceholder = 'address, neighborhood, city, or ZIP code';
@@ -100,7 +100,7 @@ export class SearchBarComponent implements OnInit {
       searchOptions.miles = this.searchForm.get('distance').value;
     }
     this.trailheads.search(searchOptions, searchType)
-    this.sessionToken = uuid.v4();
+    this.sessionToken = uuidv4();
   }
 
 }

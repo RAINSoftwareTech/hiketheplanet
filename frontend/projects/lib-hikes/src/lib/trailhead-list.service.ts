@@ -19,7 +19,9 @@ export class TrailheadListService {
   private trailheadResults = new Subject<any>();
   private searchLoading = new Subject<any>();
 
-  constructor(private htp: HtpClient, @Inject('environment') private env, private router: Router) { }
+  constructor(@Inject('environment') private env,
+              private router: Router,
+              private htp: HtpClient,) { }
 
   private _getViewPortHash(viewport): string {
     const coords = [viewport.southwest.lng, viewport.southwest.lat, viewport.northeast.lng, viewport.northeast.lat];
@@ -54,7 +56,6 @@ export class TrailheadListService {
     this._routeToMap();
     this.htp.get(this.env.baseUrls.search, searchOptions).pipe(
       tap(hikes => {
-        console.log(hikes, 'search results')
         if (hikes) {
           this.trailheadResults.next(hikes);
         }
@@ -65,6 +66,7 @@ export class TrailheadListService {
 
   getTrailheads() {
     // TODO: check for hikes:latest cache
+    this.cache
     return this.trailheadResults.asObservable();
   }
 

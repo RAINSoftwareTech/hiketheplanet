@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="hike-minimal.component.css">
+<mat-divider></mat-divider>
+<mat-list-item class="hikes-hike-min-container">
+  <a [routerLink]="['/hikes', hike.slug]">
+    <div matLine class="hikes-hike-min-name accent-color">
+      {{hike.name}}
+    </div>
+    <div matLine class="hikes-hike-min-details">
+      {{hike.difficulty}} {{hike.distance}} mile {{hike.hike_type.toLowerCase()}} hike with
+      {{hike.elevation}} ft. elevation
+    </div>
+  </a>
+  <button mat-icon-button class="hikes-hike-min-fav-button">
+    <mat-icon color="accent">favorite_border</mat-icon>
+  </button>
+</mat-list-item>

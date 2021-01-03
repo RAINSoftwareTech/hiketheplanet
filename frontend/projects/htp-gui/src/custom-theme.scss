@@ -55,7 +55,7 @@ $primary-darker-hover: rgba(8, 68, 16, .5);
 // Secondary color variables
 $accent-lighter: #FCD680;
 $accent-main: #FE9917;
-$accent-darker: #CB7301;
+$accent-darker: #AC6101;
 $accent-hover: rgba(254, 153, 23, .5);
 
 // Warning color variables
@@ -127,11 +127,11 @@ $htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn
   --primary-dark: #{$primary-dark};
   --primary-darker: #{$primary-darker};
   --primary-darker-hover: #{$primary-darker-hover};
-  --secondary-lighter: #{$accent-lighter};
+  --accent-lighter: #{$accent-lighter};
   --accent-hover: #{$accent-hover};
-  --secondary-light: #FFD167;
-  --secondary-medium: #{$accent-main};
-  --secondary-dark: #{$accent-darker};
+  --accent-light: #FFD167;
+  --accent-medium: #{$accent-main};
+  --accent-dark: #{$accent-darker};
 
   --light-text: #{$light-text};
   --dark-text: #{$dark-primary-text};
@@ -160,5 +160,12 @@ $htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn
   background: var(--white) !important;
 }
 .search-distance-control .mat-form-field-wrapper {
+  padding: 0 !important;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.mat-list-item-content {
   padding: 0 !important;
 }

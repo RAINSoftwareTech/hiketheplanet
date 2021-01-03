@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 
 import { VendorsModule } from 'vendors';
 
@@ -7,6 +9,7 @@ import { HikeComponent } from './hike/hike.component';
 import { LibHikesComponent } from './lib-hikes.component';
 import { TrailheadListComponent } from './trailhead-list/trailhead-list.component';
 import { TrailheadComponent } from './trailhead/trailhead.component';
+import { HikeMinimalComponent } from './hike-minimal/hike-minimal.component';
 
 
 
@@ -15,11 +18,14 @@ import { TrailheadComponent } from './trailhead/trailhead.component';
     LibHikesComponent,
     TrailheadComponent,
     HikeComponent,
-    TrailheadListComponent
+    TrailheadListComponent,
+    HikeMinimalComponent
   ],
   imports: [
     CommonModule,
-    VendorsModule
+    VendorsModule,
+    RouterModule,
+    BrowserModule
   ],
   exports: [LibHikesComponent, TrailheadListComponent]
 })

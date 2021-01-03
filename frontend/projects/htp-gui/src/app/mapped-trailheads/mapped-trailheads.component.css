@@ -7,6 +7,6 @@
 .mapped-trailheads-sidebar {
   background: var(--gray-light-ultra);
   box-shadow: -1px 1px 2px 0 var(--gray-light);
-  width: 300px;
+  width: 375px;
   height: 100%
 }

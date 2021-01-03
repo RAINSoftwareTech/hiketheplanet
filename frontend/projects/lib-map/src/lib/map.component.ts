@@ -14,9 +14,7 @@ import { MapService} from './map.service';
 
 @Component({
   selector: 'map-component',
-  template: `
-    <div class="map" id="map"></div>
-  `,
+  template: `<div class="map" id="map"></div>`,
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit, OnDestroy {
