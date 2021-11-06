@@ -2,10 +2,6 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/lib-map",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "mapbox-gl/dist/mapbox-gl": "mapbox-gl",
-      "lib-hikes": "lib-hikes"
-    }
+    "entryFile": "src/public-api.ts"
   }
 }
