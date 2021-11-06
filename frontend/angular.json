@@ -45,7 +45,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -150,7 +149,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/vendors/tsconfig.lib.json",
             "project": "projects/vendors/ng-package.json"
@@ -185,7 +184,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-tools/tsconfig.lib.json",
             "project": "projects/lib-tools/ng-package.json"
@@ -220,7 +219,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-api-clients/tsconfig.lib.json",
             "project": "projects/lib-api-clients/ng-package.json"
@@ -255,7 +254,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-alerts/tsconfig.lib.json",
             "project": "projects/lib-alerts/ng-package.json"
@@ -290,7 +289,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-users/tsconfig.lib.json",
             "project": "projects/lib-users/ng-package.json"
@@ -325,7 +324,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-map/tsconfig.lib.json",
             "project": "projects/lib-map/ng-package.json"
@@ -360,7 +359,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-hikes/tsconfig.lib.json",
             "project": "projects/lib-hikes/ng-package.json"
@@ -395,7 +394,7 @@
       "prefix": "search",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/lib-search/tsconfig.lib.json",
             "project": "projects/lib-search/ng-package.json"
