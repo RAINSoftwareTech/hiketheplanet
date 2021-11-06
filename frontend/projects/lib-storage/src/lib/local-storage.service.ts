@@ -21,29 +21,33 @@ export class LocalStorageService {
 
   constructor() { }
 
-  set(key: string, value: any): Observable<any> {
+  public set<T>(key: string, value: T): Observable<T> {
     if (value !== null && value !== undefined) {
       return from(localforage.setItem(key, value));
     }
   }
 
-  get(key: string): Observable<any> {
-    return from(localforage.getItem(key));
+  public get<T>(key: string): Observable<T> {
+    return (from(localforage.getItem(key)) as Observable<T>);
   }
 
-  remove(key: string): Observable<void> {
+  public remove(key: string): Observable<void> {
     return from(localforage.removeItem(key));
   }
 
-  clear(): Observable<void> {
+  public clear(): Observable<void> {
     return from(localforage.clear());
   }
 
-  has(key: string): boolean {
+  public has(key: string): boolean {
     localforage.keys()
       .then(keys => {
         return keys && keys.includes(key);
       });
     return false;
+  }
+
+  public keys(): Observable<string[]> {
+    return from(localforage.keys());
   }
 }

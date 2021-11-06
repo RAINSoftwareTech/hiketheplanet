@@ -4,25 +4,13 @@ All rights reserved
 ..codeauthor::Fable Turas <fable@rainsoftware.tech>
 
  */
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-interface RequestPayload {
-      body?: any;
-      headers?: HttpHeaders | {
-          [header: string]: string | string[];
-      };
-      params?: HttpParams | {
-          [param: string]: string | string[];
-      };
-      reportProgress?: boolean;
-      responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
-      withCredentials?: boolean;
-      observe?: string;
-}
+import { ApiToolsService } from './api-tools.service';
 
 export interface BaseUrls {
   location_autocomplete: string;
@@ -34,51 +22,18 @@ export interface BaseUrls {
   providedIn: 'root'
 })
 export class HtpClient {
+  baseUrl: string;
 
-  constructor(private http: HttpClient,
+  constructor(@Inject('environment') private env,
               // private errors: HttpErrorService,
-              @Inject('environment') private env) { }
-
-  private _constructUrl(urlPath: string): string {
-      let url = this.env.baseAPIURL;
-      url = url.trim();
-      if (urlPath) {
-          if (urlPath.startsWith('http')) {
-              url = urlPath.trim();
-          } else {
-              urlPath = urlPath.trim();
-              if (!url.endsWith('/')) {
-                  url = url.concat('/');
-              }
-              if (urlPath.startsWith('/')) {
-                  urlPath = urlPath.substr(1);
-              }
-              url = url.concat(urlPath);
-          }
-      }
-      return url;
-  }
-
-  private _construct_payload(body?: object, queryParams?: object): RequestPayload {
-      const payload: RequestPayload = {
-          responseType: 'json'
-      };
-      if (body) {
-          payload.body = body;
-      }
-      if (queryParams) {
-          let httpParams = new HttpParams();
-          Object.keys(queryParams).forEach(key => {
-              httpParams = httpParams.append(key, queryParams[key]);
-          });
-          payload.params = httpParams;
-      }
-      return payload;
+              private http: HttpClient,
+              private apiTools: ApiToolsService) {
+    this.baseUrl = this.env.baseAPIURL;
   }
 
   private _callHTP<T>(method: string, urlPath: string, payload: object,
                       errorHandler?: (errorResponse: HttpErrorResponse) => Observable<never> | null): Observable<T> {
-    const url = this._constructUrl(urlPath);
+    const url = this.apiTools.constructUrl(this.baseUrl, urlPath);
 
     function tempErrorHandler() {
         return EMPTY;
@@ -93,7 +48,7 @@ export class HtpClient {
   }
 
   get<T>(urlPath: string, queryParams?: {}, errorHandler?): Observable<T> {
-    const payload = this._construct_payload(null, queryParams);
+    const payload = this.apiTools.constructPayload(null, queryParams);
     return this._callHTP<T>('GET', urlPath, payload, errorHandler);
   }
 
