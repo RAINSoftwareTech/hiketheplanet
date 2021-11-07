@@ -1,0 +1,31 @@
+.header-toolbar {
+  background-color: var(--primary-medium);
+  margin: 0;
+  border: 0;
+  overflow: hidden;
+  vertical-align: middle;
+  height: var(--header-height);
+  z-index: 2;
+  width: 100vw;
+  box-shadow: 0 1px 2px 0 var(--gray-light);
+}
+
+.header-toolbar h1, .header-toolbar h1 a, .header-toolbar h1 a:visited, .header-toolbar h1 a:active {
+  color: var(--light-text);
+  text-decoration: none;
+  font-family: 'Architects Daughter', cursive;
+}
+.header-toolbar h1 a:hover, .header-toolbar h1 a:focus {
+  color: var(--primary-lightest);
+}
+
+.header-toolbar h1 {
+  font-size: 24pt;
+}
+
+button.header-login-link {
+  color: var(--dark-text);
+  padding: 10px;
+  background-color: var(--primary-lightest);
+}
+

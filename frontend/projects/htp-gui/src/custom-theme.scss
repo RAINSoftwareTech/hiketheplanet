@@ -1,0 +1,170 @@
+// Custom Theming for Angular Material
+@use '@angular/material' as mat;
+// For more information: https://material.angular.io/guide/theming
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Fonts
+@import url('http://fonts.googleapis.com/css?family=Gudea:300,400,500,600,800');
+
+$fontConfig: (
+  display-4: mat.define-typography-level(112px, 112px, 300, 'Gudea', -0.0134em),
+  display-3: mat.define-typography-level(56px, 56px, 400, 'Gudea', -0.0089em),
+  display-2: mat.define-typography-level(45px, 48px, 400, 'Gudea', 0.0000em),
+  display-1: mat.define-typography-level(34px, 40px, 400, 'Gudea', 0.0074em),
+  headline: mat.define-typography-level(24px, 32px, 400, 'Gudea', 0.0000em),
+  title: mat.define-typography-level(20px, 32px, 600, 'Gudea', 0.0075em),
+  subheading-2: mat.define-typography-level(16px, 28px, 400, 'Gudea', 0.0094em),
+  subheading-1: mat.define-typography-level(15px, 24px, 600, 'Gudea', 0.0067em),
+  body-2: mat.define-typography-level(14px, 24px, 600, 'Gudea', 0.0179em),
+  body-1: mat.define-typography-level(14px, 20px, 400, 'Gudea', 0.0179em),
+  button: mat.define-typography-level(14px, 14px, 500, 'Gudea', 0.0893em),
+  caption: mat.define-typography-level(12px, 20px, 400, 'Gudea', 0.0333em),
+  input: mat.define-typography-level(inherit, 1.125, 400, 'Gudea', 1.5px)
+);
+
+// Compute font config
+@include mat.core($fontConfig);
+
+// Text variables
+$light-text: #ffffff;
+$light-primary-text: $light-text;
+$light-accent-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+$dark-primary-text: #052E0B;
+$dark-text: #000;
+
+// Primary color variables
+$primary-main: #216629;
+
+$primary-lightest: #CCEB8A;
+$primary-lighter: #59B364;
+$primary: #216629;
+$primary-dark: #0E5D16;
+$primary-darker: #084410;
+$primary-hover: rgba(33, 102, 41, .5);
+$primary-darker-hover: rgba(8, 68, 16, .5);
+
+// Secondary color variables
+$accent-lighter: #FCD680;
+$accent-main: #FE9917;
+$accent-darker: #AC6101;
+$accent-hover: rgba(254, 153, 23, .5);
+
+// Warning color variables
+$warn-lighter: rgb(226, 174, 174);
+$warn-main: #922B08;
+$warn-darker: #782306;
+$warn-bright: #D02E08;
+$warn-hover: rgba(146, 43, 8, .5);
+
+// Create primary object
+$mat-primary: (
+  main: #{$primary},
+  lighter: #{$primary-lighter},
+  darker: #{$primary-darker},
+  200: #{$primary}, // For slide toggle,
+  contrast : (
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
+  )
+);
+$htp-gui-primary: mat.define-palette($mat-primary, main, lighter, darker);
+
+// Create accent object
+$mat-accent: (
+  // change main accent to accent-darker for accessibility
+  main: #{$accent-darker},
+  lighter: #{$accent-lighter},
+  darker: #{$accent-darker},
+  200: #{$accent-main}, // For slide toggle,
+  contrast : (
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
+  )
+);
+$htp-gui-accent: mat.define-palette($mat-accent, main, lighter, darker);
+
+// Create warn object
+$mat-warn: (
+  main: #{$warn-main},
+  lighter: #{$warn-lighter},
+  darker: #{$warn-darker},
+  bright: #{$warn-bright},
+  200: #{$warn-main}, // For slide toggle,
+  contrast : (
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
+  )
+);
+
+// The warn palette is optional (defaults to red).
+$htp-gui-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$htp-gui-theme: mat.define-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($htp-gui-theme);
+
+:root {
+  --primary-lightest: #{$primary-lightest};
+  --primary-lighter: #{$primary-lighter};
+  --primary-medium: #{$primary};
+  --primary-hover: #{$primary-hover};
+  --primary-dark: #{$primary-dark};
+  --primary-darker: #{$primary-darker};
+  --primary-darker-hover: #{$primary-darker-hover};
+  --accent-lighter: #{$accent-lighter};
+  --accent-hover: #{$accent-hover};
+  --accent-light: #FFD167;
+  --accent-medium: #{$accent-main};
+  --accent-dark: #{$accent-darker};
+
+  --light-text: #{$light-text};
+  --dark-text: #{rgba(black, 0.87)};
+  --darkest-text: #{$dark-text};
+
+  --red: rgba(213, 43, 30, 1);
+  --green: rgba(85, 177, 25, 1);
+  --yellow: rgba(236, 210, 82, 1);
+  --purple: rgba(120, 97, 188, 1);
+  --gray-dark: rgba(68, 68, 68, 1);
+  --gray-mid: rgba(117, 117, 117, 1);
+  --gray-light: rgba(206, 207, 210, 1);
+  --gray-light-ultra: rgba(249, 249, 249, 1);
+  --white: rgba(255, 255, 255, 1);
+
+  --header-height: 75px;
+  --footer-height: 64px;
+}
+
+//  ANGULAR MATERIAL COMPONENT AND CLASS OVERRIDES
+//  Every reasonable attempt should be made to style the overrides in the respective component CSS files,
+//  but if all else fails, styling the overrides here is preferable to using ViewEncapsulation.None (which should
+//  only be used as a weapon of absolute last resort). Be sure global overrides are as targeted as possible.
+
+.search-distance-control .mat-form-field-appearance-outline .mat-form-field-outline {
+  background: var(--white) !important;
+}
+.search-distance-control .mat-form-field-wrapper {
+  padding: 0 !important;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.mat-list-item-content {
+  padding: 0 !important;
+}

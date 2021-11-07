@@ -1,0 +1,87 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "vendors": [
+        "dist/vendors"
+      ],
+      "vendors/*": [
+        "dist/vendors/*"
+      ],
+      "lib-tools": [
+        "dist/lib-tools"
+      ],
+      "lib-tools/*": [
+        "dist/lib-tools/*"
+      ],
+      "lib-api-clients": [
+        "dist/lib-api-clients"
+      ],
+      "lib-api-clients/*": [
+        "dist/lib-api-clients/*"
+      ],
+      "lib-alerts": [
+        "dist/lib-alerts"
+      ],
+      "lib-alerts/*": [
+        "dist/lib-alerts/*"
+      ],
+      "lib-users": [
+        "dist/lib-users"
+      ],
+      "lib-users/*": [
+        "dist/lib-users/*"
+      ],
+      "lib-map": [
+        "dist/lib-map"
+      ],
+      "lib-map/*": [
+        "dist/lib-map/*"
+      ],
+      "lib-hikes": [
+        "dist/lib-hikes"
+      ],
+      "lib-hikes/*": [
+        "dist/lib-hikes/*"
+      ],
+      "lib-search": [
+        "dist/lib-search"
+      ],
+      "lib-search/*": [
+        "dist/lib-search/*"
+      ],
+      "lib-storage": [
+        "dist/lib-storage/lib-storage",
+        "dist/lib-storage"
+      ]
+    },
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

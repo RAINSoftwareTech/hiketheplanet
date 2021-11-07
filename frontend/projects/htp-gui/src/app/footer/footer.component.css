@@ -1,0 +1,31 @@
+
+
+.footer-toolbar {
+  background-color: var(--primary-medium);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+  color: var(--light-text);
+  position: relative;
+  font-size: 14px;
+  z-index: 2;
+}
+
+#footer-content{
+  text-align: center;
+  width: 100%;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.footer-toolbar a, .footer-toolbar a:visited, .footer-toolbar a:active {
+  color: var(--light-text);
+  text-decoration: underline;
+}
+
+.footer-toolbar a:hover, .footer-toolbar a:focus {
+  color: var(--accent-hover);
+}

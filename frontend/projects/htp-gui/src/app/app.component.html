@@ -1,0 +1,22 @@
+<div class="app-page-container">
+  <app-header [sideNav]="sidenav"></app-header>
+
+  <!-- MAIN BODY-->
+  <div class="app-main-container">
+    <mat-sidenav-container>
+
+      <!-- SIDE MENU -->
+      <mat-sidenav #sidenav (click)="sidenav.toggle()" role="navigation">
+        <app-menu></app-menu>
+      </mat-sidenav>
+
+      <!-- MAIN CONTENT -->
+      <mat-sidenav-content role="main" [class.app-main-no-scroll]="isMap">
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+
+    </mat-sidenav-container>
+  </div>
+
+  <app-footer></app-footer>
+</div>

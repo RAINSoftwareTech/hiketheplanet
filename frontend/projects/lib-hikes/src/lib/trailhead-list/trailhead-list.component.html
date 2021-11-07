@@ -1,0 +1,39 @@
+<div *ngFor="let trailhead of pagedTrailheads">
+  <mat-card [id]="trailhead.id" role="group" class="hikes-thead-list-card">
+    <mat-card-title>
+      <a [routerLink]="['/trailheads', trailhead.properties.slug]">
+        <img *ngIf="trailhead.properties.photo_url; else stockPhoto" [src]="trailhead.properties.photo_url"
+             width="325" class="hikes-thead-list-img" [alt]="trailhead.properties.name">
+        <ng-template #stockPhoto>
+          <img src="assets/images/trees.jpg" width="325" class="hikes-thead-list-img"
+               [alt]="trailhead.properties.name + ' stock photo'">
+        </ng-template>
+      </a>
+      <button mat-icon-button class="hikes-thead-list-fav-button">
+        <mat-icon>favorite_border</mat-icon>
+      </button>
+    </mat-card-title>
+    <mat-card-content>
+      <a class="hikes-thead-list-title" [routerLink]="['/trailheads', trailhead.properties.slug]">
+        {{trailhead.properties.name}}, {{trailhead.properties.locality}}
+      </a>
+      <mat-expansion-panel [id]="trailhead.id + '-hikes'" class="hikes-thead-list-accordion margin-top-10">
+        <mat-expansion-panel-header class="primary-color hikes-thead-list-accordion-header">
+          <mat-panel-title>
+            Hikes Accessible from Trailhead
+          </mat-panel-title>
+          <mat-panel-description class="hikes-thead-list-accordion-count">
+            {{trailhead.properties.hikes.length}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="hikes-thead-list-accordion-content">
+          <mat-nav-list class="hikes-thead-list-hikes-container">
+            <ng-container *ngFor="let hike of trailhead.properties.hikes">
+              <hikes-hike-minimal [hike]="hike"></hikes-hike-minimal>
+            </ng-container>
+          </mat-nav-list>
+        </div>
+      </mat-expansion-panel>
+    </mat-card-content>
+  </mat-card>
+</div>

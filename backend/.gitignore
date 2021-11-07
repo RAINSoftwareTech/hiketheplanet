@@ -1,0 +1,9 @@
+env
+*.DS_Store
+*.pyc
+.idea
+*.json
+*junk
+.coverage
+htmlcov
+/config/settings/local.py

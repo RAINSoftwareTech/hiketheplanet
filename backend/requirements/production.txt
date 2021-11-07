@@ -1,0 +1,5 @@
+# pull in Common Packages
+-r common.txt
+
+redis>=3.0.1
+django-redis>=4.10.0

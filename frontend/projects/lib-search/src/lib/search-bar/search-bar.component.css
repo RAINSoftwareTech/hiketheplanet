@@ -1,0 +1,68 @@
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+.search-input-group {
+  width: 100%;
+}
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+.search-input {
+  display: inline-block;
+  min-height: 42px;
+  margin: 0;
+  width: 100%;
+}
+input.search-input:placeholder-shown {
+  text-overflow: ellipsis;
+}
+.search-button {
+  position: absolute;
+  display: inline-block;
+  z-index: 99;
+  bottom: 8px;
+  right: 2px;
+  margin: 0;
+}
+
+.search-button button {
+  background: white;
+  border: none;
+}
+
+.search-method-controls {
+  height: 15px;
+  width: 75px;
+  margin: 0;
+}
+
+.search-distance-control mat-form-field {
+  width: 90px !important;
+  font-size: 12px;
+}
+
+.search-distance-control .mat-form-field-appearance-outline .mat-form-field-outline {
+  background: var(--white) !important;
+}
+
+.search-distance-control .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+  transform: none;
+}
+
+mat-radio-button {
+  font-size: 12px;
+  padding: 0 5px;
+}

@@ -1,0 +1,12 @@
+.app-page-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.app-main-container {
+  height: calc(100vh - var(--header-height) - var(--footer-height));  /*minus heights of header & footer*/
+}
+
+.app-main-no-scroll {
+  overflow: hidden !important;
+}

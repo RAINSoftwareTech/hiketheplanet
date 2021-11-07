@@ -1,4 +1,0 @@
-# pull in Common Packages
--r common.txt
-
-python-memcached==1.58
