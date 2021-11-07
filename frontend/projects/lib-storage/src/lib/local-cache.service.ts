@@ -12,7 +12,7 @@ import { HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import * as Localforage from 'localforage';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { LibToolsService } from 'lib-tools';
@@ -40,7 +40,7 @@ export interface CacheOptions {
 export class LocalCacheService {
   private readonly defaultExpires: number = 24 * 60 * 60; // 24 hours
 
-  constructor(@Inject('environment') private env,
+  constructor(@Inject('environment') private env: {[key: string]: any},
               private localStorage: LocalStorageService,
               private tools: LibToolsService) {
     this.defaultExpires = this.env.defaultExpires ? this.env.defaultExpires : this.defaultExpires;
@@ -50,8 +50,9 @@ export class LocalCacheService {
     const _expires = this._generateExpirationDate(expires);
     if (!this.tools.isEmpty(value, nestedAttribute)) {
       return this.localStorage.set<CacheStorageRecord>(key, {expires: _expires, value})
-        .pipe(map(val => val.value))
+        .pipe(map(val => val.value));
     }
+    return EMPTY;
   }
 
   public get<T>(key: string): Observable<T> {
@@ -65,7 +66,7 @@ export class LocalCacheService {
           }
         }
         return value;
-      }))
+      }));
   }
 
   public expire(key: string): Observable<void>  {
@@ -89,7 +90,7 @@ export class LocalCacheService {
       if (this._isCacheStorageRecord(value as CacheStorageRecord)) {
         this.expire(key);
       }
-    }).then()
+    }).then();
   }
 
   public getRequestCacheOptions(req: HttpRequest<any>): CacheOptions {
@@ -102,10 +103,10 @@ export class LocalCacheService {
   }
 
   private _isCacheStorageRecord(value: CacheStorageRecord): value is CacheStorageRecord {
-    return value && (value as CacheStorageRecord).expires !== undefined
+    return value && (value as CacheStorageRecord).expires !== undefined;
   }
 
-  private _expiresToDate(expires: number | string | Date): Date {
+  private _expiresToDate(expires?: number | string | Date): Date {
     let expiresAsDate = new Date();
     expires = expires ? expires : this.defaultExpires;
     if (this.tools.isNumber(expires)) {
@@ -118,7 +119,7 @@ export class LocalCacheService {
     return expiresAsDate;
   }
 
-  private _generateExpirationDate(expires: string | number | Date): Date {
+  private _generateExpirationDate(expires?: string | number | Date): Date {
     const expireDate: Date = this._expiresToDate(expires);
 
     // Dont allow expiry dates in the past

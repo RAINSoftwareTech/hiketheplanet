@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { TrailheadHike } from '../hikes.interface';
+import { TrailheadHike } from 'lib-api-clients';
 
 @Component({
   selector: 'hikes-hike-minimal',
@@ -8,14 +8,15 @@ import { TrailheadHike } from '../hikes.interface';
   styleUrls: ['./hike-minimal.component.css']
 })
 export class HikeMinimalComponent implements OnInit {
-  @Input() hike: TrailheadHike;
+  @Input() hike!: TrailheadHike;
 
   difficultyIcon: string;
 
-  constructor() { }
+  constructor() {
+    this.difficultyIcon = `assets/images/${this.hike.difficulty.toLowerCase()}.png`;
+  }
 
   ngOnInit(): void {
-    this.difficultyIcon = `assets/images/${this.hike.difficulty.toLowerCase()}.png`
   }
 
 }

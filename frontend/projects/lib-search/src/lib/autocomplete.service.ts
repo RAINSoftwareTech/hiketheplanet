@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { EMPTY } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 
 import { HtpClient } from 'lib-api-clients';
 
@@ -15,9 +15,9 @@ export type SearchType = 'distance' | 'name';
   providedIn: 'root'
 })
 export class AutocompleteService {
-  userLocation = []
+  userLocation?: number[];
 
-  constructor(private htp: HtpClient, @Inject('environment') private env) {
+  constructor(private htp: HtpClient, @Inject('environment') private env: {[key: string]: any}) {
   /// locate the user
   if (navigator.geolocation) {
      navigator.geolocation.getCurrentPosition(position => {
@@ -25,7 +25,7 @@ export class AutocompleteService {
      });
   } }
 
-  getSuggestions(search: string, searchType: SearchType, sessionToken?: string) {
+  getSuggestions(search: string, searchType: SearchType, sessionToken?: string): Observable<AutocompleteSuggestion[]> {
     function errorHandler() {
         return EMPTY;
     }
@@ -36,7 +36,7 @@ export class AutocompleteService {
       cacheOptions,
       session_token: sessionToken,
       search_text: search
-    }
-    return this.htp.get<AutocompleteSuggestion[]>(url, searchParams, errorHandler)
+    };
+    return this.htp.get<AutocompleteSuggestion[]>(url, searchParams, errorHandler);
   }
 }

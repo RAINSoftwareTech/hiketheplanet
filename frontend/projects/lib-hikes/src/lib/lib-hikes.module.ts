@@ -5,17 +5,15 @@ import { RouterModule } from '@angular/router';
 
 import { VendorsModule } from 'vendors';
 
+import { HikeMinimalComponent } from './hike-minimal/hike-minimal.component';
 import { HikeComponent } from './hike/hike.component';
-import { LibHikesComponent } from './lib-hikes.component';
 import { TrailheadListComponent } from './trailhead-list/trailhead-list.component';
 import { TrailheadComponent } from './trailhead/trailhead.component';
-import { HikeMinimalComponent } from './hike-minimal/hike-minimal.component';
 
 
 
 @NgModule({
   declarations: [
-    LibHikesComponent,
     TrailheadComponent,
     HikeComponent,
     TrailheadListComponent,
@@ -27,6 +25,6 @@ import { HikeMinimalComponent } from './hike-minimal/hike-minimal.component';
     RouterModule,
     BrowserModule
   ],
-  exports: [LibHikesComponent, TrailheadListComponent]
+  exports: [TrailheadListComponent]
 })
 export class LibHikesModule { }

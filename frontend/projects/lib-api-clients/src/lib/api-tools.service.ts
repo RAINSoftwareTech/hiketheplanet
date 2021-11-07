@@ -24,7 +24,7 @@ export class ApiToolsService {
 
   constructor(private tools: LibToolsService) { }
 
-  constructHeaders(contentType?: string): HttpHeaders {
+  constructHeaders(contentType?: string): HttpHeaders | undefined {
     const headers: { [key: string]: any } = {};
     if (contentType !== 'NONE') {
       if (!contentType) {
@@ -32,10 +32,10 @@ export class ApiToolsService {
       }
       headers['Content-Type'] = contentType;
     }
-    return Object.keys(headers).length ? new HttpHeaders(headers) : null;
+    return Object.keys(headers).length ? new HttpHeaders(headers) : undefined;
   }
 
-  constructQueryParams(params: { [key: string]: any }) {
+  constructQueryParams(params: { [key: string]: any }): HttpParams | undefined {
     let httpParams = new HttpParams();
     for (let [key, val] of Object.entries(params)) {
       if (!this.tools.isEmpty(val)) {
@@ -44,10 +44,10 @@ export class ApiToolsService {
         } else if (typeof val === 'object') {
           val = JSON.stringify(val);
         }
-        httpParams = httpParams.append(key, val)
+        httpParams = httpParams.append(key, val);
       }
     }
-    return httpParams.keys().length ? httpParams : null;
+    return httpParams.keys().length ? httpParams : undefined;
   }
 
   constructUrl(baseUrl: string, urlPath?: string): string {
@@ -61,13 +61,13 @@ export class ApiToolsService {
       url = new URL(`https://${baseUrl}`);
     }
     if (urlPath) {
-      url = new URL(urlPath, url)
+      url = new URL(urlPath, url);
     }
     return url.href.endsWith('/') ? url.href : url.href.concat('/');
   }
 
-  constructBody(body: { [key: string]: any }, filePost = false) {
-    let payloadBody = null;
+  constructBody(body: { [key: string]: any }, filePost = false): { [key: string]: any } | undefined {
+    let payloadBody;
     if (!this.tools.isEmpty(body)) {
       if (filePost) {
         const fd = new FormData();
@@ -84,27 +84,27 @@ export class ApiToolsService {
 
   constructPayload(body?: { [key: string]: any }, queryParams?: { [key: string]: any },
                    contentType?: string, filePost = false): RequestOptions {
-    const payload: RequestOptions = {}
-    const headers = this.constructHeaders(contentType);
-    const params = this.constructQueryParams(queryParams);
-    body = this.constructBody(body, filePost);
-    const temp: RequestOptions = {
+    const payload: RequestOptions = {
       responseType: 'json',
-      headers,
-      params,
-      body
+    };
+    const headers = this.constructHeaders(contentType);
+    const params = !!queryParams ? this.constructQueryParams(queryParams) : undefined;
+    body = !!body ? this.constructBody(body, filePost) : undefined;
+    if (headers) {
+      payload.headers = headers;
     }
-    for (const [key, val] of Object.entries(temp)) {
-      if (!this.tools.isEmpty(val)) {
-        payload[key] = val;
-      }
+    if (params) {
+      payload.params = params;
+    }
+    if (body) {
+      payload.body = body;
     }
     return payload;
   }
 
   constructFilePayload(method = 'GET', body?: any, queryParams?: { [key: string]: any },
                        contentType?: string, buffer = false): RequestOptions {
-    const getRequest = method === 'GET'
+    const getRequest = method === 'GET';
     contentType = !getRequest ? 'NONE' : contentType;
     const payload = this.constructPayload(body, queryParams, contentType, !getRequest);
     payload.responseType = buffer === true ? 'arraybuffer' : getRequest ? 'blob' : 'json';

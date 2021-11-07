@@ -18,7 +18,7 @@ import { MapService} from './map.service';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit, OnDestroy {
-  hikeSubscription: Subscription;
+  hikeSubscription?: Subscription;
 
   constructor(private maps: MapService, private trailheads: TrailheadListService) { }
 

@@ -17,6 +17,6 @@ export class AppComponent {
   isMap: boolean;
 
   constructor(private router: Router,) {
-      this.isMap = router.isActive('', true);
+      this.isMap = router.isActive('', {paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'});
   }
 }

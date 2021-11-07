@@ -1,7 +1,9 @@
-import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { tap } from 'rxjs';
 
 import { LibHikesModule } from 'lib-hikes';
 import { LibMapModule } from 'lib-map';
@@ -27,10 +29,8 @@ export function init_app(http: HttpClient) {
   // TODO: NEED TO HANDLE NO RESPONSE/FAILURE TO ALLOW VISUAL ELEMENTS TO LOAD WITH ERROR ALERT
   return () => {
     // @ts-ignore
-    return http.get(url, {params: {cacheOptions}}).toPromise()
-      .then(urls => {
-        environment.baseUrls = urls;
-      });
+    return http.get(url, {params: {cacheOptions}})
+      .pipe(tap(urls => environment.baseUrls = urls));
   };
 }
 

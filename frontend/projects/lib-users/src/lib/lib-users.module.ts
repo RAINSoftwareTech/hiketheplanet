@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { LibUsersComponent } from './lib-users.component';
 
 
 
 @NgModule({
-  declarations: [LibUsersComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [LibUsersComponent]
+  exports: []
 })
 export class LibUsersModule { }

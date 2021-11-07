@@ -29,6 +29,6 @@ export class LibToolsService {
       (value instanceof Array && !value.length) ||
       ((value instanceof Map || value instanceof Set) && !value.size) ||
       (typeof value === 'object' && !Object.keys(value).length) ||
-      (typeof value === 'string' && !value.trim().length)
+      (typeof value === 'string' && !value.trim().length);
   }
 }

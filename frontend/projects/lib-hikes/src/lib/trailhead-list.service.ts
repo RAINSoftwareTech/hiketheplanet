@@ -12,6 +12,9 @@ import { finalize, tap } from 'rxjs/operators';
 
 import { HtpClient } from 'lib-api-clients';
 
+import { GISViewport, SearchOptions } from 'lib-api-clients';
+
+type SearchType = 'geom' | 'name' | 'distance';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,21 +22,21 @@ export class TrailheadListService {
   private trailheadResults = new Subject<any>();
   private searchLoading = new Subject<any>();
 
-  constructor(@Inject('environment') private env,
+  constructor(@Inject('environment') private env: {[key: string]: any},
               private router: Router,
               private htp: HtpClient,) { }
 
-  private _getViewPortHash(viewport): string {
+  private _getViewPortHash(viewport: GISViewport): string {
     const coords = [viewport.southwest.lng, viewport.southwest.lat, viewport.northeast.lng, viewport.northeast.lat];
     return coords.join('');
   }
 
-  private _getCacheKey(searchOptions, searchType?) {
-    let hash: string;
+  private _getCacheKey(searchOptions: SearchOptions, searchType?: SearchType) {
+    let hash = '';
     searchType = searchType ? searchType : 'geom';
-    const descrip = searchType === 'name' ? searchOptions.name : searchType === 'distance' ? searchOptions.distance : null;
+    const descrip = searchType === 'name' ? searchOptions.name : searchType === 'distance' ? searchOptions.distance : '';
     if (descrip) {
-      hash = descrip;
+      hash = descrip.toString();
     } else if (searchOptions.latitude) {
       hash = `${searchOptions.latitude}|${searchOptions.longitude}`;
     } else if (searchOptions.viewport) {
@@ -47,7 +50,7 @@ export class TrailheadListService {
     }
   }
 
-  search(searchOptions, searchType?) {
+  search(searchOptions: SearchOptions, searchType?: SearchType) {
     searchOptions.cacheOptions = {
       cacheKey: this._getCacheKey(searchOptions, searchType),
       cacheLatestKey: 'hikes:latest'
@@ -66,7 +69,7 @@ export class TrailheadListService {
 
   getTrailheads() {
     // TODO: check for hikes:latest cache
-    this.cache
+    // this.cache;
     return this.trailheadResults.asObservable();
   }
 

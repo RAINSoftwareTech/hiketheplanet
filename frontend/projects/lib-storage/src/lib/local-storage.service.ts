@@ -10,7 +10,7 @@ stored, rather than only strings or JSON.stringify-ed objects.
 import { Injectable } from '@angular/core';
 
 import * as Localforage from 'localforage';
-import { from, Observable } from 'rxjs';
+import { EMPTY, from, Observable } from 'rxjs';
 
 const localforage = Localforage;
 
@@ -25,6 +25,7 @@ export class LocalStorageService {
     if (value !== null && value !== undefined) {
       return from(localforage.setItem(key, value));
     }
+    return EMPTY;
   }
 
   public get<T>(key: string): Observable<T> {

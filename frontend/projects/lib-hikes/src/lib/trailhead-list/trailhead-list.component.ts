@@ -4,7 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 
 import { Subscription } from 'rxjs';
 
-import { EmptyFeatureCollection, GeoJSONFeature, GeoJSONFeatureCollection } from '../hikes.interface';
+import { EmptyFeatureCollection, GeoJSONFeature, GeoJSONFeatureCollection } from 'lib-api-clients';
 import { TrailheadListService } from '../trailhead-list.service';
 
 @Component({
@@ -14,12 +14,12 @@ import { TrailheadListService } from '../trailhead-list.service';
 })
 export class TrailheadListComponent implements OnInit, OnDestroy {
   @Input() mobileView = false;
-  searchSubscription: Subscription;
+  searchSubscription?: Subscription;
 
   pageSize = 20;
   featureCollection: GeoJSONFeatureCollection = EmptyFeatureCollection;
   pagedTrailheads: GeoJSONFeature[] = [];
-  pageEvent: PageEvent;
+  pageEvent?: PageEvent;
 
   constructor(private trailheads: TrailheadListService) { }
 

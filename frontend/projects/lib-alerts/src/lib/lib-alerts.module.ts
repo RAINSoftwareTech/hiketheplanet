@@ -5,14 +5,14 @@ All rights reserved
 
  */
 import { NgModule } from '@angular/core';
-import { LibAlertsComponent } from './lib-alerts.component';
+
 
 
 
 @NgModule({
-  declarations: [LibAlertsComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [LibAlertsComponent]
+  exports: []
 })
 export class LibAlertsModule { }
