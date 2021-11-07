@@ -66,6 +66,8 @@ class Hiker(TimeStampedModel):
     )
     slug = models.SlugField(unique=True)
 
+    is_contributor = models.BooleanField(default=False)
+
     class Meta:
         ordering = ['-created']
 

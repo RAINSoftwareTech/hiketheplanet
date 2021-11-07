@@ -1,0 +1,11 @@
+.hikes-hike-min-container {
+  padding: 0 10px !important;
+}
+.hikes-hike-min-fav-button {
+  position: absolute;
+  top: -4px;
+  right: 5px;
+}
+.hikes-hike-min-details {
+  white-space: normal !important;
+}

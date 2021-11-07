@@ -17,6 +17,9 @@ class Country(models.Model):
     alpha_2_code = UpperCaseCharField(max_length=2, unique=True)
     english_short_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.alpha_2_code
+
 
 class StateProvince(models.Model):
     country = models.ForeignKey(
@@ -26,3 +29,6 @@ class StateProvince(models.Model):
     )
     code = UpperCaseCharField(max_length=2, unique=True)
     name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.code}, {str(self.country)}'

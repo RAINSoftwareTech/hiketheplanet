@@ -1,0 +1,32 @@
+.hikes-thead-list-card {
+  background: var(--white);
+  box-shadow: 0px 0px 6px 0px var(--gray-mid);
+  max-width: 350px;
+}
+
+.hikes-thead-list-title{
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary-medium)
+}
+
+.hikes-thead-list-accordion-header {
+  height: 35px;
+  padding: 0 10px;
+  font-size: 13px;
+}
+.hikes-thead-list-accordion-count {
+  justify-content: flex-end;
+  margin-right: 24px;
+}
+.hikes-thead-list-hikes-container {
+  padding: 0 !important;
+}
+.hikes-thead-list-fav-button {
+  color: var(--accent-medium);
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-size: 35px !important;
+}

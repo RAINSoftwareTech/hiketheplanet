@@ -1,13 +1,14 @@
 # Imports from Django
 from django.utils import timezone
 
+from django.utils.deprecation import MiddlewareMixin
 # Imports from Third Party Modules
 import pytz
 
 default_tz_name = 'America/Los_Angeles'
 
 
-class TimezoneMiddleware(object):
+class TimezoneMiddleware(MiddlewareMixin):
 
     def get_tz_name(self, request):
         """Return pacific US if user not logged in."""

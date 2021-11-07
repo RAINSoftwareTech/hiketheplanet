@@ -4,26 +4,27 @@ All rights reserved
 ..codeauthor::Fable Turas <fable@rainsoftware.tech>
 
  */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { Observable } from 'rxjs';
+import { debounceTime, filter, switchMap } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 
-import { AutocompleteSuggestion, SearchService, SearchType } from '../search.service';
+import { SearchOptions } from 'lib-api-clients';
+import { TrailheadListService } from 'lib-hikes';
+
+import { AutocompleteService, AutocompleteSuggestion } from '../autocomplete.service';
 
 @Component({
   selector: 'search-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css']
 })
-export class SearchBarComponent implements OnInit, OnDestroy {
+export class SearchBarComponent implements OnInit {
   searchForm: FormGroup;
-  sessionToken = uuid.v4();
-  addrSuggestions$: Observable<AutocompleteSuggestion[]>;
-  searchSubscription: Subscription;
+  sessionToken = uuidv4();
+  autoSuggestions$?: Observable<AutocompleteSuggestion[]>;
   placeholderText: string;
   distancePlaceholder = 'address, neighborhood, city, or ZIP code';
 
@@ -39,25 +40,30 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     {name: 50, displayName: '50 miles'},
   ];
 
-  constructor(private search: SearchService, private formBuilder: FormBuilder) { }
-
-  ngOnInit() {
-    this.placeholderText = this.distancePlaceholder;
+  constructor(private autocomplete: AutocompleteService,
+              private formBuilder: FormBuilder,
+              private trailheads: TrailheadListService) {
     this.searchForm = this.formBuilder.group({
       searchControl: [''],
       searchType: ['distance'],
       distance: [25],
     });
+    this.placeholderText = this.distancePlaceholder;
+  }
 
-    this.addrSuggestions$ = this.searchForm
-        .get('searchControl')
+  ngOnInit() {
+    this.autoSuggestions$ = this.searchForm
+        .controls.searchControl
         .valueChanges
         .pipe(
+          filter(value => {
+            return typeof value === 'string' && value.length > 2;
+          }),
           debounceTime(300),
           switchMap(value => this.populateAutoComplete(value, this.sessionToken))
         );
 
-    this.searchForm.get('searchType').valueChanges.subscribe(value => {
+    this.searchForm.controls.searchType.valueChanges.subscribe(value => {
       if (value === 'distance') {
         this.placeholderText = this.distancePlaceholder;
       } else {
@@ -65,28 +71,38 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.searchForm.get('distance').valueChanges.subscribe(() => {
+    this.searchForm.controls.distance.valueChanges.subscribe(() => {
       this.onSearch();
-    })
+    });
   }
 
   populateAutoComplete(search: string, sessionToken: string) {
     search = search ? search : '';
-    return this.search.getSuggestions(search, this.searchForm.get('searchType').value, sessionToken);
+    return this.autocomplete.getSuggestions(search, this.searchForm.controls.searchType.value, sessionToken);
   }
 
-  ngOnDestroy(): void {
-    if (this.searchSubscription) {
-      this.searchSubscription.unsubscribe();
-    }
-  }
-
-  displayFn(suggestion: AutocompleteSuggestion) {
+  displayFn(suggestion: AutocompleteSuggestion): string {
       if (suggestion) { return suggestion.description; }
+      return '';
   }
 
   onSearch() {
-    console.log('search')
+    const searchType = this.searchForm.get('searchType')?.value;
+    const searchCtrl = this.searchForm.get('searchControl')?.value;
+    const searchText = typeof searchCtrl === 'string' ? searchCtrl : searchCtrl.description;
+    const searchOptions: SearchOptions = {
+      session_token: this.sessionToken,
+      placeid: typeof searchCtrl === 'string' ? null : searchCtrl.placeid ? searchCtrl.placeid : null,
+      source:typeof searchCtrl === 'string' ? 'user' : searchCtrl.source ? searchCtrl.source : null,
+    };
+    if (searchType === 'name') {
+      searchOptions.name = searchText;
+    } else {
+      searchOptions.location = searchText;
+      searchOptions.distance = this.searchForm.get('distance')?.value;
+    }
+    this.trailheads.search(searchOptions, searchType);
+    this.sessionToken = uuidv4();
   }
 
 }

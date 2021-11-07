@@ -10,7 +10,7 @@
   </h1>
 
   <!-- SEARCH BAR -->
-  <search-search-bar fxFlex="1 10 calc(100% - 225px - 110px - 80px)" fxLayoutAlign="center"></search-search-bar>
+  <search-search-bar fxFlex="1 10 calc(100% - 275px - 110px - 80px)" fxLayoutAlign="center"></search-search-bar>
 
   <!-- USER DATA/BUTTONS -->
   <div class="header-user-container" fxFlex="110px">
@@ -28,7 +28,7 @@
     </ng-container>
     <!-- USER LOGIN/REGISTER -->
     <ng-template #loginRegister>
-      <button mat-button class="header-login-link">
+      <button *ngIf="showUserLogin" mat-button class="header-login-link">
           Login/Register
       </button>
      </ng-template>

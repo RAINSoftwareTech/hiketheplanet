@@ -3,8 +3,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,8 +22,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     FlexLayoutModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatExpansionModule,
     MatIconModule,
     MatListModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
@@ -30,8 +38,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     FlexLayoutModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatExpansionModule,
     MatIconModule,
     MatListModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,

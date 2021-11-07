@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 # Imports from Third Party Modules
 import os
 
+from corsheaders.defaults import default_headers
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_ROOT = os.path.dirname(BASE_DIR)
@@ -24,7 +25,6 @@ SITE_NAME = os.path.basename(BASE_DIR)
 
 INSTALLED_APPS = [
     'django.contrib.auth',
-    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -33,13 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
     'localflavor',
-    'allauth',  # TODO: if i get rid of this, get rid of sites
-    'allauth.account',
-    'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.twitter',
     'rest_framework',
+    'rest_framework_gis',
     'corsheaders',
 
     'localities',
@@ -51,15 +46,18 @@ INSTALLED_APPS = [
     'sights',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'middleware.timezones.TimezoneMiddleware',
+    'middleware.referer.AllowedHostsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -112,6 +110,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# caches
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -138,10 +144,30 @@ MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
-# Profile/allauth settings
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/hikers/login/'
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_SIGNUP_FORM_CLASS = 'hikers.forms.HikerRegistrationForm'
+# CORS
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = ()
+CORS_ORIGIN_REGEX_WHITELIST = (
+    r'^(http?://)?(\w+\.)?hiketheplanet\.info$',
+)
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'lazyupdate',
+    'normalizednames'
+]
 
-CONTRIBUTOR_GROUP_NAME = 'Contributors'
+# REST Framework
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    # ),
+    'DEFAULT_FILTER_BACKENDS':
+        ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DATETIME_INPUT_FORMATS': (
+        '%Y:%m:%d', 'iso-8601', '%Y-%m-%d'
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}

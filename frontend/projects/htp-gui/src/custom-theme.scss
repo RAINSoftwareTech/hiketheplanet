@@ -1,43 +1,42 @@
-
 // Custom Theming for Angular Material
+@use '@angular/material' as mat;
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 // Fonts
 @import url('http://fonts.googleapis.com/css?family=Gudea:300,400,500,600,800');
 
 $fontConfig: (
-  display-4: mat-typography-level(112px, 112px, 300, 'Gudea', -0.0134em),
-  display-3: mat-typography-level(56px, 56px, 400, 'Gudea', -0.0089em),
-  display-2: mat-typography-level(45px, 48px, 400, 'Gudea', 0.0000em),
-  display-1: mat-typography-level(34px, 40px, 400, 'Gudea', 0.0074em),
-  headline: mat-typography-level(24px, 32px, 400, 'Gudea', 0.0000em),
-  title: mat-typography-level(20px, 32px, 600, 'Gudea', 0.0075em),
-  subheading-2: mat-typography-level(16px, 28px, 400, 'Gudea', 0.0094em),
-  subheading-1: mat-typography-level(15px, 24px, 600, 'Gudea', 0.0067em),
-  body-2: mat-typography-level(14px, 24px, 600, 'Gudea', 0.0179em),
-  body-1: mat-typography-level(14px, 20px, 400, 'Gudea', 0.0179em),
-  button: mat-typography-level(14px, 14px, 500, 'Gudea', 0.0893em),
-  caption: mat-typography-level(12px, 20px, 400, 'Gudea', 0.0333em),
-  input: mat-typography-level(inherit, 1.125, 400, 'Gudea', 1.5px)
+  display-4: mat.define-typography-level(112px, 112px, 300, 'Gudea', -0.0134em),
+  display-3: mat.define-typography-level(56px, 56px, 400, 'Gudea', -0.0089em),
+  display-2: mat.define-typography-level(45px, 48px, 400, 'Gudea', 0.0000em),
+  display-1: mat.define-typography-level(34px, 40px, 400, 'Gudea', 0.0074em),
+  headline: mat.define-typography-level(24px, 32px, 400, 'Gudea', 0.0000em),
+  title: mat.define-typography-level(20px, 32px, 600, 'Gudea', 0.0075em),
+  subheading-2: mat.define-typography-level(16px, 28px, 400, 'Gudea', 0.0094em),
+  subheading-1: mat.define-typography-level(15px, 24px, 600, 'Gudea', 0.0067em),
+  body-2: mat.define-typography-level(14px, 24px, 600, 'Gudea', 0.0179em),
+  body-1: mat.define-typography-level(14px, 20px, 400, 'Gudea', 0.0179em),
+  button: mat.define-typography-level(14px, 14px, 500, 'Gudea', 0.0893em),
+  caption: mat.define-typography-level(12px, 20px, 400, 'Gudea', 0.0333em),
+  input: mat.define-typography-level(inherit, 1.125, 400, 'Gudea', 1.5px)
 );
 
 // Compute font config
-@include mat-core($fontConfig);
+@include mat.core($fontConfig);
 
 // Text variables
 $light-text: #ffffff;
 $light-primary-text: $light-text;
-$light-accent-text: rgba($light-primary-text, 0.7);
-$light-disabled-text: rgba($light-primary-text, 0.5);
-$light-dividers: rgba($light-primary-text, 0.12);
-$light-focused: rgba($light-primary-text, 0.12);
+$light-accent-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
 $dark-primary-text: #052E0B;
 $dark-text: #000;
 
@@ -55,7 +54,7 @@ $primary-darker-hover: rgba(8, 68, 16, .5);
 // Secondary color variables
 $accent-lighter: #FCD680;
 $accent-main: #FE9917;
-$accent-darker: #CB7301;
+$accent-darker: #AC6101;
 $accent-hover: rgba(254, 153, 23, .5);
 
 // Warning color variables
@@ -72,12 +71,12 @@ $mat-primary: (
   darker: #{$primary-darker},
   200: #{$primary}, // For slide toggle,
   contrast : (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text,
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
   )
 );
-$htp-gui-primary: mat-palette($mat-primary, main, lighter, darker);
+$htp-gui-primary: mat.define-palette($mat-primary, main, lighter, darker);
 
 // Create accent object
 $mat-accent: (
@@ -87,12 +86,12 @@ $mat-accent: (
   darker: #{$accent-darker},
   200: #{$accent-main}, // For slide toggle,
   contrast : (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text,
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
   )
 );
-$htp-gui-accent: mat-palette($mat-accent, main, lighter, darker);
+$htp-gui-accent: mat.define-palette($mat-accent, main, lighter, darker);
 
 // Create warn object
 $mat-warn: (
@@ -102,22 +101,22 @@ $mat-warn: (
   bright: #{$warn-bright},
   200: #{$warn-main}, // For slide toggle,
   contrast : (
-    main: $light-primary-text,
-    lighter: $dark-primary-text,
-    darker: $light-primary-text,
+    main: white,
+    lighter: rgba(black, 0.87),
+    darker: white,
   )
 );
 
 // The warn palette is optional (defaults to red).
-$htp-gui-warn: mat-palette($mat-red);
+$htp-gui-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn);
+$htp-gui-theme: mat.define-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($htp-gui-theme);
+@include mat.all-component-themes($htp-gui-theme);
 
 :root {
   --primary-lightest: #{$primary-lightest};
@@ -127,14 +126,14 @@ $htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn
   --primary-dark: #{$primary-dark};
   --primary-darker: #{$primary-darker};
   --primary-darker-hover: #{$primary-darker-hover};
-  --secondary-lighter: #{$accent-lighter};
+  --accent-lighter: #{$accent-lighter};
   --accent-hover: #{$accent-hover};
-  --secondary-light: #FFD167;
-  --secondary-medium: #{$accent-main};
-  --secondary-dark: #{$accent-darker};
+  --accent-light: #FFD167;
+  --accent-medium: #{$accent-main};
+  --accent-dark: #{$accent-darker};
 
   --light-text: #{$light-text};
-  --dark-text: #{$dark-primary-text};
+  --dark-text: #{rgba(black, 0.87)};
   --darkest-text: #{$dark-text};
 
   --red: rgba(213, 43, 30, 1);
@@ -160,5 +159,12 @@ $htp-gui-theme: mat-light-theme($htp-gui-primary, $htp-gui-accent, $htp-gui-warn
   background: var(--white) !important;
 }
 .search-distance-control .mat-form-field-wrapper {
+  padding: 0 !important;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.mat-list-item-content {
   padding: 0 !important;
 }

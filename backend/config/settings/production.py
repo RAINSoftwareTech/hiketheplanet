@@ -99,3 +99,5 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = EMAIL_HOST_USER
 # ---------- END EMAIL CONFIGURATION
+GMAPS_API_KEY = '{{google_api_key}}'
+ALLOWED_REFERER_DOMAIN = 'hiketheplanet.info'

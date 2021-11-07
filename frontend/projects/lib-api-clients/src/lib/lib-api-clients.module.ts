@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
-import { LibApiClientsComponent } from './lib-api-clients.component';
 
 
 
 @NgModule({
-  declarations: [LibApiClientsComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [LibApiClientsComponent]
+  exports: []
 })
 export class LibApiClientsModule { }

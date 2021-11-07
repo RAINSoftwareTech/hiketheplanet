@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MappedTrailheadsComponent } from './mapped-trailheads.component';
 
@@ -6,7 +6,7 @@ describe('MappedTrailheadsComponent', () => {
   let component: MappedTrailheadsComponent;
   let fixture: ComponentFixture<MappedTrailheadsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MappedTrailheadsComponent ]
     })
