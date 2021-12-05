@@ -7,17 +7,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Imports from Third Party Modules
 from .base import *  # noqa
-from os import environ
-
-
-def get_env_setting(setting):
-    """ Get the environment setting or return exception """
-    try:
-        return environ[setting]
-    except KeyError:
-        error_msg = "Set the {} env variable".format(setting)
-    raise ImproperlyConfigured(error_msg)
-
 
 # -------------- Explicitly set debug state
 DEBUG = False
@@ -29,10 +18,11 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'hiketheplanet',
-        'USER': get_env_setting('DATABASE_USER'),
-        'PASSWORD': get_env_setting('DATABASE_PASSWORD'),
-        'HOST': '127.0.0.1',
+        'NAME': '{ dbname }}',
+        'USER': '{ dbuser }}',
+        'PASSWORD': '{{ dbpassword }}',
+        'HOST': '{{ dbhost }}',
+        'PORT': '5432',
     }
 }
 
@@ -61,7 +51,7 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 # -------------- SECRET CONFIGURATION
 # SET SECRET KEY & SETTINGS IN ENV ON SERVER ON FIRST DEPLOY
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = get_env_setting('DJANGO_SECRET_KEY')
+SECRET_KEY = '{{ secret_key }}'
 # -------------- END SECRET CONFIGURATION
 
 
@@ -69,15 +59,11 @@ SEND_BROKEN_LINK_EMAILS = True
 # -------------- MANAGER CONFIGURATION
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-ADMINS = (
-    os.environ.get('ADMINS'),
-)
+ADMINS = {{admins}}
 MANAGERS = ADMINS
 # -------------- END MANAGER CONFIGURATION
 
-ALLOWED_HOSTS = [
-    'www.hiketheplanet.info',
-    'hiketheplanet.info']
+ALLOWED_HOSTS = {{host_name}}
 
 MAX_UPLOAD_SIZE_IN_MB = 4
 
@@ -90,11 +76,12 @@ CSRF_COOKIE_HTTPONLY = True
 # THESE SETTINGS NEED TO BE CHECKED BEFORE FIRST DEPLOY
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST = '{{ email_host }}'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '{{ email_user }}'
+EMAIL_HOST_PASSWORD = '{{ mail_password }}'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_TO_EMAIL = EMAIL_HOST_USER
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = EMAIL_HOST_USER
