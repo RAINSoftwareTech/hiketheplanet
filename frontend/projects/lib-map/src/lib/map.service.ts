@@ -24,6 +24,7 @@ export class MapService {
   lat = 45.5051064;
   lng = -122.6750261;
   markerColor = '#216629';
+  bbox: LngLatBoundsLike = [-124.848974,24.396308,-66.885444,49.384358];
 
   constructor(@Inject('environment') private env: {[key: string]: any}) {
   }
@@ -45,6 +46,11 @@ export class MapService {
       minZoom: 3,
       accessToken: this.env.mapboxToken,
     };
+    if (this.bbox) {
+      options.bounds = this.bbox;
+    } else {
+      options.center = [this.lng, this.lat];
+    }
     this.map = new mapboxgl.Map(options);
     this.map.addControl(new mapboxgl.NavigationControl());
     this.buildMap();

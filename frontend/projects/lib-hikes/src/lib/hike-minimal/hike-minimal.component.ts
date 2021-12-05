@@ -10,13 +10,13 @@ import { TrailheadHike } from 'lib-api-clients';
 export class HikeMinimalComponent implements OnInit {
   @Input() hike!: TrailheadHike;
 
-  difficultyIcon: string;
+  difficultyIcon?: string;
 
   constructor() {
-    this.difficultyIcon = `assets/images/${this.hike.difficulty.toLowerCase()}.png`;
   }
 
   ngOnInit(): void {
+    this.difficultyIcon = `assets/images/${this.hike.difficulty.toLowerCase()}.png`;
   }
 
 }
