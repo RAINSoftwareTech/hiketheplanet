@@ -37,8 +37,8 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }}
 
-MIDDLEWARE_CLASSES.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
-MIDDLEWARE_CLASSES.extend(
+MIDDLEWARE.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
+MIDDLEWARE.extend(
     ('django.middleware.cache.FetchFromCacheMiddleware',)
 )
 CACHE_MIDDLEWARE_ALIAS = 'default'
