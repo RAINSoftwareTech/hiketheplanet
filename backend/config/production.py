@@ -31,16 +31,16 @@ DATABASES = {
 
 # -------------- CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }}
-
-MIDDLEWARE.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
-MIDDLEWARE.extend(
-    ('django.middleware.cache.FetchFromCacheMiddleware',)
-)
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }}
+#
+# MIDDLEWARE.insert(0, 'django.middleware.cache.UpdateCacheMiddleware')
+# MIDDLEWARE.extend(
+#     ('django.middleware.cache.FetchFromCacheMiddleware',)
+# )
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 2
 CACHE_MIDDLEWARE_KEY_PREFIX = 'hiketheplanet'
