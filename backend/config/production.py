@@ -18,8 +18,8 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': '{ dbname }}',
-        'USER': '{ dbuser }}',
+        'NAME': '{{ dbname }}',
+        'USER': '{{ dbuser }}',
         'PASSWORD': '{{ dbpassword }}',
         'HOST': '{{ dbhost }}',
         'PORT': '5432',
