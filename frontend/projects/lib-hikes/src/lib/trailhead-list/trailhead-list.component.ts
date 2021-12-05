@@ -5,6 +5,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 
 import { EmptyFeatureCollection, GeoJSONFeature, GeoJSONFeatureCollection } from 'lib-api-clients';
+
 import { TrailheadListService } from '../trailhead-list.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class TrailheadListComponent implements OnInit, OnDestroy {
     this.searchSubscription = this.trailheads.getTrailheads().subscribe(trailheadCollection => {
       this.featureCollection = trailheadCollection;
       if (this.featureCollection && this.featureCollection.features.length) {
+        console.log(trailheadCollection, 'COLLECTION');
         this.pagedTrailheads = this.getPagedTrailheads(0);
       }
     });

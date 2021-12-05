@@ -8,6 +8,8 @@ from core.exceptions import BadRequest
 from .models import Hike, Trailhead
 RADIUS_MI = 50
 COUNTRIES = {'country': 'us'}
+
+
 def _google_find_place(text):
     if text:
         g_attribs = ['place_id']
