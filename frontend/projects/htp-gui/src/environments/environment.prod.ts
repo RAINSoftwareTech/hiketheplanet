@@ -4,6 +4,6 @@ export const environment = {
   ...defaultEnvironment,
   production: true,
   mapboxToken: '{{ mapbox_token }}',
-  baseAPIURL: 'https://api.hiketheplanet.info'
+  baseAPIURL: 'https://hiketheplanet.info/api'
 };
 // TODO: add defaults
