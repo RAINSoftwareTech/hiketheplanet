@@ -6,8 +6,8 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     # url(r'^hikers/', include('hikers.urls', namespace='hikers')),
-    path('endpoints/', EndpointsAPIView.as_view(), name='endpoints'),
-    path('', include('hikes.urls')),
+    path('api/endpoints/', EndpointsAPIView.as_view(), name='endpoints'),
+    path('api/', include('hikes.urls')),
 ]
 
 
