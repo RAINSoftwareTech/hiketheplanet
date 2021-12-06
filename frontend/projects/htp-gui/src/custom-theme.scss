@@ -9,7 +9,7 @@
 @include mat.core();
 
 // Fonts
-@import url('http://fonts.googleapis.com/css?family=Gudea:300,400,500,600,800');
+@import url('https://fonts.googleapis.com/css?family=Gudea:300,400,500,600,800');
 
 $fontConfig: (
   display-4: mat.define-typography-level(112px, 112px, 300, 'Gudea', -0.0134em),
