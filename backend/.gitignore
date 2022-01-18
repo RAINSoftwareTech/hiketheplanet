@@ -6,4 +6,4 @@ env
 *junk
 .coverage
 htmlcov
-/config/settings/local.py
+/config/local.py
